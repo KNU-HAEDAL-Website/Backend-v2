@@ -37,13 +37,11 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/haedal-web
 
-      - name: Test Network Connectivity
-        run: |
-          ping -c 4 ${{ secrets.HOST }}
+      - name: Print Secret (Debug Only)
+        run: echo "MY_SECRET=${{ secrets.HOST }}"
 
-      - name: Test Port Accessibility
-        run: |
-          nc -zv ${{ secrets.HOST }} ${{ secrets.SSH_PORT }}
+      - name: Print Secret2 (Debug Only)
+        run: echo "MY_SECRET=${{ secrets.SSH_PORT }}"
 
       - name: Test SSH Connection
         uses: appleboy/ssh-action@master
