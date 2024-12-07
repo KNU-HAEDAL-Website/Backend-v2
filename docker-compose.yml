@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "8000:8080"
     depends_on:
       - haedal-mysql
       - haedal-redis
@@ -30,12 +30,12 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: "Asia/Seoul"
     ports:
-      - "3306:3306"
+      - "3300:3306"
   haedal-redis:
     image: redis:7.2-alpine
     command: redis-server --requirepass ${SPRING_DATA_REDIS_PASSWORD} --port 6379
     ports:
-      - "6379:6379"
+      - "6300:6379"
     environment:
       TZ: "Asia/Seoul"
 volumes:
