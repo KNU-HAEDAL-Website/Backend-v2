@@ -37,13 +37,13 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/haedal-web
 
-      - name: Get Public IP
-        id: ip
-        uses: haythem/public-ip@v1.3
-
-      - name: Print Public IP
+      - name: Test Network Connectivity
         run: |
-          echo ${{ steps.ip.outputs.ipv4 }}
+          ping -c 4 ${{ secrets.HOST }}
+
+      - name: Test Port Accessibility
+        run: |
+          nc -zv ${{ secrets.HOST }} ${{ secrets.SSH_PORT }}
 
       - name: Test SSH Connection
         uses: appleboy/ssh-action@master
