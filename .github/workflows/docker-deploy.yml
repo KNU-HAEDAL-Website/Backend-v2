@@ -37,22 +37,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/haedal-web
 
-      - name: Print Secret (Debug Only)
-        run: echo "MY_SECRET=${{ secrets.HOST }}"
-
-      - name: Print Secret2 (Debug Only)
-        run: echo "MY_SECRET=${{ secrets.SSH_PORT }}"
-
-      - name: Test SSH Connection
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          username: haedal
-          script: |
-            echo "SSH connection successful!"
-
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
