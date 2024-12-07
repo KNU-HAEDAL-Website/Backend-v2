@@ -37,6 +37,24 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/haedal-web
 
+      - name: Get Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      - name: Print Public IP
+        run: |
+          echo ${{ steps.ip.outputs.ipv4 }}
+
+      - name: Test SSH Connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          username: haedal
+          script: |
+            echo "SSH connection successful!"
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
