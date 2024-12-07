@@ -43,7 +43,7 @@ jobs:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          username: ubuntu
+          username: haedal
           script: |
             cd ~/haedal-web
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/haedal-web
