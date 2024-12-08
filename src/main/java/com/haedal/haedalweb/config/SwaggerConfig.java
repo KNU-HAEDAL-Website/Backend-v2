@@ -12,6 +12,7 @@ import com.haedal.haedalweb.swagger.ApiSuccessCodeExamples;
 import com.haedal.haedalweb.swagger.ExampleHolder;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -39,8 +40,10 @@ import java.util.stream.Collectors;
 @OpenAPIDefinition(
         info = @Info(title = "HAEDAL-WEB API 명세서",
                 description = "해달 웹 백엔드 API",
-                version = "1.0")
-
+                version = "1.0"),
+        servers = {
+            @Server(url = "https://www.knu-haedal.com", description = "개발 서버"),
+        }
 )
 @Configuration
 public class SwaggerConfig {
