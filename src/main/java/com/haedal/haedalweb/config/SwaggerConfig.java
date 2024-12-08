@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
                 description = "해달 웹 백엔드 API",
                 version = "1.0"),
         servers = {
-            @Server(url = "https://www.knu-haedal.com", description = "개발 서버"),
+            @Server(url = "https://www.knu-haedal.com/api", description = "개발 서버"),
         }
 )
 @Configuration
