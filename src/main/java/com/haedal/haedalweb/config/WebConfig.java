@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
 
-        corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://www.knu-haedal.com", "https://www.knu-haedal.com");
+//        corsRegistry.addMapping("/**")
+//                .allowedOrigins("http://localhost:3000", "http://www.knu-haedal.com", "https://www.knu-haedal.com");
     }
 }
