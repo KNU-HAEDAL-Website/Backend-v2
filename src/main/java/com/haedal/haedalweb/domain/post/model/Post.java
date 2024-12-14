@@ -20,6 +20,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,12 +47,6 @@ public class Post {
     @NonNull
     private String content;
 
-    @Column(name = "post_image_url")
-    private String imageUrl;
-
-    @Column(name = "post_views")
-    private Long views;
-
     @Column(name = "post_type")
     @Enumerated(EnumType.STRING)
     @NonNull
@@ -62,10 +58,6 @@ public class Post {
     @Column(name = "post_activity_end_date")
     private LocalDate activityEndDate;
 
-    @Column(name = "post_create_date")
-    @NonNull
-    private LocalDateTime createDate;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -73,4 +65,12 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false, updatable = false)
+    private LocalDateTime regDate;
+
+    @LastModifiedDate
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 }

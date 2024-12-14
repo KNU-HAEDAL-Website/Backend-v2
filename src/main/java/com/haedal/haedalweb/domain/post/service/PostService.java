@@ -2,7 +2,6 @@ package com.haedal.haedalweb.domain.post.service;
 
 import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
 import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSliderResponseDto;
 import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +21,4 @@ public interface PostService {
     Page<PostSummaryResponseDto> getPosts(String pType, Pageable pageable);
 
     PostResponseDto getPost(Long postId);
-
-    Page<PostSliderResponseDto> getSliderPosts(Pageable pageable);
 }

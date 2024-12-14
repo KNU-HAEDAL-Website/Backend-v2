@@ -4,12 +4,9 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
 import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSliderResponseDto;
 import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
-import com.haedal.haedalweb.dto.response.PreSignedUrlResponseDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.post.service.PostService;
-import com.haedal.haedalweb.service.S3Service;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
@@ -30,23 +27,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.UUID;
 
 @Tag(name = "게시글 API")
 @RequiredArgsConstructor
 @RestController
 public class PostController {
-    private final S3Service s3Service;
     private final PostService postService;
 
-    @Operation(summary = "PreSignedUrl 게시판 대표 이미지 저장용")
-    @GetMapping("/posts/generate-presigned-url")
-    public ResponseEntity<PreSignedUrlResponseDto> generatePreSignedUrl() {
-        String objectKey = "posts/" + UUID.randomUUID().toString();
-        PreSignedUrlResponseDto preSignedUrlResponseDto = s3Service.getPreSignedUrlDTO(objectKey);
-
-        return ResponseEntity.ok(preSignedUrlResponseDto);
-    }
+//    @Operation(summary = "PreSignedUrl 게시판 대표 이미지 저장용")
+//    @GetMapping("/posts/generate-presigned-url")
+//    public ResponseEntity<PreSignedUrlResponseDto> generatePreSignedUrl() {
+//        String objectKey = "posts/" + UUID.randomUUID().toString();
+//        PreSignedUrlResponseDto preSignedUrlResponseDto = s3Service.getPreSignedUrlDTO(objectKey);
+//
+//        return ResponseEntity.ok(preSignedUrlResponseDto);
+//    }
 
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
@@ -136,18 +131,5 @@ public class PostController {
         PostResponseDto post = postService.getPost(postId);
 
         return ResponseEntity.ok(post);
-    }
-
-    @Operation(summary = "이벤트 게시글 슬라이더 조회")
-    @Parameters({
-            @Parameter(name = "page", description = "조회 할 page, default: 0"),
-            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
-    })
-    @GetMapping("/posts/slider")
-    public ResponseEntity<Page<PostSliderResponseDto>> getSliderPosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                                      @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        Page<PostSliderResponseDto> posts = postService.getSliderPosts(PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
-
-        return ResponseEntity.ok(posts);
     }
 }

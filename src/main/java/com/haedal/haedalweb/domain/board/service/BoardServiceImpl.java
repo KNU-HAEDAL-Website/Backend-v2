@@ -5,7 +5,6 @@ import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.model.Participant;
 import com.haedal.haedalweb.domain.user.model.Role;
-import com.haedal.haedalweb.service.S3Service;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.web.board.dto.CreateBoardRequestDto;
@@ -33,7 +32,6 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final ActivityRepository activityRepository;
     private final PostRepository postRepository;
-    private final S3Service s3Service;
 
     @Transactional
     public void createBoard(Long activityId, CreateBoardRequestDto createBoardRequestDto) {
@@ -48,7 +46,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = Board.builder()
                 .name(createBoardRequestDto.getBoardName())
                 .intro(createBoardRequestDto.getBoardIntro())
-                .imageUrl(createBoardRequestDto.getBoardImageUrl())
                 .user(creator)
                 .participants(new ArrayList<>())
                 .activity(activity)
@@ -86,7 +83,6 @@ public class BoardServiceImpl implements BoardService {
         validateAuthorityOfBoardManagement(loggedInUser, creator);
         validateDeleteBoardRequest(boardId);
 
-        s3Service.deleteObject(board.getImageUrl());
         boardRepository.delete(board);
     }
 
@@ -100,8 +96,8 @@ public class BoardServiceImpl implements BoardService {
 
         validateAuthorityOfBoardManagement(loggedInUser, creator);
 
-        s3Service.deleteObject(board.getImageUrl());
-        board.setImageUrl(newImageUrl);
+//        s3Service.deleteObject(board.getImageUrl());
+//        board.setImageUrl(newImageUrl);
         boardRepository.save(board);
     }
 
@@ -157,7 +153,6 @@ public class BoardServiceImpl implements BoardService {
                 .boardId(board.getId())
                 .boardName(board.getName())
                 .boardIntro(board.getIntro())
-                .boardImageUrl(s3Service.generatePreSignedGetUrl(board.getImageUrl())) // presigned-url 변환 후 값 넣어주기
                 .participants(convertParticipants(board.getParticipants())) // List<Participants>로 List<participantDTO> 만들기
                 .build();
     }

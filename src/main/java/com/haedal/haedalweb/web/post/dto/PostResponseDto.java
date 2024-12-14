@@ -1,9 +1,7 @@
 package com.haedal.haedalweb.web.post.dto;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -29,7 +27,7 @@ public class PostResponseDto {
     private String postContent;
 
     @Schema(description = "게시글 대표 이미지 파일 Url")
-    private URL postImageUrl;
+    private String postImageUrl;
 
     @Schema(description = "게시글 조회수")
     private Long postViews;

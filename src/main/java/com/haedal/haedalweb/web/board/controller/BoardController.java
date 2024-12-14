@@ -6,9 +6,7 @@ import com.haedal.haedalweb.domain.board.service.BoardService;
 import com.haedal.haedalweb.web.board.dto.CreateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.UpdateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.BoardResponseDto;
-import com.haedal.haedalweb.dto.response.PreSignedUrlResponseDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
-import com.haedal.haedalweb.service.S3Service;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
@@ -30,23 +28,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.UUID;
 
 @Tag(name = "게시판 API")
 @RequiredArgsConstructor
 @RestController
 public class BoardController {
-    private final S3Service s3Service;
     private final BoardService boardService;
-
-    @Operation(summary = "PreSignedUrl 게시판 대표 이미지 저장용")
-    @GetMapping("/boards/generate-presigned-url")
-    public ResponseEntity<PreSignedUrlResponseDto> generatePreSignedUrl() {
-        String objectKey = "boards/" + UUID.randomUUID().toString();
-        PreSignedUrlResponseDto preSignedUrlResponseDto = s3Service.getPreSignedUrlDTO(objectKey);
-
-        return ResponseEntity.ok(preSignedUrlResponseDto);
-    }
 
     @Operation(summary = "게시판 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_BOARD_SUCCESS)

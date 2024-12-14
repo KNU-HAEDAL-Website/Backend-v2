@@ -12,7 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
-
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,7 +37,6 @@ public class User {
     private Integer studentNumber;
 
     @Column(name = "email", unique = true, length = 63)
-    @NonNull
     private String email;
 
     @Column(name = "user_name", length = 15)
@@ -53,9 +53,13 @@ public class User {
     @NonNull
     private UserStatus userStatus;
 
-    @Column(name = "reg_date")
-    @NonNull
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false, updatable = false)
     private LocalDateTime regDate;
+
+    @LastModifiedDate
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 
 //    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "profile_id")

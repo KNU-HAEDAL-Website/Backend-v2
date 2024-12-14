@@ -24,7 +24,7 @@ public class BoardResponseDto {
     private String boardIntro;
 
     @Schema(description = "게시판 대표 이미지 파일 Url")
-    private URL boardImageUrl;
+    private String boardImageUrl;
 
     @Schema(description = "참여 인원 목록")
     private List<ParticipantResponseDto> participants;

@@ -20,9 +20,6 @@ public class CreateBoardRequestDto {
     @Size(max = 50, message = "게시판 소개는 50자 이하여야 합니다.")
     private String boardIntro;
 
-    @Schema(description = "게시판 대표 이미지 파일 Url", example = "boards/abc.jpg")
-    private String boardImageUrl;
-
     @Schema(description = "참여 인원 ID", allowableValues = {"haedal1234", "good1234"})
     private Set<String> participants;
 }

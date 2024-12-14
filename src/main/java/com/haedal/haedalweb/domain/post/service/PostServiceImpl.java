@@ -5,11 +5,9 @@ import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
-import com.haedal.haedalweb.service.S3Service;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
 import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSliderResponseDto;
 import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
@@ -20,10 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
@@ -32,7 +28,6 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final UserService userService;
-    private final S3Service s3Service;
 
     @Transactional
     public void createPost(Long boardId, CreatePostRequestDto createPostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
@@ -60,18 +55,14 @@ public class PostServiceImpl implements PostService {
             activityEndDate = LocalDate.parse(createPostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
         }
 
-        LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
 
         Post post = Post.builder()
                 .title(createPostRequestDTO.getPostTitle())
                 .content(createPostRequestDTO.getPostContent())
-                .imageUrl(createPostRequestDTO.getPostImageUrl()) // 이미지 생성 Controller 만들기
-                .views(0L)
                 .postType(postType)
                 .activityStartDate(activityStartDate)
                 .activityEndDate(activityEndDate)
-                .createDate(createDate)
                 .user(creator)
                 .board(board)
                 .build();
@@ -93,7 +84,6 @@ public class PostServiceImpl implements PostService {
 
         LocalDate activityStartDate = null;
         LocalDate activityEndDate = null;
-        LocalDateTime createDate = LocalDateTime.now();
         User creator = userService.getLoggedInUser();
 
         if (postType == PostType.EVENT) {
@@ -111,12 +101,9 @@ public class PostServiceImpl implements PostService {
         Post post = Post.builder()
                 .title(createPostRequestDTO.getPostTitle())
                 .content(createPostRequestDTO.getPostContent())
-                .imageUrl(createPostRequestDTO.getPostImageUrl()) // 이미지 생성 Controller 만들기
-                .views(0L)
                 .postType(postType)
                 .activityStartDate(activityStartDate)
                 .activityEndDate(activityEndDate)
-                .createDate(createDate)
                 .user(creator)
                 .build();
 
@@ -136,7 +123,6 @@ public class PostServiceImpl implements PostService {
 
         validateAuthorityOfPostManagement(loggedInUser, postCreator, boardCreator);
 
-        s3Service.deleteObject(post.getImageUrl());
         postRepository.delete(post);
     }
 
@@ -152,7 +138,6 @@ public class PostServiceImpl implements PostService {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
         }
 
-        s3Service.deleteObject(post.getImageUrl());
         postRepository.delete(post);
     }
 
@@ -187,7 +172,6 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
 
-        post.setViews(post.getViews()+1);
         postRepository.save(post);
 
         PostResponseDto postResponseDto;
@@ -196,9 +180,8 @@ public class PostServiceImpl implements PostService {
                     .postId(post.getId())
                     .postTitle(post.getTitle())
                     .postContent(post.getContent())
-                    .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
-                    .postViews(post.getViews())
-                    .postCreateDate(post.getCreateDate())
+                    .postViews(0L) // Views 구현해야 함.
+                    .postCreateDate(post.getRegDate())
                     .postActivityStartDate(post.getActivityStartDate())
                     .postActivityEndDate(post.getActivityEndDate())
                     .userId(post.getUser().getId())
@@ -214,9 +197,9 @@ public class PostServiceImpl implements PostService {
                 .postId(post.getId())
                 .postTitle(post.getTitle())
                 .postContent(post.getContent())
-                .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
-                .postViews(post.getViews())
-                .postCreateDate(post.getCreateDate())
+                .postImageUrl(null) // 이미지 구현해야 함.
+                .postViews(0L) // Views 구현해야 함.
+                .postCreateDate(post.getRegDate())
                 .postActivityStartDate(post.getActivityStartDate())
                 .postActivityEndDate(post.getActivityEndDate())
                 .userId(post.getUser().getId())
@@ -224,13 +207,6 @@ public class PostServiceImpl implements PostService {
                 .build();
 
         return postResponseDto;
-    }
-
-    @Transactional(readOnly = true)
-    public Page<PostSliderResponseDto> getSliderPosts(Pageable pageable) {
-        Page<Post> postPage = postRepository.findPostsByPostType(PostType.EVENT, pageable);
-
-        return postPage.map((post) -> convertToPostSliderDTO(post));
     }
 
     private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
@@ -250,10 +226,10 @@ public class PostServiceImpl implements PostService {
         return PostSummaryResponseDto.builder()
                 .postId(post.getId())
                 .postTitle(post.getTitle())
-                .postViews(post.getViews())
+                .postViews(0L)
                 .postActivityStartDate(post.getActivityStartDate())
                 .postActivityEndDate(post.getActivityEndDate())
-                .postCreateDate(post.getCreateDate())
+                .postCreateDate(post.getRegDate())
                 .userId(post.getUser().getId())
                 .userName(post.getUser().getName())
                 .boardId(board.getId())
@@ -265,24 +241,14 @@ public class PostServiceImpl implements PostService {
         PostSummaryResponseDto postSummaryResponseDto = PostSummaryResponseDto.builder()
                 .postId(post.getId())
                 .postTitle(post.getTitle())
-                .postViews(post.getViews())
+                .postViews(0L)
                 .postActivityStartDate(post.getActivityStartDate())
                 .postActivityEndDate(post.getActivityEndDate())
-                .postCreateDate(post.getCreateDate())
+                .postCreateDate(post.getRegDate())
                 .userId(post.getUser().getId())
                 .userName(post.getUser().getName())
                 .build();
 
         return postSummaryResponseDto;
-    }
-
-    private PostSliderResponseDto convertToPostSliderDTO(Post post) {
-        PostSliderResponseDto postSliderResponseDto = PostSliderResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postImageUrl(s3Service.generatePreSignedGetUrl(post.getImageUrl()))
-                .build();
-
-        return postSliderResponseDto;
     }
 }
