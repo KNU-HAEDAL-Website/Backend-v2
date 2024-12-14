@@ -2,11 +2,12 @@ package com.haedal.haedalweb.config;
 
 import com.haedal.haedalweb.constants.LoginConstants;
 import com.haedal.haedalweb.exception.FilterExceptionHandler;
-import com.haedal.haedalweb.jwt.CustomLogoutFilter;
-import com.haedal.haedalweb.jwt.JWTFilter;
-import com.haedal.haedalweb.jwt.JWTUtil;
-import com.haedal.haedalweb.jwt.LoginFilter;
+import com.haedal.haedalweb.security.filter.CustomLogoutFilter;
+import com.haedal.haedalweb.security.filter.JWTFilter;
+import com.haedal.haedalweb.security.service.TokenService;
+import com.haedal.haedalweb.security.filter.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,11 +29,21 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JWTFilter jwtFilter;
+    private final CustomLogoutFilter customLogoutFilter;
+    private final TokenService tokenService;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public LoginFilter loginFilter(AuthenticationManager authenticationManager) {
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, tokenService);
+        return loginFilter;
     }
 
     @Bean
@@ -42,7 +53,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, LoginFilter loginFilter) throws Exception {
 
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -51,7 +62,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.knu-haedal.com", "https://www.knu-haedal.com"));
+                        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://www.knu-haedal.com", "https://www.knu-haedal.com", "http://localhost:8080"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -91,10 +102,10 @@ public class SecurityConfig {
 
         //JWTFilter 등록
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+                .addFilterBefore(jwtFilter, LoginFilter.class);
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
 
         http
                 .addFilterBefore(new FilterExceptionHandler(), LogoutFilter.class);
@@ -103,7 +114,7 @@ public class SecurityConfig {
                 .logout((auth) -> auth.disable());
 
         http
-                .addFilterAfter(new CustomLogoutFilter(jwtUtil), LogoutFilter.class);
+                .addFilterAfter(customLogoutFilter, LogoutFilter.class);
 
 
         http

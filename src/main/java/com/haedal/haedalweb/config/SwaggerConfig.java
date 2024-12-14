@@ -3,8 +3,8 @@ package com.haedal.haedalweb.config;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.ResponseCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.dto.response.common.ErrorResponse;
-import com.haedal.haedalweb.dto.response.common.SuccessResponse;
+import com.haedal.haedalweb.web.common.dto.ErrorResponse;
+import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -26,7 +26,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.validation.FieldError;
 import org.springframework.web.method.HandlerMethod;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
                 description = "해달 웹 백엔드 API",
                 version = "1.0"),
         servers = {
-            @Server(url = "https://www.knu-haedal.com/api", description = "개발 서버"),
+            @Server(url = "https://www.knu-haedal.com/api", description = "개발 서버"), @Server(url = "http://localhost:8080/api"),
         }
 )
 @Configuration
