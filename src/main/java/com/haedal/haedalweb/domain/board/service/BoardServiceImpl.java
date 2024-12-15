@@ -124,6 +124,11 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.save(board);
     }
 
+    @Override
+    public boolean existsByActivityId(Long activityId) {
+        return boardRepository.existsByActivityId(activityId);
+    }
+
     private void addParticipantsToBoard(Board board, List<User> participants) {
         for (User user : participants) {
             Participant participant = Participant.builder()

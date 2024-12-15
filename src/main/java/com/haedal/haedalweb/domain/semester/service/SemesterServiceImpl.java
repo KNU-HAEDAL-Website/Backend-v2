@@ -1,6 +1,8 @@
 package com.haedal.haedalweb.domain.semester.service;
 
+import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.semester.model.Semester;
+import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.web.semester.dto.SemesterResponseDto;
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 public class SemesterServiceImpl implements SemesterService {
     private final SemesterRepository semesterRepository;
 
+    @Override
     public List<SemesterResponseDto> getAllSemesterDTOs() {
         List<Semester> semesters = semesterRepository.findAll(Sort.by("name"));
 
@@ -21,6 +24,13 @@ public class SemesterServiceImpl implements SemesterService {
                 .map(this::convertToSemesterDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Semester findSemesterById(Long semesterId) {
+        return semesterRepository.findById(semesterId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
+    }
+
 
     private SemesterResponseDto convertToSemesterDTO(Semester semester) {
         return SemesterResponseDto.builder()

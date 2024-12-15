@@ -1,12 +1,10 @@
 package com.haedal.haedalweb.domain.activity.service;
 
-import com.haedal.haedalweb.web.activity.dto.CreateActivityRequestDto;
+import com.haedal.haedalweb.domain.activity.model.Activity;
+import com.haedal.haedalweb.domain.semester.model.Semester;
 
-/**
- * Interface for administering activities within a semester.
- */
 public interface AdminActivityService {
-    void createActivity(Long semesterId, CreateActivityRequestDto createActivityRequestDto);
+    Activity createActivity(Semester semester, String activityName);
 
-    void deleteActivity(Long activityId);
+    void deleteActivity(Activity activity);
 }

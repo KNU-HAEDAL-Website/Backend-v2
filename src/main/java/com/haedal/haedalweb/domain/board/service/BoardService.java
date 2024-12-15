@@ -13,4 +13,5 @@ public interface BoardService {
     void deleteBoard(Long activityId, Long boardId);
     void updateBoardImage(Long activityId, Long boardId, String newImageUrl);
     void updateBoard(Long activityId, Long boardId, UpdateBoardRequestDto updateBoardRequestDto);
+    boolean existsByActivityId(Long activityId);
 }
