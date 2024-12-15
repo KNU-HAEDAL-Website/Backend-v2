@@ -1,10 +1,10 @@
 package com.haedal.haedalweb.web.activity.controller;
 
+import com.haedal.haedalweb.application.activity.service.AdminActivityAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.web.activity.dto.CreateActivityRequestDto;
+import com.haedal.haedalweb.application.activity.dto.CreateActivityRequestDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
-import com.haedal.haedalweb.domain.activity.service.AdminActivityService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class AdminActivityController {
-    private final AdminActivityService adminActivityService;
+    private final AdminActivityAppService adminActivityAppService;
 
     @Operation(summary = "활동 추가")
     @ApiSuccessCodeExample(SuccessCode.ADD_ACTIVITY_SUCCESS)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_SEMESTER_ID)
     @PostMapping
     public ResponseEntity<SuccessResponse> addActivity(@PathVariable Long semesterId, @RequestBody @Valid CreateActivityRequestDto createActivityRequestDto) {
-        adminActivityService.createActivity(semesterId, createActivityRequestDto);
+        adminActivityAppService.createActivity(semesterId, createActivityRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_ACTIVITY_SUCCESS);
     }
@@ -43,7 +43,7 @@ public class AdminActivityController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.EXIST_BOARD})
     @DeleteMapping("/{activityId}")
     public ResponseEntity<SuccessResponse> deleteActivity(@PathVariable Long semesterId, @PathVariable Long activityId) {
-        adminActivityService.deleteActivity(activityId);
+        adminActivityAppService.deleteActivity(activityId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_ACTIVITY_SUCCESS);
     }
