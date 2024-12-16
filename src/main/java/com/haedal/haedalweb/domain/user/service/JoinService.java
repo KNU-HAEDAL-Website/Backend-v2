@@ -1,13 +1,11 @@
 package com.haedal.haedalweb.domain.user.service;
 
-import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
+import com.haedal.haedalweb.domain.user.model.User;
 
 
 public interface JoinService {
 
-    void createUserAccount(JoinRequestDto joinRequestDTO);
-
-    void createAdminAccount(JoinRequestDto joinRequestDTO);
+    void createAccount(User user);
 
     void checkUserIdDuplicate(String userId);
 

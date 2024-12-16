@@ -16,7 +16,7 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash(value = EmailConstants.CHECK_EMAIL_VERIFICATION, timeToLive = EmailConstants.CHECK_EMAIL_CODE_EXPIRATION_TIME_S)
 public class CheckEmailVerification {
     @Id
-    private String id;
+    private String userId;
 
     private String email;
 }

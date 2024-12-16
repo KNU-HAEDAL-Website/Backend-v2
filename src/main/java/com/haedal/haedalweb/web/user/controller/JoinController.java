@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.haedal.haedalweb.domain.user.service.JoinService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,25 +29,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/join")
 public class JoinController {
-    private final JoinService joinService;
     private final JoinAppService joinAppService;
 
     @Operation(summary = "회원가입")
     @ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.INVALID_PARAMETER})
+    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
     @PostMapping
-    public ResponseEntity<SuccessResponse> resisterUser(@RequestBody @Valid JoinRequestDto joinRequestDTO) {
-        joinService.createUserAccount(joinRequestDTO);
+    public ResponseEntity<SuccessResponse> resisterUser(@RequestBody @Valid JoinRequestDto joinRequestDto) {
+        joinAppService.createUserAccount(joinRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
 
     @Operation(summary = "관리자 회원가입 (개발용)")
     @ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.INVALID_PARAMETER})
+    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
     @PostMapping("/admin")
     public ResponseEntity<SuccessResponse> resisterAdmin(@RequestBody @Valid JoinRequestDto joinRequestDTO) {
-        joinService.createAdminAccount(joinRequestDTO);
+        joinAppService.createMasterAccount(joinRequestDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
@@ -75,9 +73,9 @@ public class JoinController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UNIQUE_STUDENT_NUMBER);
     }
 
-    @Operation(summary = "이메일 인증 코드 전송")
+    @Operation(summary = "이메일 인증 코드 전송/재전송")
     @ApiSuccessCodeExamples({SuccessCode.SEND_VERIFICATION_CODE_SUCCESS})
-    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_EMAIL})
+    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_EMAIL, ErrorCode.LIMIT_EXCEEDED_SEND_EMAIL})
     @PostMapping("/email/send")
     public ResponseEntity<SuccessResponse> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailRequestDto) {
         joinAppService.createAndSendVerificationCode(emailRequestDto);
