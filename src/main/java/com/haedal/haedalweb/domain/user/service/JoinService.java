@@ -9,7 +9,9 @@ public interface JoinService {
 
     void createAdminAccount(JoinRequestDto joinRequestDTO);
 
-    boolean isUserIdDuplicate(String userId);
+    void checkUserIdDuplicate(String userId);
 
-    boolean isStudentNumberDuplicate(Integer studentNumber);
+    void checkStudentNumberDuplicate(Integer studentNumber);
+
+    void checkEmailDuplicate(String email);
 }

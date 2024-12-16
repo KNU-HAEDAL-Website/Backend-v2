@@ -38,11 +38,9 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
         Activity activity = activityService.findActivityById(activityId);
 
         // 보드와의 연관성 검증
-        if (boardService.existsByActivityId(activityId)) {
-            throw new BusinessException(ErrorCode.EXIST_BOARD);
-        }
+        boolean hasRelatedBoards = boardService.existsByActivityId(activityId);
 
-        // 활동 삭제
-        adminActivityService.deleteActivity(activity);
+        // 활동 삭제 요청
+        adminActivityService.deleteActivity(activity, hasRelatedBoards);
     }
 }

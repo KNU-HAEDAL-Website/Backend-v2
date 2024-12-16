@@ -12,9 +12,9 @@ public enum SuccessCode implements ResponseCode{
     JOIN_REFUSAL(HttpStatus.OK, true, "회원가입을 거절했습니다."),
     EXPEL_USER(HttpStatus.OK, true, "회원을 내보냈습니다."),
     UNIQUE_USER_ID(HttpStatus.OK, true, "사용 가능한 ID입니다."),
-    DUPLICATED_USER_ID(HttpStatus.OK, false, "중복된 ID입니다. 다른 ID를 입력해 주세요."),
+//    DUPLICATED_USER_ID(HttpStatus.OK, false, "중복된 ID입니다. 다른 ID를 입력해 주세요."),
     UNIQUE_STUDENT_NUMBER(HttpStatus.OK, true, "사용 가능한 학번입니다."),
-    DUPLICATED_STUDENT_NUMBER(HttpStatus.OK, false, "중복된 학번입니다. 다시 확인해 주세요."),
+//    DUPLICATED_STUDENT_NUMBER(HttpStatus.OK, false, "중복된 학번입니다. 다시 확인해 주세요."),
     LOGIN_SUCCESS(HttpStatus.OK, true, "로그인에 성공했습니다."),
     LOGOUT_SUCCESS(HttpStatus.OK, true, "로그아웃에 성공했습니다."),
     REISSUE_SUCCESS(HttpStatus.OK, true, "토큰을 재발급했습니다."),
@@ -29,7 +29,8 @@ public enum SuccessCode implements ResponseCode{
     ADD_POST_SUCCESS(HttpStatus.CREATED, true, "게시글을 생성했습니다."),
     OK(HttpStatus.OK, true, "요청을 성공적으로 수행했습니다."),
     DELETE_POST_SUCCESS(HttpStatus.OK, true, "게시글을 삭제했습니다."),
-    SEND_VERIFICATION_CODE_SUCCESS(HttpStatus.CREATED, true, "인증 코드를 메일로 전송했습니다.");
+    SEND_VERIFICATION_CODE_SUCCESS(HttpStatus.CREATED, true, "인증 코드를 메일로 전송했습니다."),
+    VERIFY_VERIFICATION_CODE_SUCCESS(HttpStatus.OK, true, "인증 코드 검증에 성공했습니다.");
 
 
     private final HttpStatus httpStatus;

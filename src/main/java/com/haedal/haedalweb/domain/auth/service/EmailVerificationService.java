@@ -3,9 +3,9 @@ package com.haedal.haedalweb.domain.auth.service;
 import com.haedal.haedalweb.domain.auth.model.EmailVerification;
 
 public interface EmailVerificationService {
-    void saveEmailVerification(EmailVerification emailVerification);
+    void saveEmailVerification(String email, String code);
 
-    EmailVerification findEmailVerificationById(String email);
+    void verifyCode(String email, String code);
 
     void deleteEmailVerification(EmailVerification emailVerification);
 

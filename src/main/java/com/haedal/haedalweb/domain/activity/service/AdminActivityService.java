@@ -6,5 +6,5 @@ import com.haedal.haedalweb.domain.semester.model.Semester;
 public interface AdminActivityService {
     Activity createActivity(Semester semester, String activityName);
 
-    void deleteActivity(Activity activity);
+    void deleteActivity(Activity activity, boolean hasRelatedBoards);
 }

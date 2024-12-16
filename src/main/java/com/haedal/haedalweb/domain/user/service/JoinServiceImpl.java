@@ -22,6 +22,7 @@ public class JoinServiceImpl implements JoinService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
     @Transactional
     public void createUserAccount(JoinRequestDto joinRequestDTO) {
         String userId = joinRequestDTO.getUserId();
@@ -45,6 +46,7 @@ public class JoinServiceImpl implements JoinService {
         userRepository.save(user);
     }
 
+    @Override
     @Transactional
     public void createAdminAccount(JoinRequestDto joinRequestDTO) { // 관리자 회원가입 (개발용)
         String userId = joinRequestDTO.getUserId();
@@ -68,6 +70,27 @@ public class JoinServiceImpl implements JoinService {
         userRepository.save(user);
     }
 
+    @Override
+    public void checkUserIdDuplicate(String userId) {
+        if (userRepository.existsById(userId)) {
+            throw new BusinessException(ErrorCode.DUPLICATED_USER_ID);
+        }
+    }
+
+    @Override
+    public void checkStudentNumberDuplicate(Integer studentNumber) {
+        if (userRepository.existsByStudentNumber(studentNumber)) {
+            throw new BusinessException(ErrorCode.DUPLICATED_STUDENT_NUMBER);
+        }
+    }
+
+    @Override
+    public void checkEmailDuplicate(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.DUPLICATED_EMAIL);
+        }
+    }
+
     private void validateJoinRequest(JoinRequestDto joinRequestDTO) {
         if (isUserIdDuplicate(joinRequestDTO.getUserId())) {
             throw new BusinessException(ErrorCode.DUPLICATED_USER_ID);
@@ -76,14 +99,6 @@ public class JoinServiceImpl implements JoinService {
         if (isStudentNumberDuplicate(joinRequestDTO.getStudentNumber())) {
             throw new BusinessException(ErrorCode.DUPLICATED_STUDENT_NUMBER);
         }
-    }
-
-    public boolean isUserIdDuplicate(String userId) {
-        return userRepository.existsById(userId);
-    }
-
-    public boolean isStudentNumberDuplicate(Integer studentNumber) {
-        return userRepository.existsByStudentNumber(studentNumber);
     }
 
     private Profile createProfileWithSns() {

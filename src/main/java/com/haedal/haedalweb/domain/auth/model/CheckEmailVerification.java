@@ -6,21 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@RedisHash(value = EmailConstants.EMAIL_VERIFICATION, timeToLive = EmailConstants.EMAIL_CODE_EXPIRATION_TIME_S)
-public class EmailVerification {
+@RedisHash(value = EmailConstants.CHECK_EMAIL_VERIFICATION, timeToLive = EmailConstants.CHECK_EMAIL_CODE_EXPIRATION_TIME_S)
+public class CheckEmailVerification {
     @Id
+    private String id;
+
     private String email;
-
-    private String code;
-
-    private int resendCount;
 }
