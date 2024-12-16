@@ -8,6 +8,7 @@ import com.haedal.haedalweb.domain.auth.service.CheckEmailVerificationService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
+import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.domain.user.service.JoinService;
 import com.haedal.haedalweb.infrastructure.EmailSenderService;
 import com.haedal.haedalweb.util.EmailUtil;
@@ -32,7 +33,7 @@ public class JoinAppServiceImpl implements JoinAppService {
         checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 일반 멤버로 설정
-        User user = createUserFromDto(joinRequestDto, Role.ROLE_MEMBER);
+        User user = createUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
 
         // 등록
         joinService.createAccount(user);
@@ -45,7 +46,7 @@ public class JoinAppServiceImpl implements JoinAppService {
         checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 웹 관리자로 설정
-        User user = createUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER);
+        User user = createUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER, UserStatus.MASTER);
 
         // 등록
         joinService.createAccount(user);
@@ -94,13 +95,14 @@ public class JoinAppServiceImpl implements JoinAppService {
         );
     }
 
-    private User createUserFromDto(JoinRequestDto dto, Role role) {
+    private User createUserFromDto(JoinRequestDto dto, Role role, UserStatus userStatus) {
         return User.builder()
                 .id(dto.getUserId())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getUserName())
                 .role(role)
+                .userStatus(userStatus)
                 .studentNumber(dto.getStudentNumber())
                 .build();
     }
