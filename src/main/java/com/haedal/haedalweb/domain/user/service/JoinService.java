@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.domain.user.service;
 
-import com.haedal.haedalweb.web.user.dto.JoinRequestDto;
+import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
 
 
 public interface JoinService {

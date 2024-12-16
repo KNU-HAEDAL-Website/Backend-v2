@@ -1,8 +1,8 @@
 package com.haedal.haedalweb.web.user.controller;
 
 import com.haedal.haedalweb.domain.user.service.UserService;
-import com.haedal.haedalweb.web.user.dto.UserResponseDto;
-import com.haedal.haedalweb.web.user.dto.UserSummaryResponseDto;
+import com.haedal.haedalweb.application.user.dto.UserResponseDto;
+import com.haedal.haedalweb.application.user.dto.UserSummaryResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

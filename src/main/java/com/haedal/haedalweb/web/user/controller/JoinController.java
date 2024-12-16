@@ -1,8 +1,10 @@
 package com.haedal.haedalweb.web.user.controller;
 
+import com.haedal.haedalweb.application.user.dto.EmailRequestDto;
+import com.haedal.haedalweb.application.user.service.JoinAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.web.user.dto.JoinRequestDto;
+import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "회원가입 관련 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/join")
 public class JoinController {
     private final JoinService joinService;
-
-    public JoinController(JoinService joinService) {
-        this.joinService = joinService;
-    }
+    private final JoinAppService joinAppService;
 
     @Operation(summary = "회원가입")
     @ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
@@ -75,5 +76,14 @@ public class JoinController {
         }
 
         return ResponseUtil.buildSuccessResponseEntity(successCode);
+    }
+
+    @Operation(summary = "이메일 인증 코드 전송")
+    @ApiSuccessCodeExamples({SuccessCode.SEND_VERIFICATION_CODE_SUCCESS})
+    @PostMapping("/email/send")
+    public ResponseEntity<SuccessResponse> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailRequestDto) {
+        joinAppService.createAndSendVerificationCode(emailRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS);
     }
 }
