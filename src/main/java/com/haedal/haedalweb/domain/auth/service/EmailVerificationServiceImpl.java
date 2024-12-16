@@ -31,7 +31,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         EmailVerification emailVerification = EmailVerification.builder()
                 .email(email)
                 .code(code)
-                .resendCount(0)
+                .resendCount(1)
                 .build();
 
         emailVerificationRepository.save(emailVerification);
