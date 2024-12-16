@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.domain.auth.model;
 
-import com.haedal.haedalweb.constants.LoginConstants;
+import com.haedal.haedalweb.constants.EmailConstants;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,18 +8,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.data.redis.core.index.Indexed;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@RedisHash(value = LoginConstants.REFRESH_TOKEN, timeToLive = LoginConstants.REFRESH_TOKEN_EXPIRATION_TIME_S)
-public class RefreshToken {
+@RedisHash(value = EmailConstants.CHECK_EMAIL_VERIFICATION, timeToLive = EmailConstants.CHECK_EMAIL_CODE_EXPIRATION_TIME_S)
+public class CheckEmailVerification {
     @Id
-    private String token;
-
-    @Indexed
     private String userId;
+
+    private String email;
 }

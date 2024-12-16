@@ -3,7 +3,7 @@ package com.haedal.haedalweb.domain.user.service;
 import java.util.List;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
-import com.haedal.haedalweb.web.user.dto.UserResponseDto;
+import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import org.springframework.data.domain.Sort;
 
 

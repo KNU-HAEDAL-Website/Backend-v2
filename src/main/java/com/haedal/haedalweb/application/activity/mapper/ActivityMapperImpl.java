@@ -14,9 +14,4 @@ public class ActivityMapperImpl implements ActivityMapper {
                 .semesterId(activity.getSemester().getId())
                 .build();
     }
-
-    @Override
-    public Activity toEntity(ActivityResponseDto dto) {
-        return null;
-    }
 }

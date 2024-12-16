@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Override
     public void saveRefreshToken(String token, String userId) {
         refreshTokenRepository.save(new RefreshToken(token, userId));
     }
 
+    @Override
     public void deleteRefreshToken(String token) {
         try {
             refreshTokenRepository.deleteById(token);

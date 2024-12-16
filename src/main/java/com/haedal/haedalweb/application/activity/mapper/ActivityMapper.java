@@ -5,5 +5,4 @@ import com.haedal.haedalweb.application.activity.dto.ActivityResponseDto;
 
 public interface ActivityMapper {
     ActivityResponseDto toDto(Activity activity);
-    Activity toEntity(ActivityResponseDto dto);
 }

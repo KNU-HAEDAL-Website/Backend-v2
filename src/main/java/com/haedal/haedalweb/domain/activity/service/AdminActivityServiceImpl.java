@@ -12,23 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class AdminActivityServiceImpl implements AdminActivityService {
-//    private final SemesterRepository semesterRepository;
     private final ActivityRepository activityRepository;
-//    private final BoardRepository boardRepository;
-
-//    @Transactional
-//    @Override
-//    public void createActivity(Long semesterId, CreateActivityRequestDto createActivityRequestDto) {
-//        Semester semester = semesterRepository.findById(semesterId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
-//
-//        Activity activity = Activity.builder()
-//                .name(createActivityRequestDto.getActivityName())
-//                .semester(semester)
-//                .build();
-//
-//        activityRepository.save(activity);
-//    }
 
     @Override
     public Activity createActivity(Semester semester, String activityName) {
@@ -41,17 +25,11 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     }
 
     @Override
-    public void deleteActivity(Activity activity) {
-//        Activity activity = activityRepository.findById(activityId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
+    public void deleteActivity(Activity activity, boolean hasRelatedBoards) {
+        if (hasRelatedBoards) {
+            throw new BusinessException(ErrorCode.EXIST_BOARD);
+        }
 
-//        validateDeleteActivityRequest(activityId);
         activityRepository.delete(activity);
     }
-
-//    private void validateDeleteActivityRequest(Long activityId) {
-//        if (boardRepository.existsByActivityId(activityId)) {
-//            throw new BusinessException(ErrorCode.EXIST_BOARD);
-//        }
-//    }
 }

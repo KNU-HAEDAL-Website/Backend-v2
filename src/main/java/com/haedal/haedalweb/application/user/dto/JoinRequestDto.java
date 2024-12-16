@@ -1,8 +1,10 @@
-package com.haedal.haedalweb.web.user.dto;
+package com.haedal.haedalweb.application.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -22,6 +24,12 @@ public class JoinRequestDto {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()])[A-Za-z\\d!@#$%^&*()]{8,20}$",
             message = "비밀번호는 영문, 숫자, 특수문자(!@#$%^&*())를 혼용하여 8자 이상 20자 이하로 설정해야 합니다.")
     private String password;
+
+    @Schema(description = "이메일", example = "haedal12@gmail.com")
+    @Size(max = 63, message = "이메일은 63자 이하여야 합니다.")
+    @Email(message = "유효한 이메일 형식이어야 합니다.")
+    @NotBlank(message = "이메일은 필수 입력 항목입니다.")
+    private String email;
 
     @Schema(description = "유저 학번", example = "2024111234")
     @Min(1_900_000_000)
