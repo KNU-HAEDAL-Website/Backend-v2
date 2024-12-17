@@ -15,13 +15,18 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
 
     @Override
-    public Activity findActivityById(Long activityId) {
+    public Activity getActivity(Long activityId) {
         return activityRepository.findById(activityId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
     }
 
     @Override
-    public List<Activity> getActivitiesBySemesterId(Long semesterId) {
+    public List<Activity> getActivities(Long semesterId) {
         return activityRepository.findBySemesterId(semesterId);
+    }
+
+    @Override
+    public boolean hasActivitiesBySemesterId(Long semesterId) {
+        return activityRepository.existsBySemesterId(semesterId);
     }
 }

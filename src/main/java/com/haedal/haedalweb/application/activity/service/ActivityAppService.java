@@ -5,5 +5,5 @@ import com.haedal.haedalweb.domain.activity.model.Activity;
 import java.util.List;
 
 public interface ActivityAppService {
-    List<Activity> getActivitiesBySemesterId(Long semesterId);
+    List<Activity> getActivities(Long semesterId);
 }

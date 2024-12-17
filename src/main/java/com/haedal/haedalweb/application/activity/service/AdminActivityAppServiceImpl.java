@@ -1,14 +1,12 @@
 package com.haedal.haedalweb.application.activity.service;
 
 import com.haedal.haedalweb.application.activity.dto.CreateActivityRequestDto;
-import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.activity.service.AdminActivityService;
 import com.haedal.haedalweb.domain.board.service.BoardService;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 import com.haedal.haedalweb.domain.semester.service.SemesterService;
-import com.haedal.haedalweb.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,24 +21,24 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
 
     @Transactional
     @Override
-    public void createActivity(Long semesterId, CreateActivityRequestDto createActivityRequestDto) {
+    public void registerActivity(Long semesterId, CreateActivityRequestDto createActivityRequestDto) {
         // 학기 존재 여부 검증 및 가져오기
-        Semester semester = semesterService.findSemesterById(semesterId);
+        Semester semester = semesterService.getSemester(semesterId);
 
         // 활동 생성
-        adminActivityService.createActivity(semester, createActivityRequestDto.getActivityName());
+        adminActivityService.registerActivity(semester, createActivityRequestDto.getActivityName());
     }
 
     @Transactional
     @Override
-    public void deleteActivity(Long activityId) {
+    public void removeActivity(Long activityId) {
         // 활동 존재 여부 검증 및 가져오기
-        Activity activity = activityService.findActivityById(activityId);
+        Activity activity = activityService.getActivity(activityId);
 
         // 보드와의 연관성 검증
-        boolean hasRelatedBoards = boardService.existsByActivityId(activityId);
+        boolean hasRelatedBoards = boardService.hasBoardsByActivityId(activityId);
 
         // 활동 삭제 요청
-        adminActivityService.deleteActivity(activity, hasRelatedBoards);
+        adminActivityService.removeActivity(activity, hasRelatedBoards);
     }
 }

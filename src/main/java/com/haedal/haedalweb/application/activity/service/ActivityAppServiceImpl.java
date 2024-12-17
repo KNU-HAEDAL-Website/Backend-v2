@@ -13,7 +13,7 @@ public class ActivityAppServiceImpl implements ActivityAppService {
     private final ActivityService activityService;
 
     @Override
-    public List<Activity> getActivitiesBySemesterId(Long semesterId) {
-        return activityService.getActivitiesBySemesterId(semesterId);
+    public List<Activity> getActivities(Long semesterId) {
+        return activityService.getActivities(semesterId);
     }
 }

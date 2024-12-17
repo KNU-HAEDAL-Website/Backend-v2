@@ -125,7 +125,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public boolean existsByActivityId(Long activityId) {
+    public boolean hasBoardsByActivityId(Long activityId) {
         return boardRepository.existsByActivityId(activityId);
     }
 

@@ -36,7 +36,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
     @PostMapping
     public ResponseEntity<SuccessResponse> resisterUser(@RequestBody @Valid JoinRequestDto joinRequestDto) {
-        joinAppService.createUserAccount(joinRequestDto);
+        joinAppService.registerUserAccount(joinRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
@@ -46,7 +46,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
     @PostMapping("/admin")
     public ResponseEntity<SuccessResponse> resisterAdmin(@RequestBody @Valid JoinRequestDto joinRequestDTO) {
-        joinAppService.createMasterAccount(joinRequestDTO);
+        joinAppService.registerMasterAccount(joinRequestDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_SUCCESS);
     }
@@ -57,7 +57,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID})
     @GetMapping("/check-user-id")
     public ResponseEntity<SuccessResponse> checkUserIdDuplicate(@RequestParam String userId) {
-        joinAppService.checkUserIdDuplicate(userId);
+        joinAppService.validateUserIdDuplicate(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UNIQUE_USER_ID);
     }
@@ -68,7 +68,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.DUPLICATED_STUDENT_NUMBER})
     @GetMapping("/check-student-number")
     public ResponseEntity<SuccessResponse> checkStudentNumberDuplicate(@RequestParam Integer studentNumber) {
-        joinAppService.checkStudentNumberDuplicate(studentNumber);
+        joinAppService.validateStudentNumberDuplicate(studentNumber);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UNIQUE_STUDENT_NUMBER);
     }
@@ -78,7 +78,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.DUPLICATED_EMAIL, ErrorCode.LIMIT_EXCEEDED_SEND_EMAIL})
     @PostMapping("/email/send")
     public ResponseEntity<SuccessResponse> sendVerificationCode(@RequestBody @Valid EmailRequestDto emailRequestDto) {
-        joinAppService.createAndSendVerificationCode(emailRequestDto);
+        joinAppService.registerAndSendEmailVerification(emailRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS);
     }
@@ -88,7 +88,7 @@ public class JoinController {
     @ApiErrorCodeExamples({ErrorCode.INVALID_EMAIL_VERIFICATION})
     @PostMapping("/email/verify")
     public ResponseEntity<SuccessResponse> verifyCode(@RequestBody @Valid EmailVerificationCodeRequestDto emailVerificationCodeRequestDto) {
-        joinAppService.verifyCode(emailVerificationCodeRequestDto);
+        joinAppService.validateCode(emailVerificationCodeRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.VERIFY_VERIFICATION_CODE_SUCCESS);
     }

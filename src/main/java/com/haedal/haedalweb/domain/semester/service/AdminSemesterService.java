@@ -1,11 +1,11 @@
 package com.haedal.haedalweb.domain.semester.service;
 
-import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
 
+import com.haedal.haedalweb.domain.semester.model.Semester;
 
 public interface AdminSemesterService {
 
-    void createSemester(CreateSemesterRequestDto createSemesterRequestDto);
+    void registerSemester(String semesterName);
 
-    void deleteSemester(Long semesterId);
+    void removeSemester(Semester semester, boolean hasRelatedActivities);
 }

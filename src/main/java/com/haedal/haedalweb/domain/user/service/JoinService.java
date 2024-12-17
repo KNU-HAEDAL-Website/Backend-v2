@@ -5,11 +5,11 @@ import com.haedal.haedalweb.domain.user.model.User;
 
 public interface JoinService {
 
-    void createAccount(User user);
+    void registerAccount(User user);
 
-    void checkUserIdDuplicate(String userId);
+    void validateUserId(String userId);
 
-    void checkStudentNumberDuplicate(Integer studentNumber);
+    void validateStudentNumber(Integer studentNumber);
 
-    void checkEmailDuplicate(String email);
+    void validateEmail(String email);
 }

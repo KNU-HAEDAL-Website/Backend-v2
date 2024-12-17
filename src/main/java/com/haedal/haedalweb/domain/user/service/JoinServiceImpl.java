@@ -15,37 +15,36 @@ public class JoinServiceImpl implements JoinService {
     private final UserRepository userRepository;
 
     @Override
-    public void createAccount(User user) {
-        validateCreateUser(user);
+    public void registerAccount(User user) {
+        validateRegisterUser(user);
         userRepository.save(user);
     }
 
     @Override
-    public void checkUserIdDuplicate(String userId) {
+    public void validateUserId(String userId) {
         if (userRepository.existsById(userId)) {
             throw new BusinessException(ErrorCode.DUPLICATED_USER_ID);
         }
     }
 
     @Override
-    public void checkStudentNumberDuplicate(Integer studentNumber) {
+    public void validateStudentNumber(Integer studentNumber) {
         if (userRepository.existsByStudentNumber(studentNumber)) {
             throw new BusinessException(ErrorCode.DUPLICATED_STUDENT_NUMBER);
         }
     }
 
     @Override
-    public void checkEmailDuplicate(String email) {
+    public void validateEmail(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new BusinessException(ErrorCode.DUPLICATED_EMAIL);
         }
     }
 
-    private void validateCreateUser(User user) {
-        checkUserIdDuplicate(user.getId());
-        checkStudentNumberDuplicate(user.getStudentNumber());
-        checkEmailDuplicate(user.getEmail());
-
+    private void validateRegisterUser(User user) {
+        validateUserId(user.getId());
+        validateStudentNumber(user.getStudentNumber());
+        validateEmail(user.getEmail());
     }
 
     private Profile createProfileWithSns() {

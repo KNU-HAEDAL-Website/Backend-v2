@@ -25,7 +25,7 @@ public class ActivityController {
     @Operation(summary = "해당 학기 활동 조회")
     @GetMapping("/semesters/{semesterId}/activities")
     public ResponseEntity<List<ActivityResponseDto>> getActivities(@PathVariable Long semesterId) {
-        List<Activity> activities = activityAppService.getActivitiesBySemesterId(semesterId);
+        List<Activity> activities = activityAppService.getActivities(semesterId);
 
         List<ActivityResponseDto> activityResponseDTOs = activities.stream()
                 .map(activityMapper::toDto)

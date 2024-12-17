@@ -15,7 +15,7 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     private final ActivityRepository activityRepository;
 
     @Override
-    public Activity createActivity(Semester semester, String activityName) {
+    public Activity registerActivity(Semester semester, String activityName) {
         Activity activity = Activity.builder()
                 .name(activityName)
                 .semester(semester)
@@ -25,7 +25,7 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     }
 
     @Override
-    public void deleteActivity(Activity activity, boolean hasRelatedBoards) {
+    public void removeActivity(Activity activity, boolean hasRelatedBoards) {
         if (hasRelatedBoards) {
             throw new BusinessException(ErrorCode.EXIST_BOARD);
         }
