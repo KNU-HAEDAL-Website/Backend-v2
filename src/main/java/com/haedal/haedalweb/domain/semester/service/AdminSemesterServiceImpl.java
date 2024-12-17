@@ -2,7 +2,7 @@ package com.haedal.haedalweb.domain.semester.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.semester.model.Semester;
-import com.haedal.haedalweb.web.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.activity.repository.ActivityRepository;
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;

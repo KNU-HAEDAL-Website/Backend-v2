@@ -3,7 +3,7 @@ package com.haedal.haedalweb.domain.semester.service;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 import com.haedal.haedalweb.exception.BusinessException;
-import com.haedal.haedalweb.web.semester.dto.SemesterResponseDto;
+import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;

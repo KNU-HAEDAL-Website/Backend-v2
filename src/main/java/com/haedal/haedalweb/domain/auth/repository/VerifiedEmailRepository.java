@@ -1,9 +1,9 @@
 package com.haedal.haedalweb.domain.auth.repository;
 
-import com.haedal.haedalweb.domain.auth.model.CheckEmailVerification;
+import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CheckEmailVerificationRepository extends CrudRepository<CheckEmailVerification, String> {
+public interface VerifiedEmailRepository extends CrudRepository<VerifiedEmail, String> {
 }

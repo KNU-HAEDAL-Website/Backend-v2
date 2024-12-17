@@ -13,8 +13,8 @@ import org.springframework.data.redis.core.RedisHash;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@RedisHash(value = EmailConstants.CHECK_EMAIL_VERIFICATION, timeToLive = EmailConstants.CHECK_EMAIL_CODE_EXPIRATION_TIME_S)
-public class CheckEmailVerification {
+@RedisHash(value = EmailConstants.VERIFIED_EMAIL_VERIFICATION, timeToLive = EmailConstants.VERIFIED_EMAIL_CODE_EXPIRATION_TIME_S)
+public class VerifiedEmail {
     @Id
     private String userId;
 

@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.domain.semester.service;
 
-import com.haedal.haedalweb.web.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
 
 
 public interface AdminSemesterService {

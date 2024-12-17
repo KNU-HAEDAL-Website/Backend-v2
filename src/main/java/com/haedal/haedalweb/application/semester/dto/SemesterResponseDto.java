@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.web.semester.dto;
+package com.haedal.haedalweb.application.semester.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

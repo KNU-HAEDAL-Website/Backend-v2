@@ -4,7 +4,7 @@ import com.haedal.haedalweb.constants.LoginConstants;
 import com.haedal.haedalweb.exception.FilterExceptionHandler;
 import com.haedal.haedalweb.security.filter.CustomLogoutFilter;
 import com.haedal.haedalweb.security.filter.JWTFilter;
-import com.haedal.haedalweb.security.service.TokenService;
+import com.haedal.haedalweb.security.service.TokenAppService;
 import com.haedal.haedalweb.security.filter.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import java.util.Collections;
 public class SecurityConfig {
     private final JWTFilter jwtFilter;
     private final CustomLogoutFilter customLogoutFilter;
-    private final TokenService tokenService;
+    private final TokenAppService tokenAppService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     @Bean
     public LoginFilter loginFilter(AuthenticationManager authenticationManager) {
-        LoginFilter loginFilter = new LoginFilter(authenticationManager, tokenService);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, tokenAppService);
         return loginFilter;
     }
 

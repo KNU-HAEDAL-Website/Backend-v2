@@ -2,7 +2,7 @@ package com.haedal.haedalweb.domain.auth.service;
 
 public interface RefreshTokenService {
 
-    void saveRefreshToken(String token, String userId);
-
-    void deleteRefreshToken(String token);
+    void registerRefreshToken(String refreshToken, String userId);
+    void validateRefreshToken(String refreshToken);
+    void removeRefreshToken(String refreshToken);
 }

@@ -1,7 +1,7 @@
 package com.haedal.haedalweb.web.semester.controller;
 
 import com.haedal.haedalweb.domain.semester.service.SemesterService;
-import com.haedal.haedalweb.web.semester.dto.SemesterResponseDto;
+import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

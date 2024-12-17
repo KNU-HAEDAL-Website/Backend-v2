@@ -3,8 +3,8 @@ package com.haedal.haedalweb.application.user.service;
 import com.haedal.haedalweb.application.user.dto.EmailRequestDto;
 import com.haedal.haedalweb.application.user.dto.EmailVerificationCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
-import com.haedal.haedalweb.domain.auth.model.CheckEmailVerification;
-import com.haedal.haedalweb.domain.auth.service.CheckEmailVerificationService;
+import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
+import com.haedal.haedalweb.domain.auth.service.VerifiedEmailService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class JoinAppServiceImpl implements JoinAppService {
     private final JoinService joinService;
     private final EmailVerificationService emailVerificationService;
-    private final CheckEmailVerificationService checkEmailVerificationService;
+    private final VerifiedEmailService verifiedEmailService;
     private final EmailSenderService emailSenderService;
     private final PasswordEncoder passwordEncoder;
 
@@ -30,7 +30,7 @@ public class JoinAppServiceImpl implements JoinAppService {
     @Override
     public void createUserAccount(JoinRequestDto joinRequestDto) {
         // 인증된 이메일인지 확인
-        checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
+        verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 일반 멤버로 설정
         User user = createUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
@@ -43,7 +43,7 @@ public class JoinAppServiceImpl implements JoinAppService {
     @Override
     public void createMasterAccount(JoinRequestDto joinRequestDto) { // 개발용
         // 인증된 이메일인지 확인
-        checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
+        verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 웹 관리자로 설정
         User user = createUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER, UserStatus.MASTER);
@@ -87,8 +87,8 @@ public class JoinAppServiceImpl implements JoinAppService {
         emailVerificationService.verifyCode(emailVerificationCodeRequestDto.getEmail(), emailVerificationCodeRequestDto.getCode());
 
         // 인증 여부 저장 (특정 ID로 특정 Email 인증 여부)
-        checkEmailVerificationService.saveCheckEmailVerification(
-                CheckEmailVerification.builder()
+        verifiedEmailService.registerVerifiedEmail(
+                VerifiedEmail.builder()
                         .userId(emailVerificationCodeRequestDto.getUserId())
                         .email(emailVerificationCodeRequestDto.getEmail())
                         .build()

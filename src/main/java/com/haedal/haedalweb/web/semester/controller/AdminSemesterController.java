@@ -2,7 +2,7 @@ package com.haedal.haedalweb.web.semester.controller;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.web.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.semester.service.AdminSemesterService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
