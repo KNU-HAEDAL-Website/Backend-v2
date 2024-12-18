@@ -15,17 +15,12 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     private final ActivityRepository activityRepository;
 
     @Override
-    public Activity registerActivity(Semester semester, String activityName) {
-        Activity activity = Activity.builder()
-                .name(activityName)
-                .semester(semester)
-                .build();
-
-        return activityRepository.save(activity);
+    public void registerActivity(Activity activity) {
+        activityRepository.save(activity);
     }
 
     @Override
-    public void removeActivity(Activity activity, boolean hasRelatedBoards) {
+    public void removeActivity(boolean hasRelatedBoards, Activity activity) {
         if (hasRelatedBoards) {
             throw new BusinessException(ErrorCode.EXIST_BOARD);
         }

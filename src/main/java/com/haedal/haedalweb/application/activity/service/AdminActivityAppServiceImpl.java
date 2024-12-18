@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.activity.service;
 
 import com.haedal.haedalweb.application.activity.dto.CreateActivityRequestDto;
+import com.haedal.haedalweb.application.activity.mapper.ActivityMapper;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.activity.service.AdminActivityService;
@@ -26,7 +27,10 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
         Semester semester = semesterService.getSemester(semesterId);
 
         // 활동 생성
-        adminActivityService.registerActivity(semester, createActivityRequestDto.getActivityName());
+        Activity activity = ActivityMapper.toEntity(semester, createActivityRequestDto);
+
+        // 활동 저장
+        adminActivityService.registerActivity(activity);
     }
 
     @Transactional
@@ -39,6 +43,6 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
         boolean hasRelatedBoards = boardService.hasBoardsByActivityId(activityId);
 
         // 활동 삭제 요청
-        adminActivityService.removeActivity(activity, hasRelatedBoards);
+        adminActivityService.removeActivity(hasRelatedBoards, activity);
     }
 }

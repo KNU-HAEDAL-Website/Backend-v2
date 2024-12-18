@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RestController
 public class ActivityController {
     private final ActivityAppService activityAppService;
-    private final ActivityMapper activityMapper;
 
     @Operation(summary = "해당 학기 활동 조회")
     @GetMapping("/semesters/{semesterId}/activities")
@@ -28,7 +27,7 @@ public class ActivityController {
         List<Activity> activities = activityAppService.getActivities(semesterId);
 
         List<ActivityResponseDto> activityResponseDTOs = activities.stream()
-                .map(activityMapper::toDto)
+                .map(ActivityMapper::toDto)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(activityResponseDTOs);

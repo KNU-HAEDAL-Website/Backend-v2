@@ -16,22 +16,28 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "게시판 API")
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class BoardController {
     private final BoardService boardService;
 
@@ -39,8 +45,8 @@ public class BoardController {
     @ApiSuccessCodeExample(SuccessCode.ADD_BOARD_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @Parameter(name = "activityId", description = "게시판 추가할 활동 ID")
-    @PostMapping("/activities/{activityId}/boards")
-    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestBody @Valid CreateBoardRequestDto createBoardRequestDto) {
+    @PostMapping(value = "/activities/{activityId}/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart("file") MultipartFile boardImage, @RequestPart @Valid CreateBoardRequestDto createBoardRequestDto) {
         boardService.createBoard(activityId, createBoardRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);

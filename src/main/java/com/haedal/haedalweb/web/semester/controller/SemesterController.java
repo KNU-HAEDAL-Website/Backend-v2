@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 public class SemesterController {
     private final SemesterAppService semesterAppService;
-    private final SemesterMapper semesterMapper;
 
     @Operation(summary = "학기 전체 조회")
     @GetMapping
@@ -28,7 +27,7 @@ public class SemesterController {
 
         List<Semester> semesters = semesterAppService.getSemesters();
         List<SemesterResponseDto> semesterResponseDtos = semesters.stream()
-                .map(semesterMapper::toDto)
+                .map(SemesterMapper::toDto)
                 .toList();
 
         return ResponseEntity.ok(semesterResponseDtos);
@@ -39,6 +38,6 @@ public class SemesterController {
     public ResponseEntity<SemesterResponseDto> getSemester(@PathVariable Long semesterId) {
         Semester semester = semesterAppService.getSemester(semesterId);
 
-        return ResponseEntity.ok(semesterMapper.toDto(semester));
+        return ResponseEntity.ok(SemesterMapper.toDto(semester));
     }
 }

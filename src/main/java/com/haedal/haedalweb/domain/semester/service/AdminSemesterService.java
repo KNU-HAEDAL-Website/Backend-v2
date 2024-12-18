@@ -5,7 +5,7 @@ import com.haedal.haedalweb.domain.semester.model.Semester;
 
 public interface AdminSemesterService {
 
-    void registerSemester(String semesterName);
+    void registerSemester(Semester semester);
 
-    void removeSemester(Semester semester, boolean hasRelatedActivities);
+    void removeSemester(boolean hasRelatedActivities, Semester semester);
 }
