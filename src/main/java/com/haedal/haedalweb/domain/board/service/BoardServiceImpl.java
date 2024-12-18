@@ -39,7 +39,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
         User creator = userService.getLoggedInUser();
         List<String> participantIds = new ArrayList<>(createBoardRequestDto.getParticipants());
-        List<User> participants = userService.findUserByIds(participantIds);
+        List<User> participants = userService.getUsersByIds(participantIds);
 
         validateParticipants(participants, participantIds);
 
@@ -112,7 +112,7 @@ public class BoardServiceImpl implements BoardService {
         validateAuthorityOfBoardManagement(loggedInUser, creator);
 
         List<String> participantIds = new ArrayList<>(updateBoardRequestDto.getParticipants());
-        List<User> participants = userService.findUserByIds(participantIds);
+        List<User> participants = userService.getUsersByIds(participantIds);
 
         validateParticipants(participants, participantIds);
 

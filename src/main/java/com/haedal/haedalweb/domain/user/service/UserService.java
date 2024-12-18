@@ -12,9 +12,9 @@ public interface UserService {
 
     UserResponseDto getMe();
 
-    User findUserById(String userId);
+    User getUser(String userId);
 
-    List<User> findUserByIds(List<String> userIds);
+    List<User> getUsersByIds(List<String> userIds);
 
     User getLoggedInUser();
 

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    @Override
     @Transactional(readOnly = true)
     public List<UserSummaryResponseDto> getUsers() {
         List<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, null);
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional(readOnly = true)
     public UserResponseDto getMe() {
         User user = getLoggedInUser();
@@ -37,23 +39,27 @@ public class UserServiceImpl implements UserService {
         return convertToUserDTO(user);
     }
 
-    public User findUserById(String userId) {
+    @Override
+    public User getUser(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
     }
 
-    public List<User> findUserByIds(List<String> userIds) {
+    @Override
+    public List<User> getUsersByIds(List<String> userIds) {
         return userRepository.findAllById(userIds);
     }
 
+    @Override
     public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String userId = userDetails.getUsername();
 
-        return findUserById(userId);
+        return getUser(userId);
     }
 
+    @Override
     public UserResponseDto convertToUserDTO(User user) {
         return UserResponseDto.builder()
                 .userId(user.getId())
