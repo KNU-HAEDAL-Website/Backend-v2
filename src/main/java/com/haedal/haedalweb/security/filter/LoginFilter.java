@@ -5,7 +5,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.security.dto.LoginRequestDto;
 import com.haedal.haedalweb.exception.BusinessException;
-import com.haedal.haedalweb.security.service.TokenService;
+import com.haedal.haedalweb.security.service.TokenAppService;
 import com.haedal.haedalweb.util.ResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -27,12 +27,12 @@ import java.util.Iterator;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final AuthenticationManager authenticationManager;
-    private final TokenService tokenService;
+    private final TokenAppService tokenAppService;
 
-    public LoginFilter(AuthenticationManager authenticationManager, TokenService tokenService) {
+    public LoginFilter(AuthenticationManager authenticationManager, TokenAppService tokenAppService) {
         super(authenticationManager);
         this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
+        this.tokenAppService = tokenAppService;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        tokenService.issueToken(response, userId, role);
+        tokenAppService.issueToken(response, userId, role);
         ResponseUtil.sendSuccessResponse(response, SuccessCode.LOGIN_SUCCESS);
     }
 

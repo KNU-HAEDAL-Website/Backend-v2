@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.web.user.controller;
 
+import com.haedal.haedalweb.application.user.service.UserAppService;
 import com.haedal.haedalweb.domain.user.service.UserService;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.dto.UserSummaryResponseDto;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class UserController {
+//    private final UserAppService userAppService;
     private final UserService userService;
 
     @Operation(summary = "User Me 정보 조회")

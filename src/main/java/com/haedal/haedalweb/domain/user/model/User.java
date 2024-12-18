@@ -33,7 +33,6 @@ public class User {
     private String password;
 
     @Column(name = "student_number", unique = true)
-    @NonNull
     private Integer studentNumber;
 
     @Column(name = "email", unique = true, length = 63)

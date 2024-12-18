@@ -48,18 +48,4 @@ public class JWTFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-//    private void validateAccessToken(String accessToken) {
-//        String category;
-//
-//        try {
-//            category = jwtUtil.getCategory(accessToken);
-//        } catch (ExpiredJwtException e) {
-//            throw new BusinessException(ErrorCode.EXPIRED_ACCESS_TOKEN);
-//        }
-//
-//        if (!category.equals(LoginConstants.ACCESS_TOKEN)) {
-//            throw new BusinessException(ErrorCode.INVALID_ACCESS_TOKEN);
-//        }
-//    }
 }

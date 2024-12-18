@@ -3,8 +3,8 @@ package com.haedal.haedalweb.application.user.service;
 import com.haedal.haedalweb.application.user.dto.EmailRequestDto;
 import com.haedal.haedalweb.application.user.dto.EmailVerificationCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
-import com.haedal.haedalweb.domain.auth.model.CheckEmailVerification;
-import com.haedal.haedalweb.domain.auth.service.CheckEmailVerificationService;
+import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
+import com.haedal.haedalweb.domain.auth.service.VerifiedEmailService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -22,59 +22,59 @@ import org.springframework.transaction.annotation.Transactional;
 public class JoinAppServiceImpl implements JoinAppService {
     private final JoinService joinService;
     private final EmailVerificationService emailVerificationService;
-    private final CheckEmailVerificationService checkEmailVerificationService;
+    private final VerifiedEmailService verifiedEmailService;
     private final EmailSenderService emailSenderService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
-    public void createUserAccount(JoinRequestDto joinRequestDto) {
+    public void registerUserAccount(JoinRequestDto joinRequestDto) {
         // 인증된 이메일인지 확인
-        checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
+        verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 일반 멤버로 설정
         User user = createUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
 
         // 등록
-        joinService.createAccount(user);
+        joinService.registerAccount(user);
     }
 
     @Transactional
     @Override
-    public void createMasterAccount(JoinRequestDto joinRequestDto) { // 개발용
+    public void registerMasterAccount(JoinRequestDto joinRequestDto) { // 개발용
         // 인증된 이메일인지 확인
-        checkEmailVerificationService.validateCertifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
+        verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 웹 관리자로 설정
         User user = createUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER, UserStatus.MASTER);
 
         // 등록
-        joinService.createAccount(user);
+        joinService.registerAccount(user);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public void checkUserIdDuplicate(String userId) {
-        joinService.checkUserIdDuplicate(userId);
+    public void validateUserIdDuplicate(String userId) {
+        joinService.validateUserId(userId);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public void checkStudentNumberDuplicate(Integer studentNumber) {
-        joinService.checkStudentNumberDuplicate(studentNumber);
+    public void validateStudentNumberDuplicate(Integer studentNumber) {
+        joinService.validateStudentNumber(studentNumber);
     }
 
     @Transactional
     @Override
-    public void createAndSendVerificationCode(EmailRequestDto emailRequestDto) {
+    public void registerAndSendEmailVerification(EmailRequestDto emailRequestDto) {
         String email = emailRequestDto.getEmail();
 
         // 이메일 중복 검사
-        joinService.checkEmailDuplicate(email);
+        joinService.validateEmail(email);
 
         // 인증 코드 생성 후 저장
         String code = EmailUtil.generateVerificationCode();
-        emailVerificationService.saveEmailVerification(email, code);
+        emailVerificationService.registerEmailVerification(email, code);
 
         // 인증 코드 전송
         emailSenderService.sendVerificationEmail(email, code);
@@ -82,13 +82,13 @@ public class JoinAppServiceImpl implements JoinAppService {
 
     @Transactional
     @Override
-    public void verifyCode(EmailVerificationCodeRequestDto emailVerificationCodeRequestDto) {
+    public void validateCode(EmailVerificationCodeRequestDto emailVerificationCodeRequestDto) {
         // 인증 코드 검증
-        emailVerificationService.verifyCode(emailVerificationCodeRequestDto.getEmail(), emailVerificationCodeRequestDto.getCode());
+        emailVerificationService.validateCode(emailVerificationCodeRequestDto.getEmail(), emailVerificationCodeRequestDto.getCode());
 
         // 인증 여부 저장 (특정 ID로 특정 Email 인증 여부)
-        checkEmailVerificationService.saveCheckEmailVerification(
-                CheckEmailVerification.builder()
+        verifiedEmailService.registerVerifiedEmail(
+                VerifiedEmail.builder()
                         .userId(emailVerificationCodeRequestDto.getUserId())
                         .email(emailVerificationCodeRequestDto.getEmail())
                         .build()

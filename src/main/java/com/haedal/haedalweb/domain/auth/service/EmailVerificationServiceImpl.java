@@ -14,9 +14,9 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     public final EmailVerificationRepository emailVerificationRepository;
 
     @Override
-    public void saveEmailVerification(String email, String code) {
-        if (existsById(email)) {
-            EmailVerification emailVerification = findEmailVerification(email);
+    public void registerEmailVerification(String email, String code) {
+        if (checkEmailVerificationExists(email)) {
+            EmailVerification emailVerification = getEmailVerification(email);
 
             if (emailVerification.getResendCount() >= EmailConstants.RESEND_LIMIT) {
                 throw new BusinessException(ErrorCode.LIMIT_EXCEEDED_SEND_EMAIL);
@@ -38,8 +38,8 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     }
 
     @Override
-    public void verifyCode(String email, String code) {
-        EmailVerification emailVerification = findEmailVerification(email);
+    public void validateCode(String email, String code) {
+        EmailVerification emailVerification = getEmailVerification(email);
 
         if (!emailVerification.getCode().equals(code)) {
             throw new BusinessException(ErrorCode.INVALID_EMAIL_VERIFICATION);
@@ -51,12 +51,12 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         emailVerificationRepository.delete(emailVerification);
     }
 
-    private EmailVerification findEmailVerification(String email) {
+    private EmailVerification getEmailVerification(String email) {
         return emailVerificationRepository.findById(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_EMAIL_VERIFICATION));
     }
 
-    private boolean existsById(String email) {
+    private boolean checkEmailVerificationExists(String email) {
         return emailVerificationRepository.existsById(email);
     }
 }

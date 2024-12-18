@@ -4,7 +4,7 @@ import com.haedal.haedalweb.constants.LoginConstants;
 import com.haedal.haedalweb.exception.FilterExceptionHandler;
 import com.haedal.haedalweb.security.filter.CustomLogoutFilter;
 import com.haedal.haedalweb.security.filter.JWTFilter;
-import com.haedal.haedalweb.security.service.TokenService;
+import com.haedal.haedalweb.security.service.TokenAppService;
 import com.haedal.haedalweb.security.filter.LoginFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ import java.util.Collections;
 public class SecurityConfig {
     private final JWTFilter jwtFilter;
     private final CustomLogoutFilter customLogoutFilter;
-    private final TokenService tokenService;
+    private final TokenAppService tokenAppService;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     @Bean
     public LoginFilter loginFilter(AuthenticationManager authenticationManager) {
-        LoginFilter loginFilter = new LoginFilter(authenticationManager, tokenService);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager, tokenAppService);
         return loginFilter;
     }
 
@@ -97,7 +97,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/activities/{activityId}/boards/{boardId}").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PATCH, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers("/users/me","/private/users").authenticated()
-                        .requestMatchers("/join/email/**", "/posts/{postId}","/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/swagger-ui/**", "/v3/api-docs/**", "/users/**","/semesters/**").permitAll()
+                        .requestMatchers("/posts/{postId}","/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/users/**","/semesters/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록

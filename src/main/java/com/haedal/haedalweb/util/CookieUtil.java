@@ -3,9 +3,11 @@ package com.haedal.haedalweb.util;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 public class CookieUtil {
 
     private CookieUtil() {
@@ -38,6 +40,11 @@ public class CookieUtil {
     }
 
     public static void deleteByKey(HttpServletResponse response, String key) {
+        if (key == null || key.isEmpty()) {
+            log.warn("Invalid cookie key: key is null or empty");
+            return;
+        }
+
         Cookie cookie = new Cookie(key, null);
         cookie.setMaxAge(0);
         cookie.setPath("/");

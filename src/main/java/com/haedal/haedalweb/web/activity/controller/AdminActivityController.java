@@ -32,8 +32,8 @@ public class AdminActivityController {
     @ApiSuccessCodeExample(SuccessCode.ADD_ACTIVITY_SUCCESS)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_SEMESTER_ID)
     @PostMapping
-    public ResponseEntity<SuccessResponse> addActivity(@PathVariable Long semesterId, @RequestBody @Valid CreateActivityRequestDto createActivityRequestDto) {
-        adminActivityAppService.createActivity(semesterId, createActivityRequestDto);
+    public ResponseEntity<SuccessResponse> registerActivity(@PathVariable Long semesterId, @RequestBody @Valid CreateActivityRequestDto createActivityRequestDto) {
+        adminActivityAppService.registerActivity(semesterId, createActivityRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_ACTIVITY_SUCCESS);
     }
@@ -42,8 +42,8 @@ public class AdminActivityController {
     @ApiSuccessCodeExample(SuccessCode.DELETE_ACTIVITY_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.EXIST_BOARD})
     @DeleteMapping("/{activityId}")
-    public ResponseEntity<SuccessResponse> deleteActivity(@PathVariable Long semesterId, @PathVariable Long activityId) {
-        adminActivityAppService.deleteActivity(activityId);
+    public ResponseEntity<SuccessResponse> removeActivity(@PathVariable Long semesterId, @PathVariable Long activityId) {
+        adminActivityAppService.removeActivity(activityId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_ACTIVITY_SUCCESS);
     }
