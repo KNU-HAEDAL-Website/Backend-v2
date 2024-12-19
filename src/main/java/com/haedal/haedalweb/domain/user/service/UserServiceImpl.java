@@ -70,6 +70,20 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public void validateActiveUsers(List<User> users, List<String> userIds) {
+        if (users.size() != userIds.size()) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+
+        users.forEach(user -> {
+            UserStatus userStatus = user.getUserStatus();
+            if (userStatus != UserStatus.ACTIVE) {
+                throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+            }
+        });
+    }
+
     private UserSummaryResponseDto convertToPrivateUserDTO(User user) {
         return UserSummaryResponseDto.builder()
                 .userId(user.getId())

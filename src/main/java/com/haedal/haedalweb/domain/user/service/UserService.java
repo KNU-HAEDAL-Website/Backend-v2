@@ -19,4 +19,6 @@ public interface UserService {
     User getLoggedInUser();
 
     UserResponseDto convertToUserDTO(User user);
+
+    void validateActiveUsers(List<User> users, List<String> userIds);
 }

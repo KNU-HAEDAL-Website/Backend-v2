@@ -34,7 +34,8 @@ public enum ErrorCode implements ResponseCode{
     INVALID_EMAIL_VERIFICATION(HttpStatus.BAD_REQUEST, "025", "인증 코드가 만료되었거나 일치하지 않습니다."),
     LIMIT_EXCEEDED_SEND_EMAIL(HttpStatus.TOO_MANY_REQUESTS, "026", "해당 이메일의 전송 및 재전송 횟수가 3회를 초과 했습니다."),
     NOT_FOUND_CHECK_EMAIL_VERIFICATION(HttpStatus.NOT_FOUND, "027", "이메일이 인증되지 않았습니다."),
-    NOT_AUTHENTICATED_USER(HttpStatus.UNAUTHORIZED, "028", "인증 되지 않은 사용자입니다.");
+    NOT_AUTHENTICATED_USER(HttpStatus.UNAUTHORIZED, "028", "인증 되지 않은 사용자입니다."),
+    NOT_SAVE_FILE(HttpStatus.INTERNAL_SERVER_ERROR, "029", "파일을 저장하지 못했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

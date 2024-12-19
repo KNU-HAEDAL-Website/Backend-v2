@@ -1,9 +1,10 @@
 package com.haedal.haedalweb.web.board.controller;
 
+import com.haedal.haedalweb.application.board.service.BoardAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.board.service.BoardService;
-import com.haedal.haedalweb.web.board.dto.CreateBoardRequestDto;
+import com.haedal.haedalweb.application.board.dto.CreateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.UpdateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.BoardResponseDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
@@ -24,7 +25,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @Slf4j
 public class BoardController {
+    private final BoardAppService boardAppService;
     private final BoardService boardService;
 
     @Operation(summary = "게시판 생성")
@@ -46,8 +47,9 @@ public class BoardController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @Parameter(name = "activityId", description = "게시판 추가할 활동 ID")
     @PostMapping(value = "/activities/{activityId}/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart("file") MultipartFile boardImage, @RequestPart @Valid CreateBoardRequestDto createBoardRequestDto) {
-        boardService.createBoard(activityId, createBoardRequestDto);
+    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart(value = "file", required = true) MultipartFile boardImageFile, @RequestPart @Valid CreateBoardRequestDto createBoardRequestDto) {
+//        boardService.createBoard(activityId, createBoardRequestDto);
+        boardAppService.registerBoard(activityId, boardImageFile, createBoardRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
     }
