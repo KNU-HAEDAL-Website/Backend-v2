@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 
 @Slf4j
 public class FileUtil {
+    private FileUtil() {
+    }
+
     public static void uploadFile(MultipartFile multipartFile, String uploadPath, String saveFile) {
         try {
             File folder = new File(uploadPath);

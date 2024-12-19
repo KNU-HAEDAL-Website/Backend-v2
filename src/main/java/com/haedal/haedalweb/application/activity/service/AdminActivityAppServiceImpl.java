@@ -35,9 +35,9 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
 
     @Transactional
     @Override
-    public void removeActivity(Long activityId) {
+    public void removeActivity(Long semesterId, Long activityId) {
         // 활동 존재 여부 검증 및 가져오기
-        Activity activity = activityService.getActivity(activityId);
+        Activity activity = activityService.getActivity(semesterId, activityId);
 
         // 보드와의 연관성 검증
         boolean hasRelatedBoards = boardService.hasBoardsByActivityId(activityId);

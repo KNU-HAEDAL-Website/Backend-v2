@@ -6,7 +6,7 @@ import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.board.service.BoardService;
 import com.haedal.haedalweb.application.board.dto.CreateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.UpdateBoardRequestDto;
-import com.haedal.haedalweb.web.board.dto.BoardResponseDto;
+import com.haedal.haedalweb.application.board.dto.BoardResponseDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -47,8 +47,7 @@ public class BoardController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @Parameter(name = "activityId", description = "게시판 추가할 활동 ID")
     @PostMapping(value = "/activities/{activityId}/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart(value = "file", required = true) MultipartFile boardImageFile, @RequestPart @Valid CreateBoardRequestDto createBoardRequestDto) {
-//        boardService.createBoard(activityId, createBoardRequestDto);
+    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart(value = "file") MultipartFile boardImageFile, @RequestPart @Valid CreateBoardRequestDto createBoardRequestDto) {
         boardAppService.registerBoard(activityId, boardImageFile, createBoardRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
@@ -78,9 +77,8 @@ public class BoardController {
     })
     @GetMapping("/activities/{activityId}/boards/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
-        BoardResponseDto boardResponseDto = boardService.getBoardDTO(activityId, boardId);
 
-        return ResponseEntity.ok(boardResponseDto);
+        return ResponseEntity.ok(boardAppService.getBoard(activityId, boardId));
     }
 
     @Operation(summary = "게시판 삭제")

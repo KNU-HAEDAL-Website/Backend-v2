@@ -7,10 +7,9 @@ import com.haedal.haedalweb.domain.board.model.Participant;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
-import com.haedal.haedalweb.application.board.dto.CreateBoardRequestDto;
 import com.haedal.haedalweb.web.board.dto.UpdateBoardRequestDto;
-import com.haedal.haedalweb.web.board.dto.BoardResponseDto;
-import com.haedal.haedalweb.web.board.dto.ParticipantResponseDto;
+import com.haedal.haedalweb.application.board.dto.BoardResponseDto;
+import com.haedal.haedalweb.application.board.dto.ParticipantResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.activity.repository.ActivityRepository;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
@@ -59,6 +58,12 @@ public class BoardServiceImpl implements BoardService {
     public void registerBoard(List<User> participants, Board board) {
         addParticipantsToBoard(board, participants);
         boardRepository.save(board);
+    }
+
+    @Override
+    public Board getBoard(Long activityId, Long boardId) {
+        return boardRepository.findBoardWithImageAndParticipants(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
 
     @Transactional(readOnly = true)

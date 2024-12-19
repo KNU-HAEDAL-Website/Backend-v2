@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.web.board.dto;
+package com.haedal.haedalweb.application.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.net.URL;
+
 import java.util.List;
 
 @Getter

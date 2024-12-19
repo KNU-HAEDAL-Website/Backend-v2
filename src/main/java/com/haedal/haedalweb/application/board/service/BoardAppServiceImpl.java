@@ -1,5 +1,9 @@
 package com.haedal.haedalweb.application.board.service;
 
+import com.haedal.haedalweb.application.board.dto.BoardImageResponseDto;
+import com.haedal.haedalweb.application.board.mapper.BoardImageMapper;
+import com.haedal.haedalweb.application.board.mapper.BoardMapper;
+import com.haedal.haedalweb.application.board.mapper.ParticipantMapper;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.board.model.Board;
@@ -10,12 +14,15 @@ import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.service.UserService;
 import com.haedal.haedalweb.security.service.SecurityService;
 import com.haedal.haedalweb.util.FileUtil;
+import com.haedal.haedalweb.application.board.dto.BoardResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,14 +36,16 @@ public class BoardAppServiceImpl implements BoardAppService {
     private final SecurityService securityService;
     private final UserService userService;
     private final String uploadPath;
+    private final String uploadUrl;
 
     @Autowired
-    public BoardAppServiceImpl(BoardService boardService, ActivityService activityService, SecurityService securityService, UserService userService, @Value("${file.path.upload-board-images}")String uploadPath) {
+    public BoardAppServiceImpl(BoardService boardService, ActivityService activityService, SecurityService securityService, UserService userService, @Value("${file.path.upload-board-images}")String uploadPath, @Value("${file.url.upload-board-images}")String uploadUrl) {
         this.boardService = boardService;
         this.activityService = activityService;
         this.securityService = securityService;
         this.userService = userService;
         this.uploadPath = uploadPath;
+        this.uploadUrl = uploadUrl;
     }
 
     @Override
@@ -74,5 +83,15 @@ public class BoardAppServiceImpl implements BoardAppService {
         board.setBoardImage(boardImage);
 
         boardService.registerBoard(participants, board);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BoardResponseDto getBoard(Long activityId, Long boardId) {
+        Board board = boardService.getBoard(activityId, boardId);
+        BoardImageResponseDto boardImageResponseDto = BoardImageMapper.toDto(board.getBoardImage());
+        String imageUrl = uploadUrl + "/" + boardImageResponseDto.getBoardImageSaveFile();
+
+        return BoardMapper.toDto(activityId, imageUrl, board);
     }
 }

@@ -1,9 +1,7 @@
 package com.haedal.haedalweb.web.semester.controller;
 
-import com.haedal.haedalweb.application.semester.mapper.SemesterMapper;
 import com.haedal.haedalweb.application.semester.service.SemesterAppService;
 import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
-import com.haedal.haedalweb.domain.semester.model.Semester;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +22,12 @@ public class SemesterController {
     @Operation(summary = "학기 전체 조회")
     @GetMapping
     public ResponseEntity<List<SemesterResponseDto>> getSemesters() {
-
-        List<Semester> semesters = semesterAppService.getSemesters();
-        List<SemesterResponseDto> semesterResponseDtos = semesters.stream()
-                .map(SemesterMapper::toDto)
-                .toList();
-
-        return ResponseEntity.ok(semesterResponseDtos);
+        return ResponseEntity.ok(semesterAppService.getSemesters());
     }
 
     @Operation(summary = "학기 단일 조회")
     @GetMapping("/{semesterId}")
     public ResponseEntity<SemesterResponseDto> getSemester(@PathVariable Long semesterId) {
-        Semester semester = semesterAppService.getSemester(semesterId);
-
-        return ResponseEntity.ok(SemesterMapper.toDto(semester));
+        return ResponseEntity.ok(semesterAppService.getSemester(semesterId));
     }
 }

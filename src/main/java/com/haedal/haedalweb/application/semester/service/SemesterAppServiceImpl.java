@@ -1,7 +1,9 @@
 package com.haedal.haedalweb.application.semester.service;
 
 import java.util.List;
-import com.haedal.haedalweb.domain.semester.model.Semester;
+
+import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
+import com.haedal.haedalweb.application.semester.mapper.SemesterMapper;
 import com.haedal.haedalweb.domain.semester.service.SemesterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,13 @@ public class SemesterAppServiceImpl implements SemesterAppService {
 
     @Override
     @Transactional(readOnly = true)
-    public Semester getSemester(Long semesterId) {
-        return semesterService.getSemester(semesterId);
+    public SemesterResponseDto getSemester(Long semesterId) {
+        return SemesterMapper.toDto(semesterService.getSemester(semesterId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Semester> getSemesters() {
-        return semesterService.getSemesters();
+    public List<SemesterResponseDto> getSemesters() {
+        return SemesterMapper.toDtos(semesterService.getSemesters());
     }
 }
