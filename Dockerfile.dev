@@ -1,0 +1,12 @@
+FROM openjdk:17-slim
+
+WORKDIR /app
+
+COPY gradlew gradlew
+COPY gradle gradle
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
+
+RUN ./gradlew dependencies --no-daemon || true
+
+ENTRYPOINT ["./gradlew", "bootRun", "--no-daemon"]

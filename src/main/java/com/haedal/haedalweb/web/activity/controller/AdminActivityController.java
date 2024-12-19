@@ -43,7 +43,7 @@ public class AdminActivityController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.EXIST_BOARD})
     @DeleteMapping("/{activityId}")
     public ResponseEntity<SuccessResponse> removeActivity(@PathVariable Long semesterId, @PathVariable Long activityId) {
-        adminActivityAppService.removeActivity(activityId);
+        adminActivityAppService.removeActivity(semesterId, activityId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_ACTIVITY_SUCCESS);
     }

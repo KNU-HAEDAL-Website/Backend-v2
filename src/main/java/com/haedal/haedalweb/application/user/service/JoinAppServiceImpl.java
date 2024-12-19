@@ -33,7 +33,7 @@ public class JoinAppServiceImpl implements JoinAppService {
         verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 일반 멤버로 설정
-        User user = createUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
+        User user = registerUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
 
         // 등록
         joinService.registerAccount(user);
@@ -46,7 +46,7 @@ public class JoinAppServiceImpl implements JoinAppService {
         verifiedEmailService.validateVerifiedEmail(joinRequestDto.getUserId(), joinRequestDto.getEmail());
 
         // 웹 관리자로 설정
-        User user = createUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER, UserStatus.MASTER);
+        User user = registerUserFromDto(joinRequestDto, Role.ROLE_WEB_MASTER, UserStatus.MASTER);
 
         // 등록
         joinService.registerAccount(user);
@@ -95,7 +95,7 @@ public class JoinAppServiceImpl implements JoinAppService {
         );
     }
 
-    private User createUserFromDto(JoinRequestDto dto, Role role, UserStatus userStatus) {
+    private User registerUserFromDto(JoinRequestDto dto, Role role, UserStatus userStatus) {
         return User.builder()
                 .id(dto.getUserId())
                 .email(dto.getEmail())

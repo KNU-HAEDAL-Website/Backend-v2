@@ -14,18 +14,14 @@ public class AdminSemesterServiceImpl implements AdminSemesterService {
 
 
     @Override
-    public void registerSemester(String semesterName) {
-        validateRegisterSemester(semesterName);
-
-        Semester semester = Semester.builder()
-                .name(semesterName)
-                .build();
+    public void registerSemester(Semester semester) {
+        validateRegisterSemester(semester);
 
         semesterRepository.save(semester);
     }
 
     @Override
-    public void removeSemester(Semester semester, boolean hasRelatedActivities) {
+    public void removeSemester(boolean hasRelatedActivities, Semester semester) {
         if (hasRelatedActivities) {
             throw new BusinessException(ErrorCode.EXIST_ACTIVITY);
         }
@@ -33,8 +29,8 @@ public class AdminSemesterServiceImpl implements AdminSemesterService {
         semesterRepository.delete(semester);
     }
 
-    private void validateRegisterSemester(String semesterName) {
-        if (semesterRepository.existsByName(semesterName)) {
+    private void validateRegisterSemester(Semester semester) {
+        if (semesterRepository.existsByName(semester.getName())) {
             throw new BusinessException(ErrorCode.DUPLICATED_SEMESTER);
         }
     }

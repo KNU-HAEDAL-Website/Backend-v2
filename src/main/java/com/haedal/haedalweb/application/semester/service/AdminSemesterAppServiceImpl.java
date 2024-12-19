@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.semester.service;
 
 import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.mapper.SemesterMapper;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 import com.haedal.haedalweb.domain.semester.service.AdminSemesterService;
@@ -19,7 +20,9 @@ public class AdminSemesterAppServiceImpl implements AdminSemesterAppService {
     @Transactional
     @Override
     public void registerSemester(CreateSemesterRequestDto createSemesterRequestDto) {
-        adminSemesterService.registerSemester(createSemesterRequestDto.getSemesterName());
+        Semester semester = SemesterMapper.toEntity(createSemesterRequestDto);
+
+        adminSemesterService.registerSemester(semester);
     }
 
     @Transactional
@@ -32,6 +35,6 @@ public class AdminSemesterAppServiceImpl implements AdminSemesterAppService {
         boolean hasRelatedActivities = activityService.hasActivitiesBySemesterId(semesterId);
 
         // 학기 삭제
-        adminSemesterService.removeSemester(semester, hasRelatedActivities);
+        adminSemesterService.removeSemester(hasRelatedActivities, semester);
     }
 }

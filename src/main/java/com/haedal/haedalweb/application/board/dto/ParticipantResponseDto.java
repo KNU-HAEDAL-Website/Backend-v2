@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.web.board.dto;
+package com.haedal.haedalweb.application.board.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

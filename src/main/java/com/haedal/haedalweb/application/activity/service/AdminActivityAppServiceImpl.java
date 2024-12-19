@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.activity.service;
 
 import com.haedal.haedalweb.application.activity.dto.CreateActivityRequestDto;
+import com.haedal.haedalweb.application.activity.mapper.ActivityMapper;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.activity.service.AdminActivityService;
@@ -26,19 +27,22 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
         Semester semester = semesterService.getSemester(semesterId);
 
         // 활동 생성
-        adminActivityService.registerActivity(semester, createActivityRequestDto.getActivityName());
+        Activity activity = ActivityMapper.toEntity(semester, createActivityRequestDto);
+
+        // 활동 저장
+        adminActivityService.registerActivity(activity);
     }
 
     @Transactional
     @Override
-    public void removeActivity(Long activityId) {
+    public void removeActivity(Long semesterId, Long activityId) {
         // 활동 존재 여부 검증 및 가져오기
-        Activity activity = activityService.getActivity(activityId);
+        Activity activity = activityService.getActivity(semesterId, activityId);
 
         // 보드와의 연관성 검증
         boolean hasRelatedBoards = boardService.hasBoardsByActivityId(activityId);
 
         // 활동 삭제 요청
-        adminActivityService.removeActivity(activity, hasRelatedBoards);
+        adminActivityService.removeActivity(hasRelatedBoards, activity);
     }
 }

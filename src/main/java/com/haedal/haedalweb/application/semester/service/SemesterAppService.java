@@ -1,9 +1,10 @@
 package com.haedal.haedalweb.application.semester.service;
 
-import com.haedal.haedalweb.domain.semester.model.Semester;
+import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
+
 import java.util.List;
 
 public interface SemesterAppService {
-    List<Semester> getSemesters();
-    Semester getSemester(Long semesterId);
+    List<SemesterResponseDto> getSemesters();
+    SemesterResponseDto getSemester(Long semesterId);
 }

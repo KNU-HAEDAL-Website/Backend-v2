@@ -9,9 +9,11 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 
+@Slf4j
 public class FilterExceptionHandler extends GenericFilterBean {
 
     @Override
@@ -24,6 +26,8 @@ public class FilterExceptionHandler extends GenericFilterBean {
             chain.doFilter(request, response);
         } catch (BusinessException e) {
             sendErrorResponse(response, e);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
