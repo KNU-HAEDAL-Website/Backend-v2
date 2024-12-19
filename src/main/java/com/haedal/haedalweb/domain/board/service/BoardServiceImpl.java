@@ -29,30 +29,8 @@ import java.util.stream.Collectors;
 public class BoardServiceImpl implements BoardService {
     private final UserService userService;
     private final BoardRepository boardRepository;
-    private final ActivityRepository activityRepository;
     private final PostRepository postRepository;
 
-//    @Transactional
-//    public void createBoard(Long activityId, CreateBoardRequestDto createBoardRequestDto) {
-//        Activity activity = activityRepository.findById(activityId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
-//        User creator = userService.getLoggedInUser();
-//        List<String> participantIds = new ArrayList<>(createBoardRequestDto.getParticipants());
-//        List<User> participants = userService.getUsersByIds(participantIds);
-//
-//        validateParticipants(participants, participantIds);
-//
-//        Board board = Board.builder()
-//                .name(createBoardRequestDto.getBoardName())
-//                .intro(createBoardRequestDto.getBoardIntro())
-//                .user(creator)
-//                .participants(new ArrayList<>())
-//                .activity(activity)
-//                .build();
-//
-//        addParticipantsToBoard(board, participants);
-//        boardRepository.save(board);
-//    }
 
     @Override
     public void registerBoard(List<User> participants, Board board) {
@@ -66,21 +44,9 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
 
-    @Transactional(readOnly = true)
-    public Page<BoardResponseDto> getBoardDTOs(Long activityId, Pageable pageable) {
-        Activity activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ACTIVITY_ID));
-        Page<Board> boardPage = boardRepository.findBoardsByActivity(activity, pageable);
-
-        return boardPage.map(board -> convertToBoardDTO(board, activityId));
-    }
-
-    @Transactional(readOnly = true)
-    public BoardResponseDto getBoardDTO(Long activityId, Long boardId) {
-        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-
-        return convertToBoardDTO(board, activityId);
+    @Override
+    public Page<Board> getBoardPage(Long activityId, Pageable pageable) {
+        return boardRepository.findBoardsByActivityId(activityId, pageable);
     }
 
     @Transactional

@@ -75,7 +75,7 @@ public class BoardController {
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@PathVariable Long activityId,
                                                             @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                             @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        Page<BoardResponseDto> boardDTOs = boardService.getBoardDTOs(activityId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
+        Page<BoardResponseDto> boardDTOs = boardAppService.getBoardPage(activityId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
 
         return ResponseEntity.ok(boardDTOs);
     }

@@ -11,11 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Slf4j
-public class FileUtil {
-    private FileUtil() {
+public class ImageUtil {
+    private ImageUtil() {
     }
 
-    public static void uploadFile(MultipartFile multipartFile, String uploadPath, String saveFile) {
+    public static void uploadImage(MultipartFile multipartFile, String uploadPath, String saveFile) {
         try {
             File folder = new File(uploadPath);
             if (!folder.exists()) folder.mkdirs();
@@ -26,5 +26,9 @@ public class FileUtil {
         } catch (IOException e) {
             throw new BusinessException(ErrorCode.NOT_SAVE_FILE);
         }
+    }
+
+    public static String generateImageUrl(String uploadUrl, String saveFile) {
+        return uploadUrl + "/" + saveFile;
     }
 }
