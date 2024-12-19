@@ -52,6 +52,17 @@ public class BoardController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
     }
+    @Operation(summary = "게시판 단일 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID})
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @GetMapping("/activities/{activityId}/boards/{boardId}")
+    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
+
+        return ResponseEntity.ok(boardAppService.getBoard(activityId, boardId));
+    }
 
     @Operation(summary = "게시판 페이징 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
@@ -69,17 +80,6 @@ public class BoardController {
         return ResponseEntity.ok(boardDTOs);
     }
 
-    @Operation(summary = "게시판 단일 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID})
-    @Parameters({
-            @Parameter(name = "activityId", description = "게시판 조회할 활동 ID"),
-            @Parameter(name = "boardId", description = "해당 게시판 ID")
-    })
-    @GetMapping("/activities/{activityId}/boards/{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
-
-        return ResponseEntity.ok(boardAppService.getBoard(activityId, boardId));
-    }
 
     @Operation(summary = "게시판 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_BOARD_SUCCESS)
