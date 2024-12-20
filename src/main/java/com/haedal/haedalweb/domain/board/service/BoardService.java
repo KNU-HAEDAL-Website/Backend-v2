@@ -12,14 +12,9 @@ public interface BoardService {
     Board getBoardWithImageAndParticipants(Long activityId, Long boardId);
     Page<Board> getBoardPage(Long activityId, Pageable pageable);
     Board getBoardWithImageAndUser(Long activityId, Long boardId);
-
-    void deleteBoard(Long activityId, Long boardId);
-
     Board getBoardWithUserAndParticipants(Long activityId, Long boardId);
-
+    void removeBoard(Board board);
     boolean hasBoardsByActivityId(Long activityId);
-
     void addParticipantsToBoard(List<User> participants, Board board);
-
     void validateAuthorityOfBoardManagement(User loggedInUser, User creator);
 }

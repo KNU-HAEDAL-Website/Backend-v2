@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,20 +51,10 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
 
-    @Transactional
-    public void deleteBoard(Long activityId, Long boardId) {
-        Board board = boardRepository.findBoardWithUserAndParticipants(activityId, boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-
-        User loggedInUser = userService.getLoggedInUser();
-        User creator = board.getUser();
-
-        validateAuthorityOfBoardManagement(loggedInUser, creator);
-        validateDeleteBoardRequest(boardId);
-
+    @Override
+    public void removeBoard(Board board) {
         boardRepository.delete(board);
     }
-
 
     @Override
     public boolean hasBoardsByActivityId(Long activityId) {
@@ -88,12 +77,6 @@ public class BoardServiceImpl implements BoardService {
     public void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {
         if (loggedInUser.getRole() == Role.ROLE_TEAM_LEADER && !loggedInUser.getId().equals(creator.getId())) {
             throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
-        }
-    }
-
-    private void validateDeleteBoardRequest(Long boardId) {
-        if (postRepository.existsByBoardId(boardId)) {
-            throw new BusinessException(ErrorCode.EXIST_POST);
         }
     }
 }

@@ -140,9 +140,6 @@ public class BoardAppServiceImpl implements BoardAppService {
         boardImage.setOriginalFile(originalFile);
         boardImage.setSaveFile(saveFile);
 
-        // 이전 이미지 삭제
-        ImageUtil.removeImage(uploadPath, removeFile);
-
         // 모든작업이 Commit 될 시에 이전 이미지 파일 삭제
         applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
     }
@@ -162,9 +159,31 @@ public class BoardAppServiceImpl implements BoardAppService {
         List<User> participants = userService.getUsersByIds(participantIds);
         userService.validateActiveUsers(participants, participantIds);
 
+        // 게시판 메타 데이터 수정
         board.setName(boardRequestDto.getBoardName());
         board.setIntro(boardRequestDto.getBoardIntro());
         board.getParticipants().clear();
         boardService.addParticipantsToBoard(participants, board);
+    }
+
+    @Override
+    @Transactional
+    public void removeBoard(Long activityId, Long boardId) {
+        Board board = boardService.getBoardWithImageAndUser(activityId, boardId);
+
+        // 생성자와 로그인한 유저가 같은지 검증
+        User loggedInUser = securityService.getLoggedInUser();
+        User creator = board.getUser();
+        boardService.validateAuthorityOfBoardManagement(loggedInUser, creator);
+
+        // 저장된 BoardImage 파일 이름 저장
+        BoardImage boardImage = board.getBoardImage();
+        String removeFile = boardImage.getSaveFile();
+
+        // Board 삭제
+        boardService.removeBoard(board);
+
+        // BoardImage 파일 삭제
+        applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
     }
 }

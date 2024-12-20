@@ -16,4 +16,6 @@ public interface BoardAppService {
     void updateBoardImage(Long activityId, Long boardId, MultipartFile boardImageFile);
 
     void updateBoard(Long activityId, Long boardId, BoardRequestDto boardRequestDto);
+
+    void removeBoard(Long activityId, Long boardId);
 }
