@@ -12,4 +12,6 @@ public interface BoardAppService {
     BoardResponseDto getBoard(Long activityId, Long boardId);
 
     Page<BoardResponseDto> getBoardPage(Long activityId, Pageable pageable);
+
+    void updateBoardImage(Long activityId, Long boardId, MultipartFile boardImageFile);
 }

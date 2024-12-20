@@ -10,7 +10,7 @@ import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.domain.user.service.JoinService;
-import com.haedal.haedalweb.infrastructure.EmailSenderService;
+import com.haedal.haedalweb.infrastructure.email.EmailSenderService;
 import com.haedal.haedalweb.util.EmailUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

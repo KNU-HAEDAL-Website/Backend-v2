@@ -1,7 +1,6 @@
 package com.haedal.haedalweb.domain.board.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
-import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.model.Participant;
 import com.haedal.haedalweb.domain.user.model.Role;
@@ -11,7 +10,6 @@ import com.haedal.haedalweb.web.board.dto.UpdateBoardRequestDto;
 import com.haedal.haedalweb.application.board.dto.BoardResponseDto;
 import com.haedal.haedalweb.application.board.dto.ParticipantResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
-import com.haedal.haedalweb.domain.activity.repository.ActivityRepository;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
 import com.haedal.haedalweb.domain.post.repository.PostRepository;
 import com.haedal.haedalweb.domain.user.service.UserService;
@@ -39,7 +37,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getBoard(Long activityId, Long boardId) {
+    public Board getBoardWithImageAndParticipants(Long activityId, Long boardId) {
         return boardRepository.findBoardWithImageAndParticipants(activityId, boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
@@ -49,6 +47,11 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findBoardsByActivityId(activityId, pageable);
     }
 
+    @Override
+    public Board getBoardWithImageAndUser(Long activityId, Long boardId) {
+        return boardRepository.findBoardWithImageAndUser(activityId, boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+    }
     @Transactional
     public void deleteBoard(Long activityId, Long boardId) {
         Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
@@ -61,21 +64,6 @@ public class BoardServiceImpl implements BoardService {
         validateDeleteBoardRequest(boardId);
 
         boardRepository.delete(board);
-    }
-
-    @Transactional
-    public void updateBoardImage(Long activityId, Long boardId, String newImageUrl) {
-        Board board = boardRepository.findByActivityIdAndId(activityId, boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-
-        User loggedInUser = userService.getLoggedInUser();
-        User creator = board.getUser();
-
-        validateAuthorityOfBoardManagement(loggedInUser, creator);
-
-//        s3Service.deleteObject(board.getImageUrl());
-//        board.setImageUrl(newImageUrl);
-        boardRepository.save(board);
     }
 
     @Transactional
@@ -130,31 +118,8 @@ public class BoardServiceImpl implements BoardService {
         });
     }
 
-    private BoardResponseDto convertToBoardDTO(Board board, Long activityId) {
-        return BoardResponseDto.builder()
-                .activityId(activityId)
-                .boardId(board.getId())
-                .boardName(board.getName())
-                .boardIntro(board.getIntro())
-                .participants(convertParticipants(board.getParticipants())) // List<Participants>로 List<participantDTO> 만들기
-                .build();
-    }
-
-    private List<ParticipantResponseDto> convertParticipants(List<Participant> participants) {
-        return participants.stream()
-                .map(this::convertToParticipantDTO)
-                .collect(Collectors.toList());
-    }
-
-    private ParticipantResponseDto convertToParticipantDTO(Participant participant) {
-        return ParticipantResponseDto.builder()
-                .participantId(participant.getId())
-                .userId(participant.getUser().getId())
-                .userName(participant.getUser().getName())
-                .build();
-    }
-
-    private void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {
+    @Override
+    public void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {
         if (loggedInUser.getRole() == Role.ROLE_TEAM_LEADER && !loggedInUser.getId().equals(creator.getId())) {
             throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
         }

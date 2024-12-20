@@ -28,6 +28,17 @@ public class ImageUtil {
         }
     }
 
+    public static void removeImage(String uploadPath, String removeFile) {
+        String path = uploadPath + File.separator + removeFile;
+        File file = new File(path);
+
+        if (file.exists() && file.isFile()) {
+            if (!file.delete()) {
+                log.warn("파일 삭제 실패: {}", path);
+            }
+        }
+    }
+
     public static String generateImageUrl(String uploadUrl, String saveFile) {
         return uploadUrl + "/" + saveFile;
     }

@@ -11,7 +11,7 @@ public enum ErrorCode implements ResponseCode{
     FORBIDDEN_UPDATE(HttpStatus.FORBIDDEN, "COMMON_002", "수정, 삭제 권한이 없습니다."),
     INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "COMMON_003", "인자 값이 누락되었거나 잘못된 형식입니다."),
     NOT_SAVE_FILE(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_004", "파일을 저장하지 못했습니다."),
-
+    
     INVALID_LOGIN_CONTENTS_TYPE(HttpStatus.BAD_REQUEST, "AUTH_001", "지원하지 않는 형식입니다."),
     FAILED_LOGIN(HttpStatus.UNAUTHORIZED, "AUTH_002", "아이디 또는 비밀번호가 일치하지 않습니다."),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH_003", "Access Token has expired."),

@@ -79,6 +79,32 @@ public class BoardController {
 
         return ResponseEntity.ok(boardDTOs);
     }
+    @Operation(summary = "게시판 이미지 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE}) // 변경 필요
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @PatchMapping(value = "/activities/{activityId}/boards/{boardId}/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SuccessResponse> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestPart(value = "file") MultipartFile boardImageFile) {
+        boardAppService.updateBoardImage(activityId, boardId, boardImageFile);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
+    }
+    @Operation(summary = "게시판 메타 데이터 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID})
+    @Parameters({
+            @Parameter(name = "activityId", description = "게시판 수정할 활동 ID"),
+            @Parameter(name = "boardId", description = "해당 게시판 ID")
+    })
+    @PatchMapping("/activities/{activityId}/boards/{boardId}")
+    public ResponseEntity<SuccessResponse> updateBoard(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody @Valid UpdateBoardRequestDto updateBoardRequestDto) {
+        boardService.updateBoard(activityId, boardId, updateBoardRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
+    }
 
 
     @Operation(summary = "게시판 삭제")
@@ -95,31 +121,5 @@ public class BoardController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_BOARD_SUCCESS);
     }
 
-    @Operation(summary = "게시판 이미지 수정")
-    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
-    @Parameters({
-            @Parameter(name = "activityId", description = "게시판 삭제할 활동 ID"),
-            @Parameter(name = "boardId", description = "해당 게시판 ID")
-    })
-    @PatchMapping("/activities/{activityId}/boards/{boardId}/image")
-    public ResponseEntity<SuccessResponse> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody String boardImageUrl) {
-        boardService.updateBoardImage(activityId, boardId, boardImageUrl);
 
-        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
-    }
-
-    @Operation(summary = "게시판 메타 데이터 수정")
-    @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID})
-    @Parameters({
-            @Parameter(name = "activityId", description = "게시판 수정할 활동 ID"),
-            @Parameter(name = "boardId", description = "해당 게시판 ID")
-    })
-    @PatchMapping("/activities/{activityId}/boards/{boardId}")
-    public ResponseEntity<SuccessResponse> updateBoard(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody @Valid UpdateBoardRequestDto updateBoardRequestDto) {
-        boardService.updateBoard(activityId, boardId, updateBoardRequestDto);
-
-        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
-    }
 }

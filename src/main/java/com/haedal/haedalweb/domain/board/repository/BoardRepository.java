@@ -29,4 +29,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "JOIN FETCH b.participants " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
     Optional<Board> findBoardWithImageAndParticipants(Long activityId, Long boardId);
+
+    @Query("SELECT DISTINCT b FROM Board b " +
+            "JOIN FETCH b.boardImage " +
+            "JOIN FETCH b.user " +
+            "WHERE b.id = :boardId AND b.activity.id = :activityId")
+    Optional<Board> findBoardWithImageAndUser(Long activityId, Long boardId);
 }
