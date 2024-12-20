@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.infrastructure;
+package com.haedal.haedalweb.infrastructure.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

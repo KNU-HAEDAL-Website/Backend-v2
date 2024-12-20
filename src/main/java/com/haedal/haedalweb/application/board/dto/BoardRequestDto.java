@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateBoardRequestDto {
+public class BoardRequestDto {
     @Schema(description = "게시판 이름", example = "게시판1")
     @Pattern(regexp = "^[가-힣a-zA-Z0-9\\s]*$", message = "영어, 숫자, 한글만 입력가능합니다.")
     @Size(min = 1, max = 15, message = "게시판 이름은 1자 이상 15자 이하여야 합니다.")

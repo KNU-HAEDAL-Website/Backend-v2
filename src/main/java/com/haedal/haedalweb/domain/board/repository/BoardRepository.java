@@ -15,18 +15,27 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     boolean existsByActivityId(Long activityId);
 
     @Query(
-            value = "select b from Board b " +
-                    "join fetch b.boardImage " + // 여기서 OneToOne 연관 엔티티 fetch join
-                    "where b.activity.id = :activityId",
-            countQuery = "select count(b) from Board b where b.activity.id = :activityId"
+            value = "SELECT b FROM Board b " +
+                    "JOIN FETCH b.boardImage " + // 여기서 OneToOne 연관 엔티티 fetch join
+                    "WHERE b.activity.id = :activityId",
+            countQuery = "SELECT count(b) FROM Board b WHERE b.activity.id = :activityId"
     )
-    Page<Board> findBoardsByActivityId(@Param("activityId") Long activityId, Pageable pageable);
+    Page<Board> findBoardPage(@Param("activityId") Long activityId, Pageable pageable);
 
-    Optional<Board> findByActivityIdAndId(Long activityId, Long boardId);
+    @Query("SELECT DISTINCT b FROM Board b " +
+            "JOIN FETCH b.user " +
+            "WHERE b.id = :boardId AND b.activity.id = :activityId")
+    Optional<Board> findBoardWithUserAndParticipants(Long activityId, Long boardId);
 
     @Query("SELECT DISTINCT b FROM Board b " +
             "JOIN FETCH b.boardImage " +
             "JOIN FETCH b.participants " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
     Optional<Board> findBoardWithImageAndParticipants(Long activityId, Long boardId);
+
+    @Query("SELECT DISTINCT b FROM Board b " +
+            "JOIN FETCH b.boardImage " +
+            "JOIN FETCH b.user " +
+            "WHERE b.id = :boardId AND b.activity.id = :activityId")
+    Optional<Board> findBoardWithImageAndUser(Long activityId, Long boardId);
 }

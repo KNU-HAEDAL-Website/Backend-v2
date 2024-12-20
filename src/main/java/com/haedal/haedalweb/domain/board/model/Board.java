@@ -49,7 +49,7 @@ public class Board {
     @Column(name = "board_intro")
     private String intro;
 
-    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true) // FetchType.Lazy를 설정해도, 연관관계의 주인이 BoardImage 이므로 적용 x
+    @OneToOne(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true) // FetchType.Lazy를 설정해도, 연관관계의 주인이 BoardImage 이므로 적용 x
     private BoardImage boardImage;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
