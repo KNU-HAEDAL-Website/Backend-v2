@@ -1,5 +1,8 @@
 package com.haedal.haedalweb.application.board.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import com.haedal.haedalweb.application.board.dto.BoardImageResponseDto;
 import com.haedal.haedalweb.application.board.mapper.BoardImageMapper;
 import com.haedal.haedalweb.application.board.mapper.BoardMapper;
@@ -8,7 +11,7 @@ import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.model.BoardImage;
 import com.haedal.haedalweb.domain.board.service.BoardService;
-import com.haedal.haedalweb.application.board.dto.CreateBoardRequestDto;
+import com.haedal.haedalweb.application.board.dto.BoardRequestDto;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.service.UserService;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
@@ -26,9 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 
 @Service
@@ -55,12 +55,12 @@ public class BoardAppServiceImpl implements BoardAppService {
 
     @Override
     @Transactional
-    public void registerBoard(Long activityId, MultipartFile boardImageFile, CreateBoardRequestDto createBoardRequestDto) {
+    public void registerBoard(Long activityId, MultipartFile boardImageFile, BoardRequestDto boardRequestDto) {
         Activity activity = activityService.getActivity(activityId);
         User loggedInUser = securityService.getLoggedInUser();
 
         // 게시판 참여자 검증
-        List<String> participantIds = new ArrayList<>(createBoardRequestDto.getParticipants());
+        List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
         userService.validateActiveUsers(participants, participantIds);
 
@@ -71,8 +71,8 @@ public class BoardAppServiceImpl implements BoardAppService {
         applicationEventPublisher.publishEvent(new ImageSaveRollbackEvent(uploadPath, saveFile));
 
         Board board = Board.builder()
-                .name(createBoardRequestDto.getBoardName())
-                .intro(createBoardRequestDto.getBoardIntro())
+                .name(boardRequestDto.getBoardName())
+                .intro(boardRequestDto.getBoardIntro())
                 .user(loggedInUser)
                 .participants(new ArrayList<>())
                 .activity(activity)
@@ -84,10 +84,10 @@ public class BoardAppServiceImpl implements BoardAppService {
                 .board(board)
                 .build();
 
-
         board.setBoardImage(boardImage);
+        boardService.addParticipantsToBoard(participants, board);
 
-        boardService.registerBoard(participants, board);
+        boardService.registerBoard(board);
     }
 
     @Override
@@ -145,5 +145,26 @@ public class BoardAppServiceImpl implements BoardAppService {
 
         // 모든작업이 Commit 될 시에 이전 이미지 파일 삭제
         applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+    }
+
+    @Override
+    @Transactional
+    public void updateBoard(Long activityId, Long boardId, BoardRequestDto boardRequestDto) { // 여기 bulk insert 최적화 해야함
+        Board board = boardService.getBoardWithUserAndParticipants(activityId, boardId);
+
+        // 생성자와 로그인한 유저가 같은지 검증
+        User loggedInUser = securityService.getLoggedInUser();
+        User creator = board.getUser();
+        boardService.validateAuthorityOfBoardManagement(loggedInUser, creator);
+
+        // 게시판 참여자 검증
+        List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
+        List<User> participants = userService.getUsersByIds(participantIds);
+        userService.validateActiveUsers(participants, participantIds);
+
+        board.setName(boardRequestDto.getBoardName());
+        board.setIntro(boardRequestDto.getBoardIntro());
+        board.getParticipants().clear();
+        boardService.addParticipantsToBoard(participants, board);
     }
 }

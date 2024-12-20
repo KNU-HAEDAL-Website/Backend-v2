@@ -1,13 +1,10 @@
 version: '3.8'
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
+    build: .
     ports:
       - "8080:8080"
     volumes:
-      - .:/app  # 현재 디렉토리를 /app에 마운트
       - haedal-web-board-images:/app/data/board
     depends_on:
       - haedal-mysql
