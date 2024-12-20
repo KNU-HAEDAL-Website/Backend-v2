@@ -79,7 +79,7 @@ public class BoardServiceImpl implements BoardService {
         List<String> participantIds = new ArrayList<>(updateBoardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
 
-        validateParticipants(participants, participantIds);
+//        validateParticipants(participants, participantIds);
 
         board.setName(updateBoardRequestDto.getBoardName());
         board.setIntro(updateBoardRequestDto.getBoardIntro());
@@ -104,19 +104,19 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
-    @Override
-    public void validateParticipants(List<User> users, List<String> userIds) {
-        if (users.size() != userIds.size()) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
-        }
-
-        users.forEach(user -> {
-            UserStatus userStatus = user.getUserStatus();
-            if (userStatus != UserStatus.ACTIVE) {
-                throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
-            }
-        });
-    }
+//    @Override
+//    public void validateParticipants(List<User> users, List<String> userIds) {
+//        if (users.size() != userIds.size()) {
+//            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+//        }
+//
+//        users.forEach(user -> {
+//            UserStatus userStatus = user.getUserStatus();
+//            if (userStatus != UserStatus.ACTIVE) {
+//                throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+//            }
+//        });
+//    }
 
     @Override
     public void validateAuthorityOfBoardManagement(User loggedInUser, User creator) {

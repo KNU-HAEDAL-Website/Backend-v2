@@ -7,7 +7,6 @@ import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.model.BoardImage;
-import com.haedal.haedalweb.domain.board.service.BoardImageService;
 import com.haedal.haedalweb.domain.board.service.BoardService;
 import com.haedal.haedalweb.application.board.dto.CreateBoardRequestDto;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -15,9 +14,8 @@ import com.haedal.haedalweb.domain.user.service.UserService;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
 import com.haedal.haedalweb.security.service.SecurityService;
-import com.haedal.haedalweb.util.ImageUtil;
+import com.haedal.haedalweb.infrastructure.image.ImageUtil;
 import com.haedal.haedalweb.application.board.dto.BoardResponseDto;
-import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +35,6 @@ import java.util.UUID;
 @Slf4j
 public class BoardAppServiceImpl implements BoardAppService {
     private final BoardService boardService;
-    private final BoardImageService boardImageService;
     private final ActivityService activityService;
     private final SecurityService securityService;
     private final UserService userService;
@@ -46,9 +43,8 @@ public class BoardAppServiceImpl implements BoardAppService {
     private final String uploadUrl;
 
     @Autowired
-    public BoardAppServiceImpl(BoardService boardService, BoardImageService boardImageService, ActivityService activityService, SecurityService securityService, UserService userService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-board-images}")String uploadPath, @Value("${file.url.upload-board-images}")String uploadUrl) {
+    public BoardAppServiceImpl(BoardService boardService, ActivityService activityService, SecurityService securityService, UserService userService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-board-images}")String uploadPath, @Value("${file.url.upload-board-images}")String uploadUrl) {
         this.boardService = boardService;
-        this.boardImageService = boardImageService;
         this.activityService = activityService;
         this.securityService = securityService;
         this.userService = userService;
@@ -64,15 +60,13 @@ public class BoardAppServiceImpl implements BoardAppService {
         User loggedInUser = securityService.getLoggedInUser();
 
         // 게시판 참여자 검증
-        List<String> participantIds = new ArrayList<>(createBoardRequestDto.getParticipants());;
+        List<String> participantIds = new ArrayList<>(createBoardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
         userService.validateActiveUsers(participants, participantIds);
 
         // 파일 저장
         String originalFile = boardImageFile.getOriginalFilename();
-        log.warn(originalFile + " original File Name");
-        String saveFile = UUID.randomUUID() + originalFile.substring(originalFile.lastIndexOf('.'));
-        log.warn(saveFile + " save File Name");
+        String saveFile = UUID.randomUUID() + "." + ImageUtil.getExtension(originalFile);
         ImageUtil.uploadImage(boardImageFile, uploadPath, saveFile);
         applicationEventPublisher.publishEvent(new ImageSaveRollbackEvent(uploadPath, saveFile));
 
@@ -133,7 +127,7 @@ public class BoardAppServiceImpl implements BoardAppService {
 
         // 새 이미지 파일 저장
         String originalFile = boardImageFile.getOriginalFilename();
-        String saveFile = UUID.randomUUID() + originalFile.substring(originalFile.lastIndexOf('.'));
+        String saveFile = UUID.randomUUID() + "." + ImageUtil.getExtension(originalFile);
         ImageUtil.uploadImage(boardImageFile, uploadPath, saveFile);
 
         // ROLLBACK 발생시 저장한 이미지 파일 삭제

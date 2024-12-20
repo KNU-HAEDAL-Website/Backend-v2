@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.util;
+package com.haedal.haedalweb.infrastructure.image;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.exception.BusinessException;
@@ -37,6 +37,21 @@ public class ImageUtil {
                 log.warn("파일 삭제 실패: {}", path);
             }
         }
+    }
+
+    public static String getExtension(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST_FILE);
+        }
+
+        int lastDotIndex = fileName.lastIndexOf('.');
+
+        // 확장자가 없다면 예외 발생
+        if (lastDotIndex == -1 || lastDotIndex == fileName.length() - 1) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST_FILE);
+        }
+
+        return fileName.substring(lastDotIndex + 1);
     }
 
     public static String generateImageUrl(String uploadUrl, String saveFile) {

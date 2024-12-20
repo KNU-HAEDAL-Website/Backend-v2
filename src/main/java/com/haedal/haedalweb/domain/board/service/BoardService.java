@@ -17,7 +17,6 @@ public interface BoardService {
     void deleteBoard(Long activityId, Long boardId);
     void updateBoard(Long activityId, Long boardId, UpdateBoardRequestDto updateBoardRequestDto);
     boolean hasBoardsByActivityId(Long activityId);
-    void validateParticipants(List<User> participants, List<String> participantIds);
 
     void validateAuthorityOfBoardManagement(User loggedInUser, User creator);
 }
