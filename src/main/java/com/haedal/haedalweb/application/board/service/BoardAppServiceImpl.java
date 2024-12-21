@@ -74,7 +74,6 @@ public class BoardAppServiceImpl implements BoardAppService {
                 .name(boardRequestDto.getBoardName())
                 .intro(boardRequestDto.getBoardIntro())
                 .user(loggedInUser)
-                .participants(new ArrayList<>())
                 .activity(activity)
                 .build();
 

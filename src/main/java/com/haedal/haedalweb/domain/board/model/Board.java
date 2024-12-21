@@ -1,7 +1,9 @@
 package com.haedal.haedalweb.domain.board.model;
 
+import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.user.model.User;
+import com.haedal.haedalweb.exception.BusinessException;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,7 +55,7 @@ public class Board {
     private BoardImage boardImage;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Participant> participants;
+    private List<Participant> participants = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_id")
@@ -72,8 +74,8 @@ public class Board {
     private LocalDateTime updateDate;
 
     public void addParticipant(Participant participant) {
-        if (this.participants == null) {
-            this.participants = new ArrayList<>();
+        if (participant == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
         participants.add(participant);
     }
