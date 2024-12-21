@@ -1,9 +1,10 @@
 package com.haedal.haedalweb.web.user.controller;
 
+import com.haedal.haedalweb.application.user.dto.AdminUserResponseDto;
+import com.haedal.haedalweb.application.user.service.AdminUserAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
-import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.dto.UpdateRoleRequestDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.user.service.AdminUserService;
@@ -33,20 +34,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class AdminUserController {
+    private final AdminUserAppService adminUserAppService;
     private final AdminUserService adminUserService;
 
     @Operation(summary = "User 목록")
     @Parameter(name = "active", description = "활동 유저 true, 가입대기 유저 false")
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getUser(@RequestParam Boolean active){
-        List<UserResponseDto> users = null;
+    public ResponseEntity<List<AdminUserResponseDto>> getUser(@RequestParam Boolean active){
+        List<AdminUserResponseDto> users = null;
 
         if (active) {
             Sort sort = Sort.by(Sort.Order.asc("role"), Sort.Order.asc("name"));
-            users = adminUserService.getUsers(UserStatus.ACTIVE, sort);
+            users = adminUserAppService.getUsers(UserStatus.ACTIVE, sort);
         } else {
             Sort sort = Sort.by(Sort.Order.asc("regDate"), Sort.Order.asc("name"));
-            users = adminUserService.getUsers(UserStatus.INACTIVE, sort);
+            users = adminUserAppService.getUsers(UserStatus.INACTIVE, sort);
         }
 
         return ResponseEntity.ok(users);
@@ -55,10 +57,9 @@ public class AdminUserController {
     @Operation(summary = "가입 승인")
     @ApiSuccessCodeExample(SuccessCode.JOIN_APPROVAL)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
-    @Parameter(name = "userId", description = "가입 승인할 유저 ID")
     @PatchMapping("/{userId}/approve")
     public ResponseEntity<SuccessResponse> approveUser(@PathVariable String userId) {
-        adminUserService.updateUserStatus(userId, UserStatus.ACTIVE);
+        adminUserAppService.approveUser(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_APPROVAL);
     }
@@ -66,10 +67,9 @@ public class AdminUserController {
     @Operation(summary = "가입 거절")
     @ApiSuccessCodeExample(SuccessCode.JOIN_REFUSAL)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
-    @Parameter(name = "userId", description = "가입 거절할 유저 ID")
     @DeleteMapping("/{userId}/reject")
     public ResponseEntity<SuccessResponse> rejectUser(@PathVariable String userId) {
-        adminUserService.deleteUser(userId);
+        adminUserAppService.rejectUser(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.JOIN_REFUSAL);
     }
@@ -77,10 +77,9 @@ public class AdminUserController {
     @Operation(summary = "유저 내보내기")
     @ApiSuccessCodeExample(SuccessCode.EXPEL_USER)
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
-    @Parameter(name = "userId", description = "내보낼 유저 ID")
     @PatchMapping("/{userId}/expel")
     public ResponseEntity<SuccessResponse> expelUser(@PathVariable String userId) {
-        adminUserService.updateUserStatus(userId, UserStatus.DELETED);
+        adminUserAppService.removeUser(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.EXPEL_USER);
     }
@@ -88,10 +87,9 @@ public class AdminUserController {
     @Operation(summary = "유저 권한 변경")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_ROLE)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ROLE})
-    @Parameter(name = "userId", description = "권한 변경할 유저 ID")
     @PatchMapping("/{userId}/role")
     public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
-        adminUserService.updateUserRole(userId, updateRoleRequestDto.getRole());
+        adminUserAppService.updateUserRole(userId, updateRoleRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_ROLE);
     }

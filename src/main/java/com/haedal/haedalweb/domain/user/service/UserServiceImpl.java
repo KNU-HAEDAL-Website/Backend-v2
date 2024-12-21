@@ -11,6 +11,7 @@ import com.haedal.haedalweb.application.user.dto.UserSummaryResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    public List<User> getUsersByUserStatus(UserStatus userStatus, Sort sort) {
+        return userRepository.findByUserStatus(userStatus, sort);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<UserSummaryResponseDto> getUsers() {
         List<User> users = userRepository.findByUserStatus(UserStatus.ACTIVE, null);
@@ -30,6 +36,7 @@ public class UserServiceImpl implements UserService {
                 .map(this::convertToPrivateUserDTO)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     @Transactional(readOnly = true)
