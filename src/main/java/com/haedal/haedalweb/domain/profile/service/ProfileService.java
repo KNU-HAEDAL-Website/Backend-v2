@@ -7,5 +7,7 @@ public interface ProfileService {
     void generateProfile(User user);
     Profile getProfileWithImageAndUser(String userId);
 
+    Profile getProfileWithUser(String userId);
+
     void validateAuthorityOfProfileManagement(String userId, User loggedInUser);
 }

@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.profile.service;
 
+import com.haedal.haedalweb.application.profile.dto.ProfileRequestDto;
 import com.haedal.haedalweb.application.profile.dto.ProfileResponseDto;
 import com.haedal.haedalweb.application.profile.mapper.ProfileMapper;
 import com.haedal.haedalweb.domain.profile.model.Profile;
@@ -7,7 +8,6 @@ import com.haedal.haedalweb.domain.profile.model.ProfileImage;
 import com.haedal.haedalweb.domain.profile.service.ProfileService;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.service.UserService;
-import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageUtil;
@@ -69,6 +69,20 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 
         // 모든작업이 Commit 될 시에 이전 이미지 파일 삭제
         applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+    }
+
+    @Transactional
+    @Override
+    public void updateProfile(String userId, ProfileRequestDto profileRequestDto) {
+        Profile profile = profileService.getProfileWithUser(userId);
+        User loggedInUser = securityService.getLoggedInUser();
+
+        // 프로필 수정 권한 검증
+        profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
+
+        profile.setIntro(profileRequestDto.getProfileIntro());
+        profile.setGithubAccount(profile.getGithubAccount());
+        profile.setInstaAccount(profile.getInstaAccount());
     }
 
     @Transactional(readOnly = true)

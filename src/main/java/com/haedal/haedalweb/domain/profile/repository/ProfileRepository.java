@@ -14,5 +14,10 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             "LEFT JOIN FETCH p.user " +
             "LEFT JOIN FETCH p.profileImage " +
             "WHERE p.user.id = :userId ")
-    Optional<Profile> findProfileByImageAndUser(String userId);
+    Optional<Profile> findProfileWithImageAndUser(String userId);
+
+    @Query("SELECT p FROM Profile p " +
+            "LEFT JOIN FETCH p.user " +
+            "WHERE p.user.id = :userId ")
+    Optional<Profile> findProfileWithUser(String userId);
 }

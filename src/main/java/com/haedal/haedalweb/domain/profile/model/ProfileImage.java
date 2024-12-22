@@ -31,14 +31,14 @@ import java.time.LocalDateTime;
 @Entity
 public class ProfileImage {
     @Id
-    @Column(name = "board_image_id")
+    @Column(name = "profile_image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "board_original_file")
+    @Column(name = "profile_original_file")
     private String originalFile;
 
-    @Column(name = "board_save_file")
+    @Column(name = "profile_save_file")
     private String saveFile;
 
     @OneToOne(fetch = FetchType.LAZY)
