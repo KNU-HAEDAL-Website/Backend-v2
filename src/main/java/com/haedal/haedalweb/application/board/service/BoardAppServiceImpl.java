@@ -3,8 +3,6 @@ package com.haedal.haedalweb.application.board.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import com.haedal.haedalweb.application.board.dto.BoardImageResponseDto;
-import com.haedal.haedalweb.application.board.mapper.BoardImageMapper;
 import com.haedal.haedalweb.application.board.mapper.BoardMapper;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
@@ -93,8 +91,8 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Transactional(readOnly = true)
     public BoardResponseDto getBoard(Long activityId, Long boardId) {
         Board board = boardService.getBoardWithImageAndParticipants(activityId, boardId);
-        BoardImageResponseDto boardImageResponseDto = BoardImageMapper.toDto(board.getBoardImage());
-        String imageUrl = ImageUtil.generateImageUrl(uploadUrl, boardImageResponseDto.getBoardImageSaveFile());
+
+        String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
         return BoardMapper.toDto(activityId, imageUrl, board);
     }
@@ -105,8 +103,7 @@ public class BoardAppServiceImpl implements BoardAppService {
         Page<Board> boardPage = boardService.getBoardPage(activityId, pageable);
 
         Page<BoardResponseDto> boardResponsePage = boardPage.map(board -> {
-            BoardImageResponseDto boardImageResponseDto = BoardImageMapper.toDto(board.getBoardImage());
-            String imageUrl = ImageUtil.generateImageUrl(uploadUrl, boardImageResponseDto.getBoardImageSaveFile());
+            String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
             return BoardMapper.toDto(activityId, imageUrl, board);
         });

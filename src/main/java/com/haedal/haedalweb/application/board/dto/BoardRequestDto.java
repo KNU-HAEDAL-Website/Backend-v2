@@ -21,5 +21,6 @@ public class BoardRequestDto {
     private String boardIntro;
 
     @Schema(description = "참여 인원 ID", allowableValues = {"haedal1234", "good1234"})
+    @Size(min = 1, message = "참여 인원은 최소 한 명 이상이어야 합니다.")
     private Set<String> participants;
 }
