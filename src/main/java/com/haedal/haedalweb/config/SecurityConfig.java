@@ -95,7 +95,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/boards/{boardId}/posts/{postId}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/activities/{activityId}/boards/{boardId}").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers(HttpMethod.PATCH, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+                        .requestMatchers(HttpMethod.PUT, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+                        .requestMatchers(HttpMethod.PUT, "/users/{userId}/profile/**").authenticated()
                         .requestMatchers("/posts/{postId}","/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/users/{userId}/profile", "/profiles", "/semesters/**", "/swagger-ui/**", "/v3/api-docs/**", "/error/**", "/upload/**").permitAll()
                         .anyRequest().authenticated());
 
