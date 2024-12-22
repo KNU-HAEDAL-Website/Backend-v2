@@ -24,7 +24,4 @@ public class UserResponseDto {
 
     @Schema(description = "유저 권한", example = "(해구르르, 팀장, 일반)")
     private String role;
-
-    @Schema(description = "가입 날짜")
-    private LocalDateTime regDate;
 }
