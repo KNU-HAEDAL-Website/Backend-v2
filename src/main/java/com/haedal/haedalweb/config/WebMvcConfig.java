@@ -12,17 +12,35 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 public class WebMvcConfig implements WebMvcConfigurer {
     private final String boardUploadPath;
     private final String boardUploadUrl;
+    private final String profileUploadPath;
+    private final String profileUploadUrl;
+    private final String defaultUploadUrl;
 
 
-    public WebMvcConfig(@Value("${file.path.upload-board-images}")String boardUploadPath, @Value("${file.url.upload-board-images}") String boardUploadUrl) {
+    public WebMvcConfig(@Value("${file.path.upload-board-images}")String boardUploadPath, @Value("${file.url.upload-board-images}") String boardUploadUrl, @Value("${file.path.upload-profile-images}") String profileUploadPath, @Value("${file.url.upload-profile-images}") String profileUploadUrl, @Value("${file.url.upload-default-images}") String defaultUploadUrl) {
         this.boardUploadPath = boardUploadPath;
         this.boardUploadUrl = boardUploadUrl;
+        this.profileUploadPath = profileUploadPath;
+        this.profileUploadUrl = profileUploadUrl;
+        this.defaultUploadUrl = defaultUploadUrl;
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler( boardUploadUrl + "/**")
                 .addResourceLocations("file:///" + boardUploadPath + "/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
+        registry.addResourceHandler( profileUploadUrl + "/**")
+                .addResourceLocations("file:///" + profileUploadPath + "/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
+        registry.addResourceHandler(defaultUploadUrl+"/**")
+                .addResourceLocations("classpath:/static/images/") // 기본 이미지 경로
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
@@ -37,5 +55,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new ImageUploadInterceptor())
                 .addPathPatterns("/activities/*/boards");
+
+        registry.addInterceptor(new ImageUploadInterceptor())
+                .addPathPatterns("/users/*/profile/image");
     }
 }

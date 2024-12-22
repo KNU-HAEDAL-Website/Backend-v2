@@ -60,9 +60,6 @@ public class User {
     @NonNull
     private UserStatus userStatus;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Profile profile;
-
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)
     private LocalDateTime regDate;

@@ -21,12 +21,12 @@ import java.util.List;
 public class UserController {
     private final UserAppService userAppService;
 
-    @Operation(summary = "User Me 정보 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
-    @GetMapping("/users/me")
-    public ResponseEntity<UserResponseDto> getMe() {
-        return ResponseEntity.ok(userAppService.getMe());
-    }
+//    @Operation(summary = "User Me 정보 조회")
+//    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
+//    @GetMapping("/users/me")
+//    public ResponseEntity<UserResponseDto> getMe() {
+//        return ResponseEntity.ok(userAppService.getMe());
+//    }
 
     @Operation(summary = "User 조회 (학번 포함, 회원만)")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})

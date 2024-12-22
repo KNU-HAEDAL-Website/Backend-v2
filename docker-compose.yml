@@ -6,6 +6,7 @@ services:
       - "8080:8080"
     volumes:
       - haedal-web-board-images:/app/data/board
+      - haedal-web-profile-images:/app/data/profile
     depends_on:
       - haedal-mysql
       - haedal-redis
@@ -42,3 +43,4 @@ services:
 volumes:
   db-data:
   haedal-web-board-images:
+  haedal-web-profile-images:

@@ -9,6 +9,7 @@ import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,18 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
 
-        if (user.getUserStatus() != UserStatus.ACTIVE) {
+        if (user.getUserStatus() != UserStatus.ACTIVE && user.getUserStatus() != UserStatus.MASTER) {
             throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
         return user;
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+        // 현재 사용자가 로그인되어 있는지 확인하는 로직
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     @Override

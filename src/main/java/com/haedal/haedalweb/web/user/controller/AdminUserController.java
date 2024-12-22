@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 
-@Tag(name = "관리자 - 유저 관리 API")
+@Tag(name = "관리자 페이지 - 유저 관리 API")
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
 @RestController

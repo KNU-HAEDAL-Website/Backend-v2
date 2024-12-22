@@ -6,6 +6,7 @@ import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
 import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
 import com.haedal.haedalweb.domain.auth.service.VerifiedEmailService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
+import com.haedal.haedalweb.domain.profile.service.ProfileService;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JoinAppServiceImpl implements JoinAppService {
     private final JoinService joinService;
+    private final ProfileService profileService;
     private final EmailVerificationService emailVerificationService;
     private final VerifiedEmailService verifiedEmailService;
     private final EmailSenderService emailSenderService;
@@ -37,6 +39,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 
         // 등록
         joinService.registerAccount(user);
+        profileService.generateProfile(user);
     }
 
     @Transactional

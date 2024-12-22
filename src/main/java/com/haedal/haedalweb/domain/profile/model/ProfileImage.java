@@ -36,11 +36,9 @@ public class ProfileImage {
     private Long id;
 
     @Column(name = "board_original_file")
-    @NonNull
     private String originalFile;
 
     @Column(name = "board_save_file")
-    @NonNull
     private String saveFile;
 
     @OneToOne(fetch = FetchType.LAZY)
