@@ -3,6 +3,7 @@ package com.haedal.haedalweb.domain.activity.model;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,11 +16,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Builder
 @Getter
 public class Activity {
@@ -35,4 +42,12 @@ public class Activity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "semester_id")
     private Semester semester;
+
+    @CreatedDate
+    @Column(name = "reg_date", nullable = false, updatable = false)
+    private LocalDateTime regDate;
+
+    @LastModifiedDate
+    @Column(name = "update_date")
+    private LocalDateTime updateDate;
 }

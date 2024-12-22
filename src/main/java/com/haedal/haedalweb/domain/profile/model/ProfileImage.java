@@ -1,7 +1,6 @@
 package com.haedal.haedalweb.domain.profile.model;
 
-import com.haedal.haedalweb.domain.user.model.User;
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -16,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,27 +30,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Profile {
+public class ProfileImage {
     @Id
-    @Column(name = "profile_id")
+    @Column(name = "board_image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "profile_intro", length = 127)
-    private String intro;
+    @Column(name = "board_original_file")
+    @NonNull
+    private String originalFile;
 
-    @Column(name = "github_account", length = 63)
-    private String githubAccount;
-
-    @Column(name = "insta_account", length = 63)
-    private String instaAccount;
-
-    @OneToOne(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private ProfileImage profileImage;
+    @Column(name = "board_save_file")
+    @NonNull
+    private String saveFile;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "profile_id", nullable = false, unique = true)
+    private Profile profile;
 
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)
