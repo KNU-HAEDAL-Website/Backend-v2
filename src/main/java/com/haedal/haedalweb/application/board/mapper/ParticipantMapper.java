@@ -21,6 +21,6 @@ public class ParticipantMapper {
     public static List<ParticipantResponseDto> toDtos(List<Participant> participants) {
         return participants.stream()
                 .map(ParticipantMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -1,11 +1,15 @@
 package com.haedal.haedalweb.domain.user.model;
 
+import com.haedal.haedalweb.domain.profile.model.Profile;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,9 +67,4 @@ public class User {
     @LastModifiedDate
     @Column(name = "update_date")
     private LocalDateTime updateDate;
-
-//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "profile_id")
-//    @NonNull
-//    private Profile profile;
 }

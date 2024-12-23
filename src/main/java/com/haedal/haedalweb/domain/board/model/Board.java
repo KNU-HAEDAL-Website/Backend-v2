@@ -55,6 +55,7 @@ public class Board {
     private BoardImage boardImage;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Participant> participants = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

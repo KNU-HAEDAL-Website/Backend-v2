@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,9 +39,9 @@ public class BoardController {
 
     @Operation(summary = "게시판 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.BAD_REQUEST_FILE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.BAD_REQUEST_FILE, ErrorCode.NOT_AUTHENTICATED_USER})
     @PostMapping(value = "/activities/{activityId}/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<SuccessResponse> addBoard(@PathVariable Long activityId, @RequestPart(value = "file") MultipartFile boardImageFile, @RequestPart @Valid BoardRequestDto boardRequestDto) {
+    public ResponseEntity<SuccessResponse> registerBoard(@PathVariable Long activityId, @RequestPart(value = "file") MultipartFile boardImageFile, @RequestPart @Valid BoardRequestDto boardRequestDto) {
         boardAppService.registerBoard(activityId, boardImageFile, boardRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
@@ -61,14 +60,14 @@ public class BoardController {
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@PathVariable Long activityId,
                                                             @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                             @RequestParam(name = "size", defaultValue = "5") Integer size) {
-        Page<BoardResponseDto> boardDTOs = boardAppService.getBoardPage(activityId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
+        Page<BoardResponseDto> boardDtos = boardAppService.getBoardPage(activityId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
 
-        return ResponseEntity.ok(boardDTOs);
+        return ResponseEntity.ok(boardDtos);
     }
     @Operation(summary = "게시판 이미지 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.BAD_REQUEST_FILE})
-    @PatchMapping(value = "/activities/{activityId}/boards/{boardId}/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.BAD_REQUEST_FILE, ErrorCode.NOT_AUTHENTICATED_USER})
+    @PutMapping(value = "/activities/{activityId}/boards/{boardId}/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse> updateBoardImage(@PathVariable Long activityId, @PathVariable Long boardId, @RequestPart(value = "file") MultipartFile boardImageFile) {
         boardAppService.updateBoardImage(activityId, boardId, boardImageFile);
 
@@ -76,7 +75,7 @@ public class BoardController {
     }
     @Operation(summary = "게시판 메타 데이터 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER})
     @PutMapping("/activities/{activityId}/boards/{boardId}")
     public ResponseEntity<SuccessResponse> updateBoard(@PathVariable Long activityId, @PathVariable Long boardId, @RequestBody @Valid BoardRequestDto boardRequestDto) {
         boardAppService.updateBoard(activityId, boardId, boardRequestDto);
@@ -87,7 +86,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_BOARD_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_AUTHENTICATED_USER})
     @DeleteMapping("/activities/{activityId}/boards/{boardId}")
     public ResponseEntity<SuccessResponse> deleteBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
         boardAppService.removeBoard(activityId, boardId);

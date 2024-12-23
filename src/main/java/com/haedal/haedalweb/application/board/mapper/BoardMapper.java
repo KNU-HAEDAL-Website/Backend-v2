@@ -17,6 +17,4 @@ public class BoardMapper {
                 .participants(ParticipantMapper.toDtos(board.getParticipants())) // List<Participants>로 List<participantDTO> 만들기
                 .build();
     }
-
-
 }

@@ -30,8 +30,8 @@ public enum SuccessCode implements ResponseCode{
     OK(HttpStatus.OK, true, "요청을 성공적으로 수행했습니다."),
     DELETE_POST_SUCCESS(HttpStatus.OK, true, "게시글을 삭제했습니다."),
     SEND_VERIFICATION_CODE_SUCCESS(HttpStatus.CREATED, true, "인증 코드를 메일로 전송했습니다."),
-    VERIFY_VERIFICATION_CODE_SUCCESS(HttpStatus.OK, true, "인증 코드 검증에 성공했습니다.");
-
+    VERIFY_VERIFICATION_CODE_SUCCESS(HttpStatus.OK, true, "인증 코드 검증에 성공했습니다."),
+    UPDATE_PROFILE_SUCCESS(HttpStatus.OK, true,"프로필을 수정했습니다");
 
     private final HttpStatus httpStatus;
     private final Boolean success;

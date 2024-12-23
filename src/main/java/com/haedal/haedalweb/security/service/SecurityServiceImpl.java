@@ -17,6 +17,13 @@ public class SecurityServiceImpl implements SecurityService {
     private final UserRepository userRepository;
 
     @Override
+    public boolean isLoggedIn() {
+        // 현재 사용자가 로그인되어 있는지 확인하는 로직
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
+    }
+
+    @Override
     public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

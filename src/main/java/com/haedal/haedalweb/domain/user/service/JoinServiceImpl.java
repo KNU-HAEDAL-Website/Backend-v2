@@ -1,7 +1,6 @@
 package com.haedal.haedalweb.domain.user.service;
 
-import com.haedal.haedalweb.domain.profile.model.Profile;
-import com.haedal.haedalweb.domain.sns.model.Sns;
+
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.constants.ErrorCode;
@@ -45,13 +44,5 @@ public class JoinServiceImpl implements JoinService {
         validateUserId(user.getId());
         validateStudentNumber(user.getStudentNumber());
         validateEmail(user.getEmail());
-    }
-
-    private Profile createProfileWithSns() {
-        Sns sns = Sns.builder().build();
-
-        return Profile.builder()
-                .sns(sns)
-                .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.security.controller;
+package com.haedal.haedalweb.web.security.controller;
 
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.security.service.TokenAppService;
@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "토큰 재발급")
+@Tag(name = "토큰 관련 API")
 @RequiredArgsConstructor
 @RestController
 public class ReissueController {

@@ -34,14 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
     private final PostService postService;
 
-//    @Operation(summary = "PreSignedUrl 게시판 대표 이미지 저장용")
-//    @GetMapping("/posts/generate-presigned-url")
-//    public ResponseEntity<PreSignedUrlResponseDto> generatePreSignedUrl() {
-//        String objectKey = "posts/" + UUID.randomUUID().toString();
-//        PreSignedUrlResponseDto preSignedUrlResponseDto = s3Service.getPreSignedUrlDTO(objectKey);
-//
-//        return ResponseEntity.ok(preSignedUrlResponseDto);
-//    }
 
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
