@@ -5,23 +5,32 @@ import com.haedal.haedalweb.application.profile.dto.ProfileResponseDto;
 import com.haedal.haedalweb.application.profile.service.ProfileAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
+import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Tag(name = "프로필 API")
 @RequiredArgsConstructor
@@ -57,10 +66,18 @@ public class ProfileController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_PROFILE_SUCCESS);
     }
 
-//
-//    // 모든 유저 프로필 목록 조회
-//    @GetMapping("/users/profiles")
-//    public ResponseEntity<> getProfiles() {
-//    }
+    // 프로필 페이징 조회 With 권한 별
+    @Operation(summary = "프로필 페이징 조회")
+    @Parameters({
+            @Parameter(name = "page", description = "페이지 번호 (0부터 시작)", required = false, example = "0"),
+            @Parameter(name = "size", description = "페이지 크기", required = false, example = "5"),
+            @Parameter(name = "roles", description = "조회할 역할 목록 컴마로 여러개 전달 가능 (ex: ROLE_ADMIN,ROLE_TEAM_LEADER,ROLE_MEMBER)", required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER")
+    })
+    @GetMapping("/users/profiles")
+    public ResponseEntity<Page<ProfileResponseDto>> getProfiles(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                @RequestParam(name = "size", defaultValue = "5") Integer size,
+                                                                @RequestParam List<Role> roles) {
+        return ResponseEntity.ok(profileAppService.getProfilePage(roles, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id")))));
+    }
 
 }

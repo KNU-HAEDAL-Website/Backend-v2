@@ -15,7 +15,7 @@ public class ProfileMapper {
         return ProfileResponseDto.builder()
                 .userId(user.getId())
                 .userName(user.getName())
-                .role(user.getRole().getLabel())
+                .role(user.getRole())
                 .userIntro(profile.getIntro())
                 .profileImageUrl(imageUrl)
                 .githubAccount(profile.getGithubAccount())

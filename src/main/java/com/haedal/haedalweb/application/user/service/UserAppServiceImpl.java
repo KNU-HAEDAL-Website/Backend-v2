@@ -17,13 +17,13 @@ import java.util.List;
 public class UserAppServiceImpl implements UserAppService {
     private final UserService userService;
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserResponseDto getMe() {
-        User user = userService.getLoggedInUser();
-
-        return UserMapper.toDto(user);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public UserResponseDto getMe() {
+//        User user = userService.getLoggedInUser();
+//
+//        return UserMapper.toDto(user);
+//    }
 
 
     @Override

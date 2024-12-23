@@ -14,9 +14,5 @@ public interface UserService {
 
     List<User> getUsersByIds(List<String> userIds);
 
-    boolean isLoggedIn();
-
-    User getLoggedInUser();
-
     void validateActiveUsers(List<User> users, List<String> userIds);
 }

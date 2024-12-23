@@ -13,7 +13,7 @@ public class UserMapper {
     public static UserResponseDto toDto(User user) {
         return UserResponseDto.builder()
                 .userId(user.getId())
-                .role(user.getRole().getLabel())
+                .role(user.getRole())
                 .studentNumber(user.getStudentNumber())
                 .userName(user.getName())
                 .build();

@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.profile.dto;
 
+import com.haedal.haedalweb.domain.user.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,8 @@ public class ProfileResponseDto {
     @Schema(description = "유저 이메일 (본인 전용)")
     private String email;
 
-    @Schema(description = "유저 권한", example = "(해구르르, 팀장, 일반)")
-    private String role;
+    @Schema(description = "유저 권한", example = "(ROLE_WEB_MASTER, ROLE_ADMIN, ROLE_TEAM_LEADER, ROLE_MEMBER)")
+    private Role role;
 
     @Schema(description = "프로필 이미지 파일 Url")
     private String profileImageUrl;

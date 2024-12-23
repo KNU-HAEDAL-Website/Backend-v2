@@ -15,6 +15,7 @@ import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -88,7 +89,7 @@ public class AdminUserController {
     @ApiSuccessCodeExample(SuccessCode.UPDATE_ROLE)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ROLE})
     @PatchMapping("/{userId}/role")
-    public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody UpdateRoleRequestDto updateRoleRequestDto) {
+    public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody @Valid UpdateRoleRequestDto updateRoleRequestDto) {
         adminUserAppService.updateUserRole(userId, updateRoleRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_ROLE);

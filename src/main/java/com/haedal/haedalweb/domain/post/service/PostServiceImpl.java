@@ -6,6 +6,7 @@ import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
+import com.haedal.haedalweb.security.service.SecurityService;
 import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
 import com.haedal.haedalweb.web.post.dto.PostResponseDto;
 import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
@@ -28,6 +29,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final UserService userService;
+    private final SecurityService securityService;
 
     @Transactional
     public void createPost(Long boardId, CreatePostRequestDto createPostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
@@ -55,7 +57,7 @@ public class PostServiceImpl implements PostService {
             activityEndDate = LocalDate.parse(createPostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
         }
 
-        User creator = userService.getLoggedInUser();
+        User creator = securityService.getLoggedInUser();
 
         Post post = Post.builder()
                 .title(createPostRequestDTO.getPostTitle())
@@ -84,7 +86,7 @@ public class PostServiceImpl implements PostService {
 
         LocalDate activityStartDate = null;
         LocalDate activityEndDate = null;
-        User creator = userService.getLoggedInUser();
+        User creator = securityService.getLoggedInUser();
 
         if (postType == PostType.EVENT) {
             try {
@@ -117,7 +119,7 @@ public class PostServiceImpl implements PostService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
 
-        User loggedInUser = userService.getLoggedInUser();
+        User loggedInUser = securityService.getLoggedInUser();
         User postCreator = post.getUser();
         User boardCreator = board.getUser();
 

@@ -13,7 +13,7 @@ public class AdminUserMapper {
                 .userId(user.getId())
                 .studentNumber(user.getStudentNumber())
                 .userName(user.getName())
-                .role(user.getRole().getLabel())
+                .role(user.getRole())
                 .regDate(user.getRegDate())
                 .build();
     }

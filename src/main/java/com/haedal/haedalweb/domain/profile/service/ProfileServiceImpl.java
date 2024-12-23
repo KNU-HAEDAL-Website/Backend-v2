@@ -4,11 +4,16 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.profile.model.Profile;
 import com.haedal.haedalweb.domain.profile.model.ProfileImage;
 import com.haedal.haedalweb.domain.profile.repository.ProfileRepository;
+import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +56,11 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         return profile;
+    }
+
+    @Override
+    public Page<Profile> getProfilePage(List<Role> roles, Pageable pageable) {
+        return profileRepository.findProfilePageByRoles(roles, pageable);
     }
 
     @Override

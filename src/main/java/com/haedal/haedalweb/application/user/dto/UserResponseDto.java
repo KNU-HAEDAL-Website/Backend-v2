@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.user.dto;
 
-import java.time.LocalDateTime;
+
+import com.haedal.haedalweb.domain.user.model.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,6 @@ public class UserResponseDto {
     @Schema(description = "유저 이름", example = "조대성")
     private String userName;
 
-    @Schema(description = "유저 권한", example = "(해구르르, 팀장, 일반)")
-    private String role;
+    @Schema(description = "유저 권한", example = "(ROLE_WEB_MASTER, ROLE_ADMIN, ROLE_TEAM_LEADER, ROLE_MEMBER)")
+    private Role role;
 }
