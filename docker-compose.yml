@@ -5,8 +5,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - haedal-web-board-images:/app/data/board
-      - haedal-web-profile-images:/app/data/profile
+      - board-images:/app/data/board
+      - profile-images:/app/data/profile
     depends_on:
       - haedal-mysql
       - haedal-redis
@@ -43,5 +43,5 @@ services:
       TZ: "Asia/Seoul"
 volumes:
   db-data:
-  haedal-web-board-images:
-  haedal-web-profile-images:
+  board-images:
+  profile-images:

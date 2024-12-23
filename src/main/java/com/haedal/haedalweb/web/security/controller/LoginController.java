@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.security.controller;
+package com.haedal.haedalweb.web.security.controller;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;

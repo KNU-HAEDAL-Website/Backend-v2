@@ -23,6 +23,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,7 +68,22 @@ public class SwaggerConfig {
 
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
-                .components(components);
+                .components(components)
+                .tags(Arrays.asList(
+                        new Tag().name("회원가입 관련 API"),
+                        new Tag().name("로그인 관련 API"),
+                        new Tag().name("토큰 관련 API"),
+                        new Tag().name("관리자 - 유저 관리 API"),
+                        new Tag().name("관리자 - 학기 관리 API"),
+                        new Tag().name("관리자 - 활동 관리 API"),
+                        new Tag().name("유저 API"),
+                        new Tag().name("프로필 API"),
+                        new Tag().name("학기 API"),
+                        new Tag().name("활동 API"),
+                        new Tag().name("게시판 API"),
+                        new Tag().name("게시글 API"),
+                        new Tag().name("공통 에러 코드 정의")
+                ));
     }
 
     @Bean
