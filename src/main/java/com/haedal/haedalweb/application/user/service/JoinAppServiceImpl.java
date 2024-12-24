@@ -53,6 +53,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 
         // 등록
         joinService.registerAccount(user);
+        profileService.generateProfile(user);
     }
 
     @Transactional(readOnly = true)
