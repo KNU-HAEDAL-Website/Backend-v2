@@ -7,7 +7,6 @@ import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.application.user.dto.UpdateRoleRequestDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
-import com.haedal.haedalweb.domain.user.service.AdminUserService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -36,7 +35,6 @@ import java.util.List;
 @RestController
 public class AdminUserController {
     private final AdminUserAppService adminUserAppService;
-    private final AdminUserService adminUserService;
 
     @Operation(summary = "User 목록")
     @Parameter(name = "active", description = "활동 유저 true, 가입대기 유저 false")
