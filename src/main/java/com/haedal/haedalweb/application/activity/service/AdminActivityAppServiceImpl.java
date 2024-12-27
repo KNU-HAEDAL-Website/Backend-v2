@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.application.activity.service;
 
-import com.haedal.haedalweb.application.activity.dto.CreateActivityRequestDto;
+import com.haedal.haedalweb.application.activity.dto.ActivityRequestDto;
 import com.haedal.haedalweb.application.activity.mapper.ActivityMapper;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
@@ -22,12 +22,12 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
 
     @Transactional
     @Override
-    public void registerActivity(Long semesterId, CreateActivityRequestDto createActivityRequestDto) {
+    public void registerActivity(Long semesterId, ActivityRequestDto activityRequestDto) {
         // 학기 존재 여부 검증 및 가져오기
         Semester semester = semesterService.getSemester(semesterId);
 
         // 활동 생성
-        Activity activity = ActivityMapper.toEntity(semester, createActivityRequestDto);
+        Activity activity = ActivityMapper.toEntity(semester, activityRequestDto);
 
         // 활동 저장
         adminActivityService.registerActivity(activity);
