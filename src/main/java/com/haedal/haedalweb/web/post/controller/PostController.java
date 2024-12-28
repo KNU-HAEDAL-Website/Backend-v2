@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "게시글 API")
 @RequiredArgsConstructor
@@ -34,6 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
     private final PostService postService;
 
+    @Operation(summary = "게시글 이미지 등록")
+    @ApiSuccessCodeExample(SuccessCode.ADD_POST_IMAGE_SUCCESS)
+    public ResponseEntity<SuccessResponse> registerPostImage(@RequestPart(value = "file") MultipartFile postImageFile) {
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_IMAGE_SUCCESS);
+    }
 
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
