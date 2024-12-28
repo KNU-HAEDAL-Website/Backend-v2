@@ -16,7 +16,7 @@ public class ProfileMapper {
                 .userId(user.getId())
                 .userName(user.getName())
                 .role(user.getRole())
-                .userIntro(profile.getIntro())
+                .profileIntro(profile.getIntro())
                 .profileImageUrl(imageUrl)
                 .githubAccount(profile.getGithubAccount())
                 .instaAccount(profile.getInstaAccount())
