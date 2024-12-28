@@ -35,11 +35,11 @@ public class BoardImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "board_original_file")
+    @Column(name = "board_image_original_file")
     @NonNull
     private String originalFile;
 
-    @Column(name = "board_save_file")
+    @Column(name = "board_image_save_file")
     @NonNull
     private String saveFile;
 
