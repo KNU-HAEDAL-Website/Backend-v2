@@ -32,7 +32,7 @@ public class ProfileResponseDto {
     private String profileImageUrl;
 
     @Schema(description = "프로필 소개")
-    private String userIntro;
+    private String profileIntro;
 
     @Schema(description = "깃허브 계정 id")
     private String githubAccount;

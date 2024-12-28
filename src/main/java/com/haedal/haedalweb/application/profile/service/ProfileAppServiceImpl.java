@@ -81,8 +81,8 @@ public class ProfileAppServiceImpl implements ProfileAppService {
         profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
 
         profile.setIntro(profileRequestDto.getProfileIntro());
-        profile.setGithubAccount(profile.getGithubAccount());
-        profile.setInstaAccount(profile.getInstaAccount());
+        profile.setGithubAccount(profileRequestDto.getGithubAccount());
+        profile.setInstaAccount(profileRequestDto.getInstaAccount());
     }
 
     @Transactional(readOnly = true)
