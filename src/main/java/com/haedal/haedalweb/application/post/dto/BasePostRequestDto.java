@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.web.post.dto;
+package com.haedal.haedalweb.application.post.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreatePostRequestDto {
+public class BasePostRequestDto {
     @Schema(description = "게시글 이름", example = "게시글1")
     @Size(min = 1, max = 50, message = "게시글 이름은 1자 이상 50자 이하여야 합니다.")
     private String postTitle;

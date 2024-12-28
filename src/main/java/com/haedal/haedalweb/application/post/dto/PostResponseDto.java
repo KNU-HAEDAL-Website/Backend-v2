@@ -1,4 +1,4 @@
-package com.haedal.haedalweb.web.post.dto;
+package com.haedal.haedalweb.application.post.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

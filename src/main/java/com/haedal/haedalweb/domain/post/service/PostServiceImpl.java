@@ -7,9 +7,9 @@ import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.security.service.SecurityService;
-import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
-import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
+import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
 import com.haedal.haedalweb.domain.post.repository.PostRepository;
@@ -32,13 +32,13 @@ public class PostServiceImpl implements PostService {
     private final SecurityService securityService;
 
     @Transactional
-    public void createPost(Long boardId, CreatePostRequestDto createPostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
+    public void createPost(Long boardId, BasePostRequestDto basePostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
         PostType postType;
 
         try {
-            postType = PostType.valueOf(createPostRequestDTO.getPostType());
+            postType = PostType.valueOf(basePostRequestDTO.getPostType());
             if (postType != PostType.ACTIVITY) throw new IllegalArgumentException();
         } catch (IllegalArgumentException e) {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
@@ -48,20 +48,20 @@ public class PostServiceImpl implements PostService {
         LocalDate activityEndDate = null;
 
         try {
-            activityStartDate = LocalDate.parse(createPostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+            activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
         } catch (DateTimeException e) {
             throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
         }
 
-        if (createPostRequestDTO.getPostActivityEndDate() != null) {
-            activityEndDate = LocalDate.parse(createPostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+        if (basePostRequestDTO.getPostActivityEndDate() != null) {
+            activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
         }
 
         User creator = securityService.getLoggedInUser();
 
         Post post = Post.builder()
-                .title(createPostRequestDTO.getPostTitle())
-                .content(createPostRequestDTO.getPostContent())
+                .title(basePostRequestDTO.getPostTitle())
+                .content(basePostRequestDTO.getPostContent())
                 .postType(postType)
                 .activityStartDate(activityStartDate)
                 .activityEndDate(activityEndDate)
@@ -73,11 +73,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
-    public void createPost(CreatePostRequestDto createPostRequestDTO) {
+    public void createPost(BasePostRequestDto basePostRequestDTO) {
         PostType postType;
 
         try {
-            postType = PostType.valueOf(createPostRequestDTO.getPostType());
+            postType = PostType.valueOf(basePostRequestDTO.getPostType());
             if (postType != PostType.NOTICE && postType != PostType.EVENT)
                 throw new IllegalArgumentException();
         } catch (IllegalArgumentException e) {
@@ -90,19 +90,19 @@ public class PostServiceImpl implements PostService {
 
         if (postType == PostType.EVENT) {
             try {
-                activityStartDate = LocalDate.parse(createPostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+                activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
             } catch (DateTimeException e) {
                 throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
             }
 
-            if (createPostRequestDTO.getPostActivityEndDate() != null) {
-                activityEndDate = LocalDate.parse(createPostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+            if (basePostRequestDTO.getPostActivityEndDate() != null) {
+                activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
             }
         }
 
         Post post = Post.builder()
-                .title(createPostRequestDTO.getPostTitle())
-                .content(createPostRequestDTO.getPostContent())
+                .title(basePostRequestDTO.getPostTitle())
+                .content(basePostRequestDTO.getPostContent())
                 .postType(postType)
                 .activityStartDate(activityStartDate)
                 .activityEndDate(activityEndDate)

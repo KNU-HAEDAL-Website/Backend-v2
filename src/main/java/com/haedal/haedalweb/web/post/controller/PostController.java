@@ -2,9 +2,9 @@ package com.haedal.haedalweb.web.post.controller;
 
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
-import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
+import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.post.service.PostService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
@@ -40,8 +40,8 @@ public class PostController {
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
     @Parameter(name = "boardId", description = "게시글 추가할 게시판 ID")
     @PostMapping("/boards/{boardId}/posts")
-    public ResponseEntity<SuccessResponse> addPost(@PathVariable Long boardId, @RequestBody @Valid CreatePostRequestDto createPostRequestDTO) {
-        postService.createPost(boardId, createPostRequestDTO);
+    public ResponseEntity<SuccessResponse> addPost(@PathVariable Long boardId, @RequestBody @Valid BasePostRequestDto basePostRequestDTO) {
+        postService.createPost(boardId, basePostRequestDTO);
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
 
@@ -49,8 +49,8 @@ public class PostController {
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
     @PostMapping("/posts")
-    public ResponseEntity<SuccessResponse> addNoticePost(@RequestBody @Valid CreatePostRequestDto createPostRequestDTO) {
-        postService.createPost(createPostRequestDTO);
+    public ResponseEntity<SuccessResponse> addNoticePost(@RequestBody @Valid BasePostRequestDto basePostRequestDTO) {
+        postService.createPost(basePostRequestDTO);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }

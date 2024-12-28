@@ -1,16 +1,16 @@
 package com.haedal.haedalweb.domain.post.service;
 
-import com.haedal.haedalweb.web.post.dto.CreatePostRequestDto;
-import com.haedal.haedalweb.web.post.dto.PostResponseDto;
-import com.haedal.haedalweb.web.post.dto.PostSummaryResponseDto;
+import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostService {
 
-    void createPost(Long boardId, CreatePostRequestDto createPostRequestDTO);
+    void createPost(Long boardId, BasePostRequestDto basePostRequestDTO);
 
-    void createPost(CreatePostRequestDto createPostRequestDTO);
+    void createPost(BasePostRequestDto basePostRequestDTO);
 
     void deletePost(Long boardId, Long postId);
 
