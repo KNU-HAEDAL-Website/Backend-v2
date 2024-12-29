@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.domain.post.model;
 
+import com.haedal.haedalweb.domain.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -45,6 +46,10 @@ public class PostImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)
