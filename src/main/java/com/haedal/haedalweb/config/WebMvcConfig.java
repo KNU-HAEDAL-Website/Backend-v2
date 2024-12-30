@@ -58,5 +58,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new ImageUploadInterceptor())
                 .addPathPatterns("/users/*/profile/image");
+
+        registry.addInterceptor(new ImageUploadInterceptor())
+                .addPathPatterns("/users/*/profile/image");
+
+        registry.addInterceptor(new ImageUploadInterceptor())
+                .addPathPatterns("/post-images");
     }
 }
