@@ -1,5 +1,7 @@
 package com.haedal.haedalweb.application.post.service;
 
+import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
+import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
 import com.haedal.haedalweb.domain.post.model.PostImage;
 import com.haedal.haedalweb.domain.post.service.PostImageService;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -31,7 +33,7 @@ public class PostAppServiceImpl implements PostAppService {
 
     @Override
     @Transactional
-    public String registerPostImage(MultipartFile postImageFile) {
+    public PostImageResponseDto registerPostImage(MultipartFile postImageFile) {
         User loggedInUser = securityService.getLoggedInUser();
 
         String originalFile = postImageFile.getOriginalFilename();
@@ -47,6 +49,7 @@ public class PostAppServiceImpl implements PostAppService {
                 .build();
 
         postImageService.registerPostImage(postImage);
-        return ImageUtil.generateImageUrl(uploadUrl, saveFile);
+
+        return PostImageMapper.toDto(ImageUtil.generateImageUrl(uploadUrl, saveFile));
     }
 }
