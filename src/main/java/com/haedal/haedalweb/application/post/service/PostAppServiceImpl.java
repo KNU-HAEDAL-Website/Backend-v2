@@ -23,7 +23,7 @@ public class PostAppServiceImpl implements PostAppService {
     private final String uploadPath;
     private final String uploadUrl;
 
-    public PostAppServiceImpl(PostImageService postImageService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-profile-images}") String uploadPath, @Value("${file.url.upload-profile-images}") String uploadUrl) {
+    public PostAppServiceImpl(PostImageService postImageService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-post-images}") String uploadPath, @Value("${file.url.upload-post-images}") String uploadUrl) {
         this.postImageService = postImageService;
         this.securityService = securityService;
         this.applicationEventPublisher = applicationEventPublisher;
@@ -48,8 +48,8 @@ public class PostAppServiceImpl implements PostAppService {
                 .user(loggedInUser)
                 .build();
 
-        postImageService.registerPostImage(postImage);
+        PostImage savedPostImage = postImageService.registerPostImage(postImage);
 
-        return PostImageMapper.toDto(ImageUtil.generateImageUrl(uploadUrl, saveFile));
+        return PostImageMapper.toDto(ImageUtil.generateImageUrl(uploadUrl, saveFile), savedPostImage);
     }
 }

@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostImageResponseDto {
+    @Schema(description = "게시글 이미지 id")
+    private Long postImageId;
+
     @Schema(description = "게시글 이미지 파일 Url")
     private String postImageUrl;
 }

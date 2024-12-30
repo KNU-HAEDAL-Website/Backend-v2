@@ -11,7 +11,7 @@ public class PostImageServiceImpl implements PostImageService {
     private final PostImageRepository postImageRepository;
 
     @Override
-    public void registerPostImage(PostImage postImage) {
-        postImageRepository.save(postImage);
+    public PostImage registerPostImage(PostImage postImage) {
+        return postImageRepository.save(postImage);
     }
 }
