@@ -2,6 +2,7 @@ package com.haedal.haedalweb.application.post.service;
 
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostWithoutBoardRequestDto;
 import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.service.BoardService;
@@ -19,7 +20,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -60,13 +60,25 @@ public class PostAppServiceImpl implements PostAppService {
 
         postService.registerPost(post);
 
-        List<Long> postImageIds = postWithBoardRequestDto.getPostImageIds();
+        List<Long> postImageIds = postWithBoardRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
+        postImageService.addPostImagesToPost(postImageIds, post); // PostImage에 Post를 연결해주기
+    }
 
-        if (postImageIds != null && !postImageIds.isEmpty()) { // 게시글에 이미지가 포함되어 있다면
-            List<PostImage> postImages = postImageService.getPostImages(postImageIds); // 이미지 ID들을 기반으로 PostImage 엔티티 조회
-            postImageService.validatePostImages(postImageIds, postImages); // 이미지 검증
-            postImages.forEach(postImage -> postImage.setPost(post)); // Post와 PostImage 연결
-        }
+    @Override
+    @Transactional
+    public void registerPost(PostWithoutBoardRequestDto postWithoutBoardRequestDto) {
+        User user = securityService.getLoggedInUser();
+
+        Post post = Post.builder()
+                .title(postWithoutBoardRequestDto.getPostTitle())
+                .content(postWithoutBoardRequestDto.getPostContent())
+                .postType(postWithoutBoardRequestDto.getPostType())
+                .user(user)
+                .build();
+
+        postService.registerPost(post);
+        List<Long> postImageIds = postWithoutBoardRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
+        postImageService.addPostImagesToPost(postImageIds, post); // PostImage에 Post를 연결해주기
     }
 
     @Override
