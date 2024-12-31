@@ -1,9 +1,7 @@
 package com.haedal.haedalweb.application.activity.mapper;
 
-import com.haedal.haedalweb.application.activity.dto.ActivityRequestDto;
 import com.haedal.haedalweb.domain.activity.model.Activity;
 import com.haedal.haedalweb.application.activity.dto.ActivityResponseDto;
-import com.haedal.haedalweb.domain.semester.model.Semester;
 
 import java.util.List;
 
@@ -23,12 +21,5 @@ public class ActivityMapper {
         return activities.stream()
                 .map(ActivityMapper::toDto)
                 .toList();
-    }
-
-    public static Activity toEntity(Semester semester, ActivityRequestDto activityRequestDto) {
-        return Activity.builder()
-                .name(activityRequestDto.getActivityName())
-                .semester(semester)
-                .build();
     }
 }

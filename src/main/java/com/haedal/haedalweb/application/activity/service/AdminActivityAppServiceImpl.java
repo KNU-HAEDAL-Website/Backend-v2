@@ -27,7 +27,10 @@ public class AdminActivityAppServiceImpl implements AdminActivityAppService {
         Semester semester = semesterService.getSemester(semesterId);
 
         // 활동 생성
-        Activity activity = ActivityMapper.toEntity(semester, activityRequestDto);
+        Activity activity = Activity.builder()
+                .name(activityRequestDto.getActivityName())
+                .semester(semester)
+                .build();
 
         // 활동 저장
         adminActivityService.registerActivity(activity);
