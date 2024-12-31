@@ -14,14 +14,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final String boardUploadUrl;
     private final String profileUploadPath;
     private final String profileUploadUrl;
+    private final String postUploadPath;
+    private final String postUploadUrl;
     private final String defaultUploadUrl;
 
 
-    public WebMvcConfig(@Value("${file.path.upload-board-images}")String boardUploadPath, @Value("${file.url.upload-board-images}") String boardUploadUrl, @Value("${file.path.upload-profile-images}") String profileUploadPath, @Value("${file.url.upload-profile-images}") String profileUploadUrl, @Value("${file.url.upload-default-images}") String defaultUploadUrl) {
+    public WebMvcConfig(@Value("${file.path.upload-board-images}")String boardUploadPath, @Value("${file.url.upload-board-images}") String boardUploadUrl, @Value("${file.path.upload-profile-images}") String profileUploadPath, @Value("${file.url.upload-profile-images}") String profileUploadUrl, @Value("${file.path.upload-post-images}") String postUploadPath, @Value("${file.url.upload-post-images}") String postUploadUrl, @Value("${file.url.upload-default-images}") String defaultUploadUrl) {
         this.boardUploadPath = boardUploadPath;
         this.boardUploadUrl = boardUploadUrl;
         this.profileUploadPath = profileUploadPath;
         this.profileUploadUrl = profileUploadUrl;
+        this.postUploadPath = postUploadPath;
+        this.postUploadUrl = postUploadUrl;
         this.defaultUploadUrl = defaultUploadUrl;
     }
 
@@ -35,6 +39,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler( profileUploadUrl + "/**")
                 .addResourceLocations("file:///" + profileUploadPath + "/")
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
+        registry.addResourceHandler( postUploadUrl + "/**")
+                .addResourceLocations("file:///" + postUploadPath + "/")
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
