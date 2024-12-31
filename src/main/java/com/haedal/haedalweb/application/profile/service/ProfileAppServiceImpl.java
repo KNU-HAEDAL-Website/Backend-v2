@@ -43,7 +43,7 @@ public class ProfileAppServiceImpl implements ProfileAppService {
     @Transactional
     @Override
     public void updateProfileImage(String userId, MultipartFile profileImageFile) {
-        Profile profile = profileService.getProfileWithImageAndUser(userId);
+        Profile profile = profileService.getProfileWithUser(userId);
         User loggedInUser = securityService.getLoggedInUser();
 
         // 프로필 수정 권한 검증
@@ -88,7 +88,7 @@ public class ProfileAppServiceImpl implements ProfileAppService {
     @Transactional(readOnly = true)
     @Override
     public ProfileResponseDto getProfile(String userId) {
-        Profile profile = profileService.getProfileWithImageAndUser(userId);
+        Profile profile = profileService.getProfileWithUser(userId);
         String saveFile = profile.getProfileImage().getSaveFile();
         String imageUrl = getProfileImageUrl(defaultUrl, uploadUrl, saveFile);
 
