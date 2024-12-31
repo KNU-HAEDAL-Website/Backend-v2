@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostWithoutBoardRequestDto {
-    @Schema(description = "게시글 타입", example = "(ACTIVITY, NOTICE)")
+public class PostWithoutBoardRequestDto extends BasePostRequestDto {
+    @Schema(description = "게시글 타입", example = "NOTICE")
     @NotNull(message = "게시글 타입은 필수 항목입니다.")
     private PostType postType;
 }

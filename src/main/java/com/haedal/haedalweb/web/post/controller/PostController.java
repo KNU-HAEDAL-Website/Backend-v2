@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.web.post.controller;
 
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
 import com.haedal.haedalweb.application.post.service.PostAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
@@ -50,17 +51,18 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
     @Parameter(name = "boardId", description = "게시글 추가할 게시판 ID")
     @PostMapping("/boards/{boardId}/posts")
-    public ResponseEntity<SuccessResponse> addPost(@PathVariable Long boardId, @RequestBody @Valid BasePostRequestDto basePostRequestDTO) {
-        postService.createPost(boardId, basePostRequestDTO);
+    public ResponseEntity<SuccessResponse> registerPost(@PathVariable Long boardId, @RequestBody @Valid PostWithBoardRequestDto postWithBoardRequestDto) {
+        postAppService.registerPost(boardId, postWithBoardRequestDto);
+
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
 
-    @Operation(summary = "공지사항, 이벤트 게시글 생성")
+    @Operation(summary = "게시글 생성 (공지사항)")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.INVALID_ARGUMENT})
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.INVALID_ARGUMENT})
     @PostMapping("/posts")
     public ResponseEntity<SuccessResponse> addNoticePost(@RequestBody @Valid BasePostRequestDto basePostRequestDTO) {
         postService.createPost(basePostRequestDTO);

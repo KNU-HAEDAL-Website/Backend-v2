@@ -12,12 +12,12 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostWithBoardRequestDto extends BasePostRequestDto {
-    @Schema(description = "활동 시작일", example = "yyyy-MM-dd (2024-07-24)")
+    @Schema(description = "활동 시작일", example = "2024-07-24")
     @NotNull(message = "활동 시작일은 필수입니다.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate postActivityStartDate;
 
-    @Schema(description = "활동 종료일 (생략 가능)", example = "yyyy-MM-dd (2024-07-24)")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Schema(description = "활동 종료일 (생략 가능)", example = "2024-07-24")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate postActivityEndDate;
 }

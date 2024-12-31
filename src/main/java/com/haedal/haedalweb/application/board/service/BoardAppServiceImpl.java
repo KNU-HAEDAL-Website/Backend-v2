@@ -60,7 +60,7 @@ public class BoardAppServiceImpl implements BoardAppService {
         // 게시판 참여자 검증
         List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
-        userService.validateActiveUsers(participants, participantIds);
+        userService.validateActiveUsers(participantIds, participants);
 
         // 파일 저장
         String originalFile = boardImageFile.getOriginalFilename();
@@ -153,7 +153,7 @@ public class BoardAppServiceImpl implements BoardAppService {
         // 게시판 참여자 검증
         List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
-        userService.validateActiveUsers(participants, participantIds);
+        userService.validateActiveUsers(participantIds, participants);
 
         // 게시판 메타 데이터 수정
         board.setName(boardRequestDto.getBoardName());

@@ -38,7 +38,8 @@ public enum ErrorCode implements ResponseCode{
     EXIST_POST(HttpStatus.CONFLICT, "BOARD_002", "해당 게시판에 게시글이 존재하는 경우 삭제할 수 없습니다."),
 
     NOT_FOUND_POST_TYPE(HttpStatus.NOT_FOUND, "POST_001", "해당 게시글 타입이 존재하지 않습니다."),
-    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "POST_002", "해당 게시글을 찾을 수 없습니다."),
+    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "POST_001", "해당 게시글을 찾을 수 없습니다."),
+    NOT_FOUND_POST_IMAGE(HttpStatus.NOT_FOUND, "POST_002", "해당 게시글 이미지를 찾을 수 없습니다."),
 
     INVALID_EMAIL_VERIFICATION(HttpStatus.BAD_REQUEST, "EMAIL_001", "인증 코드가 만료되었거나 일치하지 않습니다."),
     LIMIT_EXCEEDED_SEND_EMAIL(HttpStatus.TOO_MANY_REQUESTS, "EMAIL_002", "해당 이메일의 전송 및 재전송 횟수가 3회를 초과 했습니다."),

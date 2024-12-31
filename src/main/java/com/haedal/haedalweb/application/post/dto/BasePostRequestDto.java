@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,12 +17,6 @@ public class BasePostRequestDto {
     @Size(min = 1, max = 200000, message = "게시글의 메타 정보와 내용은 합쳐서 20만자 이하여야 합니다.")
     private String postContent;
 
-    @Schema(description = "활동 시작일 (이벤트와 활동은 필수, 공지사항은 생략)", example = "yyyy-MM-dd (2024-07-24)")
-    private String postActivityStartDate;
-
-    @Schema(description = "활동 종료일 (생략 가능)", example = "yyyy-MM-dd (2024-07-24)")
-    private String postActivityEndDate;
-
-    @Schema(description = "게시글 타입", example = "(ACTIVITY, NOTICE)")
-    private String postType;
+    @Schema(description = "게시글 이미지 ID", example = "[1, 2]")
+    private List<Long> postImageIds;
 }

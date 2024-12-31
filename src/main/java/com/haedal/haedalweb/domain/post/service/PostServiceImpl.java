@@ -31,85 +31,90 @@ public class PostServiceImpl implements PostService {
     private final UserService userService;
     private final SecurityService securityService;
 
-    @Transactional
-    public void createPost(Long boardId, BasePostRequestDto basePostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-        PostType postType;
-
-        try {
-            postType = PostType.valueOf(basePostRequestDTO.getPostType());
-            if (postType != PostType.ACTIVITY) throw new IllegalArgumentException();
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-        }
-
-        LocalDate activityStartDate = null;
-        LocalDate activityEndDate = null;
-
-        try {
-            activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-        } catch (DateTimeException e) {
-            throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
-        }
-
-        if (basePostRequestDTO.getPostActivityEndDate() != null) {
-            activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
-        }
-
-        User creator = securityService.getLoggedInUser();
-
-        Post post = Post.builder()
-                .title(basePostRequestDTO.getPostTitle())
-                .content(basePostRequestDTO.getPostContent())
-                .postType(postType)
-                .activityStartDate(activityStartDate)
-                .activityEndDate(activityEndDate)
-                .user(creator)
-                .board(board)
-                .build();
-
+    @Override
+    public void registerPost(Post post) {
         postRepository.save(post);
     }
 
+//    @Transactional
+//    public void createPost(Long boardId, BasePostRequestDto basePostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
+//        Board board = boardRepository.findById(boardId)
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+//        PostType postType;
+//
+//        try {
+//            postType = PostType.valueOf(basePostRequestDTO.getPostType());
+//            if (postType != PostType.ACTIVITY) throw new IllegalArgumentException();
+//        } catch (IllegalArgumentException e) {
+//            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
+//        }
+//
+//        LocalDate activityStartDate = null;
+//        LocalDate activityEndDate = null;
+//
+//        try {
+//            activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+//        } catch (DateTimeException e) {
+//            throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
+//        }
+//
+//        if (basePostRequestDTO.getPostActivityEndDate() != null) {
+//            activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+//        }
+//
+//        User creator = securityService.getLoggedInUser();
+//
+//        Post post = Post.builder()
+//                .title(basePostRequestDTO.getPostTitle())
+//                .content(basePostRequestDTO.getPostContent())
+//                .postType(postType)
+//                .activityStartDate(activityStartDate)
+//                .activityEndDate(activityEndDate)
+//                .user(creator)
+//                .board(board)
+//                .build();
+//
+//        postRepository.save(post);
+//    }
+
     @Transactional
     public void createPost(BasePostRequestDto basePostRequestDTO) {
-        PostType postType;
-
-        try {
-            postType = PostType.valueOf(basePostRequestDTO.getPostType());
-            if (postType != PostType.NOTICE && postType != PostType.EVENT)
-                throw new IllegalArgumentException();
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-        }
-
-        LocalDate activityStartDate = null;
-        LocalDate activityEndDate = null;
-        User creator = securityService.getLoggedInUser();
-
-        if (postType == PostType.EVENT) {
-            try {
-                activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-            } catch (DateTimeException e) {
-                throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
-            }
-
-            if (basePostRequestDTO.getPostActivityEndDate() != null) {
-                activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
-            }
-        }
-
-        Post post = Post.builder()
-                .title(basePostRequestDTO.getPostTitle())
-                .content(basePostRequestDTO.getPostContent())
-                .postType(postType)
-                .activityStartDate(activityStartDate)
-                .activityEndDate(activityEndDate)
-                .user(creator)
-                .build();
-
-        postRepository.save(post);
+//        PostType postType;
+//
+//        try {
+//            postType = PostType.valueOf(basePostRequestDTO.getPostType());
+//            if (postType != PostType.NOTICE && postType != PostType.EVENT)
+//                throw new IllegalArgumentException();
+//        } catch (IllegalArgumentException e) {
+//            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
+//        }
+//
+//        LocalDate activityStartDate = null;
+//        LocalDate activityEndDate = null;
+//        User creator = securityService.getLoggedInUser();
+//
+//        if (postType == PostType.EVENT) {
+//            try {
+//                activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
+//            } catch (DateTimeException e) {
+//                throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
+//            }
+//
+//            if (basePostRequestDTO.getPostActivityEndDate() != null) {
+//                activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
+//            }
+//        }
+//
+//        Post post = Post.builder()
+//                .title(basePostRequestDTO.getPostTitle())
+//                .content(basePostRequestDTO.getPostContent())
+//                .postType(postType)
+//                .activityStartDate(activityStartDate)
+//                .activityEndDate(activityEndDate)
+//                .user(creator)
+//                .build();
+//
+//        postRepository.save(post);
     }
 
     @Transactional
