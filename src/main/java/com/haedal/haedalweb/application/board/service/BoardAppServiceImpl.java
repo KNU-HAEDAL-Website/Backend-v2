@@ -90,7 +90,7 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional(readOnly = true)
     public BoardResponseDto getBoard(Long activityId, Long boardId) {
-        Board board = boardService.getBoardWithImageAndParticipants(activityId, boardId);
+        Board board = boardService.getBoardWithParticipants(activityId, boardId);
 
         String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
@@ -114,7 +114,7 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional
     public void updateBoardImage(Long activityId, Long boardId, MultipartFile boardImageFile) {
-        Board board = boardService.getBoardWithImageAndUser(activityId, boardId);
+        Board board = boardService.getBoardWithUser(activityId, boardId);
 
         // 생성자와 로그인한 유저가 같은지 검증
         User loggedInUser = securityService.getLoggedInUser();
@@ -165,7 +165,7 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional
     public void removeBoard(Long activityId, Long boardId) {
-        Board board = boardService.getBoardWithImageAndUser(activityId, boardId);
+        Board board = boardService.getBoardWithUser(activityId, boardId);
 
         // 생성자와 로그인한 유저가 같은지 검증
         User loggedInUser = securityService.getLoggedInUser();

@@ -20,7 +20,7 @@ public class BoardRequestDto {
     @Size(max = 50, message = "게시판 소개는 50자 이하여야 합니다.")
     private String boardIntro;
 
-    @Schema(description = "참여 인원 ID", allowableValues = {"haedal1234", "good1234"})
+    @Schema(description = "참여 인원 ID", example = "[\"haedal1234\", \"good1234\"]")
     @Size(min = 1, message = "참여 인원은 최소 한 명 이상이어야 합니다.")
     private Set<String> participants;
 }

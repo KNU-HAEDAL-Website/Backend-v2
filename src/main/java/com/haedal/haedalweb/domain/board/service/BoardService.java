@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface BoardService {
     void registerBoard(Board board);
-    Board getBoardWithImageAndParticipants(Long activityId, Long boardId);
+    Board getBoard(Long boardId);
+    Board getBoardWithParticipants(Long activityId, Long boardId);
     Page<Board> getBoardPage(Long activityId, Pageable pageable);
-    Board getBoardWithImageAndUser(Long activityId, Long boardId);
+    Board getBoardWithUser(Long activityId, Long boardId);
     Board getBoardWithUserAndParticipants(Long activityId, Long boardId);
     void removeBoard(Board board);
     boolean hasBoardsByActivityId(Long activityId);

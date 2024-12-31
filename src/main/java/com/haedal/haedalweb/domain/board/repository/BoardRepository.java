@@ -23,7 +23,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findBoardPage(@Param("activityId") Long activityId, Pageable pageable);
 
     @Query("SELECT DISTINCT b FROM Board b " +
+            "JOIN FETCH b.boardImage " +
+            "WHERE b.id = :boardId")
+    Optional<Board> findBoard(Long boardId);
+
+    @Query("SELECT DISTINCT b FROM Board b " +
             "JOIN FETCH b.user " +
+            "JOIN FETCH b.boardImage " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
     Optional<Board> findBoardWithUserAndParticipants(Long activityId, Long boardId);
 
@@ -31,11 +37,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "JOIN FETCH b.boardImage " +
             "JOIN FETCH b.participants " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
-    Optional<Board> findBoardWithImageAndParticipants(Long activityId, Long boardId);
+    Optional<Board> findBoardWithParticipants(Long activityId, Long boardId);
 
     @Query("SELECT DISTINCT b FROM Board b " +
             "JOIN FETCH b.boardImage " +
             "JOIN FETCH b.user " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
-    Optional<Board> findBoardWithImageAndUser(Long activityId, Long boardId);
+    Optional<Board> findBoardWithUser(Long activityId, Long boardId);
 }
