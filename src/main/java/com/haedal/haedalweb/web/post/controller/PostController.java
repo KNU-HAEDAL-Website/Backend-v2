@@ -2,7 +2,7 @@ package com.haedal.haedalweb.web.post.controller;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
-import com.haedal.haedalweb.application.post.dto.PostResponseDto;
+import com.haedal.haedalweb.application.post.dto.BasePostResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
@@ -11,13 +11,11 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
-import com.haedal.haedalweb.domain.post.service.PostService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -114,10 +112,10 @@ public class PostController {
     @Operation(summary = "활동 게시글 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
     @GetMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<PostResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
-        Page<>
-//        PostResponseDto post = postService.getPost(postId);
+    public ResponseEntity<BasePostResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
 
-        return ResponseEntity.ok(post);
+//        BasePostResponseDto post = postService.getPost(postId);
+
+        return ResponseEntity.ok(null);
     }
 }

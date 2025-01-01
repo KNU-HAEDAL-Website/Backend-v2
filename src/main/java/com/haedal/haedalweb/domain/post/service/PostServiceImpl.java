@@ -97,15 +97,15 @@ public class PostServiceImpl implements PostService {
 //    }
 
 //    @Transactional
-//    public PostResponseDto getPost(Long postId) {
+//    public BasePostResponseDto getPost(Long postId) {
 //        Post post = postRepository.findById(postId)
 //                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
 //
 //        postRepository.save(post);
 //
-//        PostResponseDto postResponseDto;
+//        BasePostResponseDto postResponseDto;
 //        if (post.getPostType() == PostType.ACTIVITY) {
-//            postResponseDto = PostResponseDto.builder()
+//            postResponseDto = BasePostResponseDto.builder()
 //                    .postId(post.getId())
 //                    .postTitle(post.getTitle())
 //                    .postContent(post.getContent())
@@ -122,7 +122,7 @@ public class PostServiceImpl implements PostService {
 //            return postResponseDto;
 //        }
 //
-//        postResponseDto = PostResponseDto.builder()
+//        postResponseDto = BasePostResponseDto.builder()
 //                .postId(post.getId())
 //                .postTitle(post.getTitle())
 //                .postContent(post.getContent())

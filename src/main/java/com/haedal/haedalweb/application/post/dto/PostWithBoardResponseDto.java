@@ -1,19 +1,19 @@
 package com.haedal.haedalweb.application.post.dto;
 
-import java.time.LocalDate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostWithBoardSummaryResponseDto extends BasePostSummaryResponseDto{
+public class PostWithBoardResponseDto extends BasePostResponseDto {
+
     @Schema(description = "게시판 id")
     private Long boardId;
 
