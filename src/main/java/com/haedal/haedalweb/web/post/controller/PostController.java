@@ -117,4 +117,12 @@ public class PostController {
 
         return ResponseEntity.ok(postAppService.getPost(boardId, postId));
     }
+
+    @Operation(summary = "공지사항 게시글 단일 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
+    @GetMapping("/notices/{postId}")
+    public ResponseEntity<BasePostResponseDto> getNoticePost(@PathVariable Long postId) {
+
+        return ResponseEntity.ok(postAppService.getPost(PostType.NOTICE, postId));
+    }
 }

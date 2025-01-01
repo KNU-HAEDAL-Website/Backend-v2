@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.post.service;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.BasePostResponseDto;
 import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
@@ -22,4 +23,6 @@ public interface PostAppService {
     Page<BasePostSummaryResponseDto> getPostPage(PostType postType, Pageable pageable);
 
     PostWithBoardResponseDto getPost(Long boardId, Long postId);
+
+    BasePostResponseDto getPost(PostType postType, Long postId);
 }

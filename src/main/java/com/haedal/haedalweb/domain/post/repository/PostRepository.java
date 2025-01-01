@@ -41,4 +41,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE p.id = :postId AND p.board.id = :boardId")
     Optional<Post> findPostWithUserAndBoard(Long boardId, Long postId);
 
+    Optional<Post> findByPostTypeAndId(PostType postType, Long postId);
 }

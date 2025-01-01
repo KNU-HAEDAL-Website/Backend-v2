@@ -34,109 +34,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPost(Long postId) {
-        return postRepository.findById(postId)
+    public Post getPostByPostTypeAndId(PostType postType, Long postId) {
+        return postRepository.findByPostTypeAndId(postType, postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
     }
-
-    @Transactional
-    public void deletePost(Long boardId, Long postId) { // 활동 게시글 삭제 method
-        Post post = postRepository.findByBoardIdAndId(boardId, postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-
-        User loggedInUser = securityService.getLoggedInUser();
-        User postCreator = post.getUser();
-        User boardCreator = board.getUser();
-
-        validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator);
-
-        postRepository.delete(post);
-    }
-
-//    @Transactional
-//    public void deletePost(Long postId) { // 이벤트, 공지사항 삭제
-//        Post post = postRepository.findById(postId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-//
-//        try {
-//            if (post.getPostType() != PostType.NOTICE && post.getPostType() != PostType.EVENT)
-//                throw new IllegalArgumentException();
-//        } catch (IllegalArgumentException e) {
-//            throw new BusinessException(ErrorCode.BAD_REQUEST_POST_TYPE);
-//        }
-//
-//        postRepository.delete(post);
-//    }
-
-//    @Transactional(readOnly = true)
-//    public Page<PostWithBoardSummaryResponseDto> getPosts(Long boardId, Pageable pageable) {
-//        Board board = boardRepository.findById(boardId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-//        Page<Post> postPage = postRepository.findPostsByBoard(board, pageable);
-//
-//        return postPage.map(post -> convertToPostSummaryDTO(post, board));
-//    }
-
-//    @Transactional(readOnly = true)
-//    public Page<PostWithBoardSummaryResponseDto> getPosts(String pType, Pageable pageable) {
-//        PostType postType;
-//
-//        try {
-//            postType = PostType.valueOf(pType.toUpperCase());
-//            if (postType != PostType.NOTICE && postType != PostType.EVENT)
-//                throw new IllegalArgumentException();
-//        } catch (IllegalArgumentException e) {
-//            throw new BusinessException(ErrorCode.BAD_REQUEST_POST_TYPE);
-//        }
-//
-//        Page<Post> postPage = postRepository.findPostsByPostType(postType, pageable);
-//
-//        return postPage.map(post -> convertToPostSummaryDTO(post));
-//    }
-
-//    @Transactional
-//    public BasePostResponseDto getPost(Long postId) {
-//        Post post = postRepository.findById(postId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-//
-//        postRepository.save(post);
-//
-//        BasePostResponseDto postResponseDto;
-//        if (post.getPostType() == PostType.ACTIVITY) {
-//            postResponseDto = BasePostResponseDto.builder()
-//                    .postId(post.getId())
-//                    .postTitle(post.getTitle())
-//                    .postContent(post.getContent())
-//                    .postViews(0L) // Views 구현해야 함.
-//                    .postCreateDate(post.getRegDate())
-//                    .postActivityStartDate(post.getActivityStartDate())
-//                    .postActivityEndDate(post.getActivityEndDate())
-//                    .userId(post.getUser().getId())
-//                    .userName(post.getUser().getName())
-//                    .boardId(post.getBoard().getId())
-//                    .boardName(post.getBoard().getName())
-//                    .build();
-//
-//            return postResponseDto;
-//        }
-//
-//        postResponseDto = BasePostResponseDto.builder()
-//                .postId(post.getId())
-//                .postTitle(post.getTitle())
-//                .postContent(post.getContent())
-//                .postImageUrl(null) // 이미지 구현해야 함.
-//                .postViews(0L) // Views 구현해야 함.
-//                .postCreateDate(post.getRegDate())
-//                .postActivityStartDate(post.getActivityStartDate())
-//                .postActivityEndDate(post.getActivityEndDate())
-//                .userId(post.getUser().getId())
-//                .userName(post.getUser().getName())
-//                .build();
-//
-//        return postResponseDto;
-//    }
 
     @Override
     public Post getPostWithUserAndBoard(Long boardId, Long postId) {
@@ -165,5 +66,4 @@ public class PostServiceImpl implements PostService {
 
         throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }
-
 }

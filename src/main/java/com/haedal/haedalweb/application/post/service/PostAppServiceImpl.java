@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.post.service;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.BasePostResponseDto;
 import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
@@ -141,7 +142,7 @@ public class PostAppServiceImpl implements PostAppService {
     @Override
     @Transactional
     public void removePost(PostType postType, Long postId) { // Board가 필요없는 Post 삭제
-        Post post = postService.getPost(postId);
+        Post post = postService.getPostByPostTypeAndId(postType, postId);
 
         // Notice 말고, 다른 PostType이 생긴다면 삭제 검증을 해야 함.
 
@@ -188,5 +189,13 @@ public class PostAppServiceImpl implements PostAppService {
         Post post = postService.getPostWithUserAndBoard(boardId, postId);
 
         return PostMapper.toPostWithBoardResponseDto(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BasePostResponseDto getPost(PostType postType, Long postId) {
+        Post post = postService.getPostByPostTypeAndId(postType, postId);
+
+        return PostMapper.toBasePostResponseDto(post);
     }
 }
