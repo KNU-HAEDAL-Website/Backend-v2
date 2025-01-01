@@ -71,6 +71,29 @@ public class ProfileAppServiceImpl implements ProfileAppService {
         applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
     }
 
+    @Override
+    @Transactional
+    public void removeProfileImage(String userId) {
+        Profile profile = profileService.getProfileWithUser(userId);
+        User loggedInUser = securityService.getLoggedInUser();
+
+        // 프로필 삭제 권한 검증
+        profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
+
+        ProfileImage profileImage = profile.getProfileImage();
+        String removeFile = profileImage.getSaveFile();
+
+        // 삭제할 이미지 없다면 early return
+        if (removeFile == null || removeFile.isEmpty()) return;
+
+        // 이미지 테이블 수정
+        profileImage.setOriginalFile(null);
+        profileImage.setSaveFile(null);
+
+        // 모든작업이 Commit 될 시에 이전 이미지 파일 삭제
+        applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+    }
+
     @Transactional
     @Override
     public void updateProfile(String userId, ProfileRequestDto profileRequestDto) {
