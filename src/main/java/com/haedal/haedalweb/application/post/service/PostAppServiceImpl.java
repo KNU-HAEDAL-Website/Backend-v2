@@ -222,6 +222,21 @@ public class PostAppServiceImpl implements PostAppService {
         }
     }
 
+    @Override
+    @Transactional
+    public void updatePost(PostType postType, Long postId, BasePostRequestDto basePostRequestDto) {
+        Post post = postService.getPostByPostTypeAndId(postType, postId);
+
+        // Notice 말고, 다른 PostType이 생긴다면 타입에 따라 수정 검증을 해야 함.
+
+        post.setTitle(basePostRequestDto.getPostTitle());
+        post.setContent(basePostRequestDto.getPostContent());
+
+        if (basePostRequestDto.getPostImageIds() != null && !basePostRequestDto.getPostImageIds().isEmpty()) {
+            updatePostImages(basePostRequestDto.getPostImageIds(), post);
+        }
+    }
+
     private void updatePostImages(List<Long> incomingPostImageIds, Post post) {
         // 1. 기존에 연결된 PostImage 목록 조회
         List<PostImage> existingPostImages = postImageService.getPostImages(post);

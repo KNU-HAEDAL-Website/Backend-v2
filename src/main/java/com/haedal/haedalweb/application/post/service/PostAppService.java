@@ -27,4 +27,6 @@ public interface PostAppService {
     BasePostResponseDto getPost(PostType postType, Long postId);
 
     void updatePost(Long boardId, Long postId, PostWithBoardRequestDto postWithBoardRequestDto);
+
+    void updatePost(PostType postType, Long postId, BasePostRequestDto basePostRequestDto);
 }

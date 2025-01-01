@@ -134,4 +134,14 @@ public class PostController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_POST_SUCCESS);
     }
+
+    @Operation(summary = "공지사하 게시글 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_POST_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
+    @PutMapping("/notices/{postId}")
+    public ResponseEntity<SuccessResponse> updateNoticePost(@PathVariable Long postId, @RequestBody @Valid BasePostRequestDto basePostRequestDto) {
+        postAppService.updatePost(PostType.NOTICE, postId, basePostRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_POST_SUCCESS);
+    }
 }

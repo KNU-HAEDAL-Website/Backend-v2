@@ -1,27 +1,21 @@
 package com.haedal.haedalweb.domain.post.service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
-import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
-import com.haedal.haedalweb.security.service.SecurityService;
 import com.haedal.haedalweb.exception.BusinessException;
-import com.haedal.haedalweb.domain.board.repository.BoardRepository;
 import com.haedal.haedalweb.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
-    private final BoardRepository boardRepository;
-    private final SecurityService securityService;
 
     @Override
     public void registerPost(Post post) {
