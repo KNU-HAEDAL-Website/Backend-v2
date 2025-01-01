@@ -16,7 +16,6 @@ import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -52,7 +52,6 @@ public class PostController {
     @Operation(summary = "활동 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
-    @Parameter(name = "boardId", description = "게시글 추가할 게시판 ID")
     @PostMapping("/boards/{boardId}/posts")
     public ResponseEntity<SuccessResponse> registerPostWithBoard(@PathVariable Long boardId, @RequestBody @Valid PostWithBoardRequestDto postWithBoardRequestDto) {
         postAppService.registerPost(boardId, postWithBoardRequestDto);
@@ -124,5 +123,15 @@ public class PostController {
     public ResponseEntity<BasePostResponseDto> getNoticePost(@PathVariable Long postId) {
 
         return ResponseEntity.ok(postAppService.getPost(PostType.NOTICE, postId));
+    }
+
+    @Operation(summary = "활동 게시글 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_POST_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
+    @PutMapping("/boards/{boardId}/posts/{postId}")
+    public ResponseEntity<SuccessResponse> updatePostWithBoard(@PathVariable Long boardId, @PathVariable Long postId, @RequestBody @Valid PostWithBoardRequestDto postWithBoardRequestDto) {
+        postAppService.updatePost(boardId, postId, postWithBoardRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_POST_SUCCESS);
     }
 }

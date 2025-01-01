@@ -28,8 +28,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostAppServiceImpl implements PostAppService {
@@ -50,6 +55,7 @@ public class PostAppServiceImpl implements PostAppService {
         this.uploadPath = uploadPath;
         this.uploadUrl = uploadUrl;
     }
+
     @Override
     @Transactional
     public void registerPost(Long boardId, PostWithBoardRequestDto postWithBoardRequestDto) { // Board가 존재하는 Post 생성 (활동 게시판의 게시글)
@@ -168,9 +174,7 @@ public class PostAppServiceImpl implements PostAppService {
     public Page<PostWithBoardSummaryResponseDto> getPostPage(Long boardId, Pageable pageable) { // board가 존재하는 post (활동 게시글) 페이징
         Page<Post> postPage = postService.getPostPage(boardId, pageable);
 
-        Page<PostWithBoardSummaryResponseDto> postResponsePage = postPage.map(PostMapper::toPostWithBoardSummaryResponseDto);
-
-        return postResponsePage;
+        return postPage.map(PostMapper::toPostWithBoardSummaryResponseDto);
     }
 
     @Override
@@ -178,9 +182,7 @@ public class PostAppServiceImpl implements PostAppService {
     public Page<BasePostSummaryResponseDto> getPostPage(PostType postType, Pageable pageable) {
         Page<Post> postPage = postService.getPostPage(postType, pageable);
 
-        Page<BasePostSummaryResponseDto> postResponsePage = postPage.map(PostMapper::toBasePostSummaryResponseDto);
-
-        return postResponsePage;
+        return postPage.map(PostMapper::toBasePostSummaryResponseDto);
     }
 
     @Override
@@ -197,5 +199,71 @@ public class PostAppServiceImpl implements PostAppService {
         Post post = postService.getPostByPostTypeAndId(postType, postId);
 
         return PostMapper.toBasePostResponseDto(post);
+    }
+
+    @Override
+    @Transactional
+    public void updatePost(Long boardId, Long postId, PostWithBoardRequestDto postWithBoardRequestDto) {
+        Post post = postService.getPostWithUserAndBoard(boardId, postId);
+
+        User loggedInUser = securityService.getLoggedInUser();
+        User postCreator = post.getUser();
+        User boardCreator = post.getBoard().getUser();
+
+        postService.validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator); // 게시글 수정 검증
+
+        post.setTitle(postWithBoardRequestDto.getPostTitle());
+        post.setContent(postWithBoardRequestDto.getPostContent());
+        post.setActivityStartDate(postWithBoardRequestDto.getPostActivityStartDate());
+        post.setActivityEndDate(postWithBoardRequestDto.getPostActivityEndDate());
+
+        if (postWithBoardRequestDto.getPostImageIds() != null && !postWithBoardRequestDto.getPostImageIds().isEmpty()) {
+            updatePostImages(postWithBoardRequestDto.getPostImageIds(), post);
+        }
+    }
+
+    private void updatePostImages(List<Long> incomingPostImageIds, Post post) {
+        // 1. 기존에 연결된 PostImage 목록 조회
+        List<PostImage> existingPostImages = postImageService.getPostImages(post);
+
+        // 2. 기존 이미지 IDs 추출
+        Set<Long> existingImageIds = existingPostImages.stream()
+                .map(PostImage::getId)
+                .collect(Collectors.toSet());
+
+        // 3. 요청으로 받은 이미지 IDs 중 새로운 이미지 IDs 추출
+        Set<Long> incomingImageIdsSet = new HashSet<>(incomingPostImageIds);
+
+        // 4. 삭제할 이미지 IDs: 기존에는 있었지만 요청에는 없는 경우
+        Set<Long> imageIdsToRemove = new HashSet<>(existingImageIds);
+        imageIdsToRemove.removeAll(incomingImageIdsSet);
+
+        // 5. 추가할 이미지 IDs: 요청에는 있지만 기존에는 없는 경우
+        Set<Long> imageIdsToAdd = new HashSet<>(incomingImageIdsSet);
+        imageIdsToAdd.removeAll(existingImageIds);
+
+        // 6. 이미지 삭제 처리
+        if (!imageIdsToRemove.isEmpty()) {
+            // 삭제할 PostImage 엔티티 조회
+            List<PostImage> postImagesToRemove = postImageService.getPostImagesByIds(imageIdsToRemove);
+            //PostImage 삭제
+            postImageService.removePostImages(postImagesToRemove);
+
+            // 실제 이미지 파일 삭제 및 이벤트 발행
+            List<String> removeFiles = postImagesToRemove.stream()
+                    .map(PostImage::getSaveFile)
+                    .toList();
+
+            for (String removeFile : removeFiles) { // 성능 테스트 후 필요 시 Batch 처리 고려
+                applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+            }
+        }
+
+        // 7. 이미지 추가 처리
+        if (!imageIdsToAdd.isEmpty()) {
+            // 각 PostImage에 게시글 연결
+            List<Long> imageIds = new ArrayList<>(imageIdsToAdd);
+            postImageService.addPostImagesToPost(imageIds, post); // PostImage에 Post를 연결해주기
+        }
     }
 }

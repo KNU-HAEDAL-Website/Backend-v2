@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,11 @@ public class PostImageServiceImpl implements PostImageService {
     @Override
     public List<PostImage> getPostImagesByIds(List<Long> postImageIds) {
        return postImageRepository.findAllById(postImageIds);
+    }
+
+    @Override
+    public List<PostImage> getPostImagesByIds(Set<Long> postImageIds) {
+        return postImageRepository.findAllById(postImageIds);
     }
 
     @Override
