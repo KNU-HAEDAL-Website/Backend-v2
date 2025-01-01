@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,11 +18,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findPostsByPostType(PostType postType, Pageable pageable);
 
-    Page<Post> findPostsByBoard(Board board, Pageable pageable);
+    @Query(
+            value = "SELECT p FROM Post p " +
+                    "JOIN FETCH p.user " +
+                    "WHERE p.board.id = :boardId",
+            countQuery = "SELECT count(p) FROM Post p WHERE p.board.id = :boardId"
+    )
+    Page<Post> findPostPage(@Param("boardId") Long boardId, Pageable pageable);
 
     Optional<Post> findByBoardIdAndId(Long boardId, Long postId);
 
-    @Query("SELECT DISTINCT p FROM Post p " +
+    @Query("SELECT p FROM Post p " +
             "JOIN FETCH p.user " +
             "JOIN FETCH p.board " +
             "WHERE p.id = :postId AND p.board.id = :boardId")

@@ -3,8 +3,10 @@ package com.haedal.haedalweb.application.post.service;
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.domain.post.model.PostType;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface PostAppService {
@@ -13,4 +15,5 @@ public interface PostAppService {
     PostImageResponseDto registerPostImage(MultipartFile postImageFile);
     void removePost(Long boardId, Long postId);
     void removePost(PostType postType, Long postId);
+    Page<PostWithBoardSummaryResponseDto> getPostPage(Long boardId, Pageable pageable);
 }

@@ -3,16 +3,12 @@ package com.haedal.haedalweb.domain.post.service;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.post.model.Post;
-import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.security.service.SecurityService;
-import com.haedal.haedalweb.application.post.dto.PostResponseDto;
-import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
 import com.haedal.haedalweb.domain.post.repository.PostRepository;
-import com.haedal.haedalweb.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
-    private final UserService userService;
     private final SecurityService securityService;
 
     @Override
@@ -74,17 +69,17 @@ public class PostServiceImpl implements PostService {
 //        postRepository.delete(post);
 //    }
 
-    @Transactional(readOnly = true)
-    public Page<PostSummaryResponseDto> getPosts(Long boardId, Pageable pageable) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-        Page<Post> postPage = postRepository.findPostsByBoard(board, pageable);
-
-        return postPage.map(post -> convertToPostSummaryDTO(post, board));
-    }
+//    @Transactional(readOnly = true)
+//    public Page<PostWithBoardSummaryResponseDto> getPosts(Long boardId, Pageable pageable) {
+//        Board board = boardRepository.findById(boardId)
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+//        Page<Post> postPage = postRepository.findPostsByBoard(board, pageable);
+//
+//        return postPage.map(post -> convertToPostSummaryDTO(post, board));
+//    }
 
 //    @Transactional(readOnly = true)
-//    public Page<PostSummaryResponseDto> getPosts(String pType, Pageable pageable) {
+//    public Page<PostWithBoardSummaryResponseDto> getPosts(String pType, Pageable pageable) {
 //        PostType postType;
 //
 //        try {
@@ -147,6 +142,10 @@ public class PostServiceImpl implements PostService {
         return postRepository.findPostWithUserAndBoard(boardId, postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
     }
+    @Override
+    public Page<Post> getPostPage(Long boardId, Pageable pageable) {
+        return postRepository.findPostPage(boardId, pageable);
+    }
 
     @Override
     public void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator) {
@@ -161,33 +160,4 @@ public class PostServiceImpl implements PostService {
         throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }
 
-    private PostSummaryResponseDto convertToPostSummaryDTO(Post post, Board board) {
-        return PostSummaryResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postViews(0L)
-                .postActivityStartDate(post.getActivityStartDate())
-                .postActivityEndDate(post.getActivityEndDate())
-                .postCreateDate(post.getRegDate())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .boardId(board.getId())
-                .boardName(board.getName())
-                .build();
-    }
-
-    private PostSummaryResponseDto convertToPostSummaryDTO(Post post) {
-        PostSummaryResponseDto postSummaryResponseDto = PostSummaryResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postViews(0L)
-                .postActivityStartDate(post.getActivityStartDate())
-                .postActivityEndDate(post.getActivityEndDate())
-                .postCreateDate(post.getRegDate())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .build();
-
-        return postSummaryResponseDto;
-    }
 }

@@ -1,15 +1,13 @@
 package com.haedal.haedalweb.web.post.controller;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
 import com.haedal.haedalweb.application.post.service.PostAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.application.post.dto.PostResponseDto;
-import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.domain.post.model.PostType;
-import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.post.service.PostService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
@@ -17,7 +15,6 @@ import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RestController
 public class PostController {
-    private final PostService postService;
     private final PostAppService postAppService;
 
     @Operation(summary = "게시글 이미지 등록")
@@ -94,16 +90,13 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 목록 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_ID})
-    @Parameters({
-            @Parameter(name = "boardId", description = "게시글 조회할 게시판 ID"),
-            @Parameter(name = "page", description = "조회 할 page, default: 0"),
-            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
-    })
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<Page<PostSummaryResponseDto>>  getActivityPosts(@PathVariable Long boardId,
-                                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                                          @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        Page<PostSummaryResponseDto> posts = postService.getPosts(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getActivityPosts(@PathVariable Long boardId,
+                                                                                   @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                                   @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
+        Page<PostWithBoardSummaryResponseDto> posts = postAppService.getPostPage(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+//        Page<PostWithBoardSummaryResponseDto> posts = postService.getPosts(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
         return ResponseEntity.ok(posts);
     }
@@ -115,10 +108,10 @@ public class PostController {
 //            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
 //    })
 //    @GetMapping("/posts")
-//    public ResponseEntity<Page<PostSummaryResponseDto>>  getActivityPosts(@RequestParam(name = "postType") String postType,
+//    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getActivityPosts(@RequestParam(name = "postType") String postType,
 //                                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
 //                                                                          @RequestParam(name = "size", defaultValue = "10") Integer size) {
-//        Page<PostSummaryResponseDto> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+//        Page<PostWithBoardSummaryResponseDto> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 //
 //        return ResponseEntity.ok(posts);
 //    }

@@ -3,7 +3,9 @@ package com.haedal.haedalweb.application.post.service;
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
+import com.haedal.haedalweb.application.post.mapper.PostMapper;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.service.BoardService;
 import com.haedal.haedalweb.domain.post.model.Post;
@@ -18,6 +20,8 @@ import com.haedal.haedalweb.infrastructure.image.ImageUtil;
 import com.haedal.haedalweb.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -154,5 +158,15 @@ public class PostAppServiceImpl implements PostAppService {
             }
         }
         postService.removePost(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostWithBoardSummaryResponseDto> getPostPage(Long boardId, Pageable pageable) { // board가 존재하는 post (활동 게시글) 페이징
+        Page<Post> postPage = postService.getPostPage(boardId, pageable);
+
+        Page<PostWithBoardSummaryResponseDto> postResponsePage = postPage.map(PostMapper::toPostWithBoardSummaryResponseDto);
+
+        return postResponsePage;
     }
 }
