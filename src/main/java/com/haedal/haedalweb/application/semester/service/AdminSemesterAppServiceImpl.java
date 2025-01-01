@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.application.semester.service;
 
-import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.dto.SemesterRequestDto;
 import com.haedal.haedalweb.application.semester.mapper.SemesterMapper;
 import com.haedal.haedalweb.domain.activity.service.ActivityService;
 import com.haedal.haedalweb.domain.semester.model.Semester;
@@ -19,8 +19,8 @@ public class AdminSemesterAppServiceImpl implements AdminSemesterAppService {
 
     @Transactional
     @Override
-    public void registerSemester(CreateSemesterRequestDto createSemesterRequestDto) {
-        Semester semester = SemesterMapper.toEntity(createSemesterRequestDto);
+    public void registerSemester(SemesterRequestDto semesterRequestDto) {
+        Semester semester = SemesterMapper.toEntity(semesterRequestDto);
 
         adminSemesterService.registerSemester(semester);
     }

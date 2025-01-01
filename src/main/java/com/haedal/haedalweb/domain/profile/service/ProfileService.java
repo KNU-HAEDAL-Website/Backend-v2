@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface ProfileService {
     void generateProfile(User user);
-    Profile getProfileWithImageAndUser(String userId);
-
     Profile getProfileWithUser(String userId);
     Page<Profile> getProfilePage(List<Role> roles, Pageable pageable);
     void validateAuthorityOfProfileManagement(String userId, User loggedInUser);

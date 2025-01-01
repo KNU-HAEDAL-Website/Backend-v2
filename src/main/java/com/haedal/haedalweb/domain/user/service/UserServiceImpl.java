@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateActiveUsers(List<User> users, List<String> userIds) {
+    public void validateActiveUsers(List<String> userIds, List<User> users) {
         if (users.size() != userIds.size()) {
             throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }

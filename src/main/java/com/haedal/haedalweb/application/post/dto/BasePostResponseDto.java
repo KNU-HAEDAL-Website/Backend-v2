@@ -1,53 +1,43 @@
-package com.haedal.haedalweb.web.post.dto;
+package com.haedal.haedalweb.application.post.dto;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
+import com.haedal.haedalweb.domain.post.model.PostType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostSummaryResponseDto {
+public class BasePostResponseDto {
     @Schema(description = "게시글 id")
     private Long postId;
 
     @Schema(description = "게시글 제목")
     private String postTitle;
 
-    @Schema(description = "게시글 대표 이미지 파일 Url")
-    private URL postImageUrl;
+    @Schema(description = "게시글 내용")
+    private String postContent;
 
     @Schema(description = "게시글 조회수")
     private Long postViews;
 
-    @Schema(description = "활동 시작일")
-    private LocalDate postActivityStartDate;
-
-    @Schema(description = "활동 종료일")
-    private LocalDate postActivityEndDate;
+    @Schema(description = "게시글 타입", example = "(NOTICE, ACTIVITY)")
+    private PostType postType;
 
     @Schema(description = "게시글 생성일")
-    private LocalDateTime postCreateDate;
+    private LocalDateTime postRegDate;
 
     @Schema(description = "유저 아이디", example = "haedal12")
     private String userId;
 
     @Schema(description = "유저 이름", example = "조대성")
     private String userName;
-
-    @Schema(description = "게시판 id")
-    private Long boardId;
-
-    @Schema(description = "게시판 이름")
-    private String boardName;
 }

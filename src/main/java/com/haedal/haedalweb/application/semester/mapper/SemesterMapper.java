@@ -1,6 +1,6 @@
 package com.haedal.haedalweb.application.semester.mapper;
 
-import com.haedal.haedalweb.application.semester.dto.CreateSemesterRequestDto;
+import com.haedal.haedalweb.application.semester.dto.SemesterRequestDto;
 import com.haedal.haedalweb.application.semester.dto.SemesterResponseDto;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 
@@ -23,9 +23,9 @@ public class SemesterMapper {
                 .toList();
     }
 
-    public static Semester toEntity(CreateSemesterRequestDto createSemesterRequestDto) {
+    public static Semester toEntity(SemesterRequestDto semesterRequestDto) {
         return Semester.builder()
-                .name(createSemesterRequestDto.getSemesterName())
+                .name(semesterRequestDto.getSemesterName())
                 .build();
     }
 }

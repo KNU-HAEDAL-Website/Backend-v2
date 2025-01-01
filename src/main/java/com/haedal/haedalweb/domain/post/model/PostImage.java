@@ -1,5 +1,6 @@
-package com.haedal.haedalweb.domain.board.model;
+package com.haedal.haedalweb.domain.post.model;
 
+import com.haedal.haedalweb.domain.user.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -8,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -29,23 +29,27 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class BoardImage {
+public class PostImage {
     @Id
-    @Column(name = "board_image_id")
+    @Column(name = "post_image_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "board_image_original_file")
+    @Column(name = "post_image_original_file")
     @NonNull
     private String originalFile;
 
-    @Column(name = "board_image_save_file")
+    @Column(name = "post_image_save_file")
     @NonNull
     private String saveFile;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false, unique = true)
-    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)

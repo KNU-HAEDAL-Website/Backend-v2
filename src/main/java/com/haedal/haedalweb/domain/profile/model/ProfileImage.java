@@ -35,10 +35,10 @@ public class ProfileImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "profile_original_file")
+    @Column(name = "profile_image_original_file")
     private String originalFile;
 
-    @Column(name = "profile_save_file")
+    @Column(name = "profile_image_save_file")
     private String saveFile;
 
     @OneToOne(fetch = FetchType.LAZY)

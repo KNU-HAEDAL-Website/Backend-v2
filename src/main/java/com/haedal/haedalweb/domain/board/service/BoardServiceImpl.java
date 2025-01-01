@@ -7,8 +7,6 @@ import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
-import com.haedal.haedalweb.domain.post.repository.PostRepository;
-import com.haedal.haedalweb.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class BoardServiceImpl implements BoardService {
-    private final UserService userService;
     private final BoardRepository boardRepository;
-    private final PostRepository postRepository;
-
 
     @Override
     public void registerBoard(Board board) {
@@ -29,8 +24,14 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getBoardWithImageAndParticipants(Long activityId, Long boardId) {
-        return boardRepository.findBoardWithImageAndParticipants(activityId, boardId)
+    public Board getBoard(Long boardId) {
+        return boardRepository.findBoard(boardId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
+    }
+
+    @Override
+    public Board getBoardWithParticipants(Long activityId, Long boardId) {
+        return boardRepository.findBoardWithParticipants(activityId, boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
 
@@ -40,8 +41,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Board getBoardWithImageAndUser(Long activityId, Long boardId) {
-        return boardRepository.findBoardWithImageAndUser(activityId, boardId)
+    public Board getBoardWithUser(Long activityId, Long boardId) {
+        return boardRepository.findBoardWithUser(activityId, boardId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
     }
 

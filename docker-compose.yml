@@ -7,6 +7,7 @@ services:
     volumes:
       - board-images:/app/data/board
       - profile-images:/app/data/profile
+      - post-images:/app/data/post
     depends_on:
       - haedal-mysql
       - haedal-redis
@@ -45,3 +46,4 @@ volumes:
   db-data:
   board-images:
   profile-images:
+  post-images:

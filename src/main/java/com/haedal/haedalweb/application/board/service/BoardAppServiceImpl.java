@@ -60,7 +60,7 @@ public class BoardAppServiceImpl implements BoardAppService {
         // 게시판 참여자 검증
         List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
-        userService.validateActiveUsers(participants, participantIds);
+        userService.validateActiveUsers(participantIds, participants);
 
         // 파일 저장
         String originalFile = boardImageFile.getOriginalFilename();
@@ -90,7 +90,7 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional(readOnly = true)
     public BoardResponseDto getBoard(Long activityId, Long boardId) {
-        Board board = boardService.getBoardWithImageAndParticipants(activityId, boardId);
+        Board board = boardService.getBoardWithParticipants(activityId, boardId);
 
         String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
@@ -114,11 +114,11 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional
     public void updateBoardImage(Long activityId, Long boardId, MultipartFile boardImageFile) {
-        Board board = boardService.getBoardWithImageAndUser(activityId, boardId);
+        Board board = boardService.getBoardWithUser(activityId, boardId);
 
-        // 생성자와 로그인한 유저가 같은지 검증
         User loggedInUser = securityService.getLoggedInUser();
         User creator = board.getUser();
+        // BoardImage 업데이트 권한 유효성 검사
         boardService.validateAuthorityOfBoardManagement(loggedInUser, creator);
 
         // 새 이미지 파일 저장
@@ -145,15 +145,16 @@ public class BoardAppServiceImpl implements BoardAppService {
     public void updateBoard(Long activityId, Long boardId, BoardRequestDto boardRequestDto) { // 여기 bulk insert 최적화 해야함
         Board board = boardService.getBoardWithUserAndParticipants(activityId, boardId);
 
-        // 생성자와 로그인한 유저가 같은지 검증
+
         User loggedInUser = securityService.getLoggedInUser();
         User creator = board.getUser();
+        // Board 업데이트 권한 유효성 검사
         boardService.validateAuthorityOfBoardManagement(loggedInUser, creator);
 
         // 게시판 참여자 검증
         List<String> participantIds = new ArrayList<>(boardRequestDto.getParticipants());
         List<User> participants = userService.getUsersByIds(participantIds);
-        userService.validateActiveUsers(participants, participantIds);
+        userService.validateActiveUsers(participantIds, participants);
 
         // 게시판 메타 데이터 수정
         board.setName(boardRequestDto.getBoardName());
@@ -165,11 +166,11 @@ public class BoardAppServiceImpl implements BoardAppService {
     @Override
     @Transactional
     public void removeBoard(Long activityId, Long boardId) {
-        Board board = boardService.getBoardWithImageAndUser(activityId, boardId);
+        Board board = boardService.getBoardWithUser(activityId, boardId);
 
-        // 생성자와 로그인한 유저가 같은지 검증
         User loggedInUser = securityService.getLoggedInUser();
         User creator = board.getUser();
+        // Board 삭제 권한 유효성 검사
         boardService.validateAuthorityOfBoardManagement(loggedInUser, creator);
 
         // 저장된 BoardImage 파일 이름 저장

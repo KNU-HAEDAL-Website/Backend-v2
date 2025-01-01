@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum PostType {
-    ACTIVITY, NOTICE, EVENT
+    ACTIVITY, NOTICE
 }

@@ -87,17 +87,23 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/admin/**").hasAnyRole("WEB_MASTER", "ADMIN")
-                        .requestMatchers("/boards/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers(HttpMethod.GET, "/posts/generate-presigned-url").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER", "MEMBER")
-                        .requestMatchers(HttpMethod.POST, "/posts").hasAnyRole("WEB_MASTER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/posts/{postId}").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/notices").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/notices/{postId}").hasAnyRole("WEB_MASTER", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/notices/{postId}").hasAnyRole("WEB_MASTER", "ADMIN")
+
                         .requestMatchers(HttpMethod.POST, "/activities/{activityId}/boards").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
-                        .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/boards/{boardId}/posts/{postId}").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/activities/{activityId}/boards/{boardId}").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
                         .requestMatchers(HttpMethod.PUT, "/activities/{activityId}/boards/{boardId}/**").hasAnyRole("WEB_MASTER", "ADMIN", "TEAM_LEADER")
+
+                        .requestMatchers(HttpMethod.POST, "/boards/{boardId}/posts").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/boards/{boardId}/posts/{postId}").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/boards/{boardId}/posts/{postId}").authenticated()
+
                         .requestMatchers(HttpMethod.PUT, "/users/{userId}/profile/**").authenticated()
-                        .requestMatchers("/posts/{postId}","/boards/{boardId}/posts", "/posts","/activities/{activityId}/boards","/activities/{activityId}/boards/{boardId}","/login", "/", "/join/**", "/reissue", "/users/{userId}/profile", "/profiles", "/semesters/**", "/swagger-ui/**", "/v3/api-docs/**", "/error/**", "/upload/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").authenticated()
+
+                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers("/login", "/join/**", "/reissue").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록

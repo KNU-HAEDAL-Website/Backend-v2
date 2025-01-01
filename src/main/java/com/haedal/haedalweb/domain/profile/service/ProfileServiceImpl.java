@@ -35,18 +35,6 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile getProfileWithImageAndUser(String userId) {
-        Profile profile = profileRepository.findProfileWithImageAndUser(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
-
-        if (profile.getUser().getUserStatus() == UserStatus.DELETED || profile.getUser().getUserStatus() == UserStatus.INACTIVE) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
-        }
-
-        return profile;
-    }
-
-    @Override
     public Profile getProfileWithUser(String userId) {
         Profile profile = profileRepository.findProfileWithUser(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));

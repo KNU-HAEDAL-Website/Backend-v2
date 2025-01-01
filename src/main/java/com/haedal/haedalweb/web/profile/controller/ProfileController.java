@@ -48,7 +48,7 @@ public class ProfileController {
 
     @Operation(summary = "프로필 이미지 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_PROFILE_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.FORBIDDEN_UPDATE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.BAD_REQUEST_FILE, ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.FORBIDDEN_UPDATE})
     @PutMapping(value = "/users/{userId}/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse> updateProfileImage(@PathVariable String userId, @RequestPart(value = "file") MultipartFile userImageFile) {
         profileAppService.updateProfileImage(userId, userImageFile);
