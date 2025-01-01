@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.application.post.service;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
@@ -16,4 +17,6 @@ public interface PostAppService {
     void removePost(Long boardId, Long postId);
     void removePost(PostType postType, Long postId);
     Page<PostWithBoardSummaryResponseDto> getPostPage(Long boardId, Pageable pageable);
+
+    Page<BasePostSummaryResponseDto> getPostPage(PostType postType, Pageable pageable);
 }

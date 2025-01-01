@@ -3,6 +3,7 @@ package com.haedal.haedalweb.domain.post.service;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.post.model.Post;
+import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.security.service.SecurityService;
@@ -144,7 +145,12 @@ public class PostServiceImpl implements PostService {
     }
     @Override
     public Page<Post> getPostPage(Long boardId, Pageable pageable) {
-        return postRepository.findPostPage(boardId, pageable);
+        return postRepository.findPostPageByBoardId(boardId, pageable);
+    }
+
+    @Override
+    public Page<Post> getPostPage(PostType postType, Pageable pageable) {
+        return postRepository.findPostPageByPostType(postType, pageable);
     }
 
     @Override

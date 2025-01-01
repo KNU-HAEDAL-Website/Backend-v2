@@ -1,6 +1,8 @@
 package com.haedal.haedalweb.web.post.controller;
 
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
+import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
@@ -15,6 +17,7 @@ import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +75,7 @@ public class PostController {
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_POST_ID, ErrorCode.FORBIDDEN_UPDATE})
     @DeleteMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<SuccessResponse> removePost(@PathVariable Long boardId, @PathVariable Long postId) {
+    public ResponseEntity<SuccessResponse> removePostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
         postAppService.removePost(boardId, postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
@@ -89,42 +92,32 @@ public class PostController {
     }
 
     @Operation(summary = "활동 게시글 목록 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_ID})
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getActivityPosts(@PathVariable Long boardId,
+    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getPostsWithBoard(@PathVariable Long boardId,
                                                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                                    @RequestParam(name = "size", defaultValue = "10") Integer size) {
 
         Page<PostWithBoardSummaryResponseDto> posts = postAppService.getPostPage(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
-//        Page<PostWithBoardSummaryResponseDto> posts = postService.getPosts(boardId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
         return ResponseEntity.ok(posts);
     }
 
-//    @Operation(summary = "공지사항, 이벤트 게시글 목록 조회")
-//    @ApiErrorCodeExamples({ErrorCode.BAD_REQUEST_POST_TYPE, ErrorCode.NOT_FOUND_POST_ID})
-//    @Parameters({
-//            @Parameter(name = "page", description = "조회 할 page, default: 0"),
-//            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
-//    })
-//    @GetMapping("/posts")
-//    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getActivityPosts(@RequestParam(name = "postType") String postType,
-//                                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
-//                                                                          @RequestParam(name = "size", defaultValue = "10") Integer size) {
-//        Page<PostWithBoardSummaryResponseDto> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
-//
-//        return ResponseEntity.ok(posts);
-//    }
+    @Operation(summary = "공지사항 게시글 목록 조회")
+    @GetMapping("/notices")
+    public ResponseEntity<Page<BasePostSummaryResponseDto>>  getNoticePosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                                            @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        Page<BasePostSummaryResponseDto> posts = postAppService.getPostPage(PostType.NOTICE, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
-//    @Operation(summary = "게시글 단일 조회")
-//    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
-//    @Parameters({
-//            @Parameter(name = "postId", description = "해당 게시글 ID")
-//    })
-//    @GetMapping("/posts/{postId}")
-//    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(posts);
+    }
+
+    @Operation(summary = "활동 게시글 단일 조회")
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
+    @GetMapping("/boards/{boardId}/posts/{postId}")
+    public ResponseEntity<PostResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
+        Page<>
 //        PostResponseDto post = postService.getPost(postId);
-//
-//        return ResponseEntity.ok(post);
-//    }
+
+        return ResponseEntity.ok(post);
+    }
 }

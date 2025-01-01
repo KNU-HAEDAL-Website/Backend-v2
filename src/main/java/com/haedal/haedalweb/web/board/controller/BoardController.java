@@ -55,7 +55,6 @@ public class BoardController {
     }
 
     @Operation(summary = "게시판 페이징 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID})
     @GetMapping("/activities/{activityId}/boards")
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@PathVariable Long activityId,
                                                             @RequestParam(name = "page", defaultValue = "0") Integer page,

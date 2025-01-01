@@ -1,6 +1,5 @@
 package com.haedal.haedalweb.domain.post.repository;
 
-import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,15 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                     "WHERE p.board.id = :boardId",
             countQuery = "SELECT count(p) FROM Post p WHERE p.board.id = :boardId"
     )
-    Page<Post> findPostPage(@Param("boardId") Long boardId, Pageable pageable);
+    Page<Post> findPostPageByBoardId(@Param("boardId") Long boardId, Pageable pageable);
+
+    @Query(
+            value = "SELECT p FROM Post p " +
+                    "JOIN FETCH p.user " +
+                    "WHERE p.postType = :postType",
+            countQuery = "SELECT count(p) FROM Post p WHERE p.postType = :postType"
+    )
+    Page<Post> findPostPageByPostType(@Param("postType") PostType postType, Pageable pageable);
 
     Optional<Post> findByBoardIdAndId(Long boardId, Long postId);
 
@@ -33,4 +40,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "JOIN FETCH p.board " +
             "WHERE p.id = :postId AND p.board.id = :boardId")
     Optional<Post> findPostWithUserAndBoard(Long boardId, Long postId);
+
 }

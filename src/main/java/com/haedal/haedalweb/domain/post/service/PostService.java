@@ -2,6 +2,7 @@ package com.haedal.haedalweb.domain.post.service;
 
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.domain.post.model.Post;
+import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,5 @@ public interface PostService {
 
     void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator);
     Page<Post> getPostPage(Long boardId, Pageable pageable);
+    Page<Post> getPostPage(PostType postType, Pageable pageable);
 }
