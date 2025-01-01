@@ -1,14 +1,15 @@
 package com.haedal.haedalweb.web.post.controller;
 
+import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
-import com.haedal.haedalweb.application.post.dto.PostWithoutBoardRequestDto;
 import com.haedal.haedalweb.application.post.service.PostAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
-import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
+import com.haedal.haedalweb.domain.post.model.PostType;
+import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.domain.post.service.PostService;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
@@ -61,12 +62,12 @@ public class PostController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
 
-    @Operation(summary = "게시글 생성 (공지사항)")
+    @Operation(summary = "공지사항 게시글 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
-    @PostMapping("/posts")
-    public ResponseEntity<SuccessResponse> registerPost(@RequestBody @Valid PostWithoutBoardRequestDto postWithoutBoardRequestDto) {
-        postAppService.registerPost(postWithoutBoardRequestDto);
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_IMAGE, ErrorCode.BAD_REQUEST_POST_TYPE})
+    @PostMapping("/notices")
+    public ResponseEntity<SuccessResponse> registerPost(@RequestBody @Valid BasePostRequestDto basePostRequestDto) {
+        postAppService.registerPost(PostType.NOTICE, basePostRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
     }
@@ -74,26 +75,22 @@ public class PostController {
     @Operation(summary = "활동 게시글 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
-    @Parameters({
-            @Parameter(name = "boardId", description = "게시글 삭제할 활동 게시판 ID"),
-            @Parameter(name = "postId", description = "해당 게시글 ID")
-    })
     @DeleteMapping("/boards/{boardId}/posts/{postId}")
     public ResponseEntity<SuccessResponse> deletePost(@PathVariable Long boardId, @PathVariable Long postId) {
-        postService.deletePost(boardId, postId);
+        postAppService.removePost(boardId, postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
 
     @Operation(summary = "공지사항, 이벤트 게시글 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_TYPE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.BAD_REQUEST_POST_TYPE})
     @Parameters({
             @Parameter(name = "postId", description = "해당 게시글 ID")
     })
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<SuccessResponse> deleteNoticePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+//        postService.deletePost(postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
@@ -114,20 +111,20 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @Operation(summary = "공지사항, 이벤트 게시글 목록 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_TYPE, ErrorCode.NOT_FOUND_POST_ID})
-    @Parameters({
-            @Parameter(name = "page", description = "조회 할 page, default: 0"),
-            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
-    })
-    @GetMapping("/posts")
-    public ResponseEntity<Page<PostSummaryResponseDto>>  getActivityPosts(@RequestParam(name = "postType") String postType,
-                                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
-                                                                          @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        Page<PostSummaryResponseDto> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
-
-        return ResponseEntity.ok(posts);
-    }
+//    @Operation(summary = "공지사항, 이벤트 게시글 목록 조회")
+//    @ApiErrorCodeExamples({ErrorCode.BAD_REQUEST_POST_TYPE, ErrorCode.NOT_FOUND_POST_ID})
+//    @Parameters({
+//            @Parameter(name = "page", description = "조회 할 page, default: 0"),
+//            @Parameter(name = "size", description = "한 번에 조회 할 page 수, default: 10")
+//    })
+//    @GetMapping("/posts")
+//    public ResponseEntity<Page<PostSummaryResponseDto>>  getActivityPosts(@RequestParam(name = "postType") String postType,
+//                                                                          @RequestParam(name = "page", defaultValue = "0") Integer page,
+//                                                                          @RequestParam(name = "size", defaultValue = "10") Integer size) {
+//        Page<PostSummaryResponseDto> posts = postService.getPosts(postType, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+//
+//        return ResponseEntity.ok(posts);
+//    }
 
     @Operation(summary = "게시글 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})

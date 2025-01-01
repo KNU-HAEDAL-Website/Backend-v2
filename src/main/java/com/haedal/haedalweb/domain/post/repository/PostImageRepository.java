@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.domain.post.repository;
 
+import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,4 +15,6 @@ public interface PostImageRepository extends JpaRepository<PostImage, Long> {
             "AND pi.regDate < :threshold " +
             "ORDER BY pi.regDate ASC")
     List<PostImage> findOldImages(LocalDateTime threshold);
+
+    List<PostImage> findByPost(Post post);
 }

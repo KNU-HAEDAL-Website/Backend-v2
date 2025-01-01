@@ -7,6 +7,10 @@ import java.util.List;
 public interface PostImageService {
     PostImage registerPostImage(PostImage postImage);
     void registerPostImages(List<PostImage> postImages);
-    List<PostImage> getPostImages(List<Long> postImageIds);
+
+    void removePostImages(List<PostImage> postImages);
+
+    List<PostImage> getPostImagesByIds(List<Long> postImageIds);
+    List<PostImage> getPostImages(Post post);
     void addPostImagesToPost(List<Long> postImageIds, Post post);
 }

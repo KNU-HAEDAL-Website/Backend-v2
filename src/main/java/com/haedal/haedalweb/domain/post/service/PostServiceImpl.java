@@ -7,7 +7,6 @@ import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.security.service.SecurityService;
-import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.exception.BusinessException;
@@ -19,9 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Service
@@ -36,85 +32,9 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
-//    @Transactional
-//    public void createPost(Long boardId, BasePostRequestDto basePostRequestDTO) { // createPost 리팩토링 해야함. // 게시판 참여자만 게시글을 쓸 수 있게 해야하나?
-//        Board board = boardRepository.findById(boardId)
-//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_BOARD_ID));
-//        PostType postType;
-//
-//        try {
-//            postType = PostType.valueOf(basePostRequestDTO.getPostType());
-//            if (postType != PostType.ACTIVITY) throw new IllegalArgumentException();
-//        } catch (IllegalArgumentException e) {
-//            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-//        }
-//
-//        LocalDate activityStartDate = null;
-//        LocalDate activityEndDate = null;
-//
-//        try {
-//            activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-//        } catch (DateTimeException e) {
-//            throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
-//        }
-//
-//        if (basePostRequestDTO.getPostActivityEndDate() != null) {
-//            activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
-//        }
-//
-//        User creator = securityService.getLoggedInUser();
-//
-//        Post post = Post.builder()
-//                .title(basePostRequestDTO.getPostTitle())
-//                .content(basePostRequestDTO.getPostContent())
-//                .postType(postType)
-//                .activityStartDate(activityStartDate)
-//                .activityEndDate(activityEndDate)
-//                .user(creator)
-//                .board(board)
-//                .build();
-//
-//        postRepository.save(post);
-//    }
-
-    @Transactional
-    public void createPost(BasePostRequestDto basePostRequestDTO) {
-//        PostType postType;
-//
-//        try {
-//            postType = PostType.valueOf(basePostRequestDTO.getPostType());
-//            if (postType != PostType.NOTICE && postType != PostType.EVENT)
-//                throw new IllegalArgumentException();
-//        } catch (IllegalArgumentException e) {
-//            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-//        }
-//
-//        LocalDate activityStartDate = null;
-//        LocalDate activityEndDate = null;
-//        User creator = securityService.getLoggedInUser();
-//
-//        if (postType == PostType.EVENT) {
-//            try {
-//                activityStartDate = LocalDate.parse(basePostRequestDTO.getPostActivityStartDate(), DateTimeFormatter.ISO_DATE);
-//            } catch (DateTimeException e) {
-//                throw new BusinessException(ErrorCode.INVALID_ARGUMENT);
-//            }
-//
-//            if (basePostRequestDTO.getPostActivityEndDate() != null) {
-//                activityEndDate = LocalDate.parse(basePostRequestDTO.getPostActivityEndDate(), DateTimeFormatter.ISO_DATE);
-//            }
-//        }
-//
-//        Post post = Post.builder()
-//                .title(basePostRequestDTO.getPostTitle())
-//                .content(basePostRequestDTO.getPostContent())
-//                .postType(postType)
-//                .activityStartDate(activityStartDate)
-//                .activityEndDate(activityEndDate)
-//                .user(creator)
-//                .build();
-//
-//        postRepository.save(post);
+    @Override
+    public void removePost(Post post) {
+        postRepository.delete(post);
     }
 
     @Transactional
@@ -128,25 +48,25 @@ public class PostServiceImpl implements PostService {
         User postCreator = post.getUser();
         User boardCreator = board.getUser();
 
-        validateAuthorityOfPostManagement(loggedInUser, postCreator, boardCreator);
+        validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator);
 
         postRepository.delete(post);
     }
 
-    @Transactional
-    public void deletePost(Long postId) { // 이벤트, 공지사항 삭제
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-
-        try {
-            if (post.getPostType() != PostType.NOTICE && post.getPostType() != PostType.EVENT)
-                throw new IllegalArgumentException();
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-        }
-
-        postRepository.delete(post);
-    }
+//    @Transactional
+//    public void deletePost(Long postId) { // 이벤트, 공지사항 삭제
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+//
+//        try {
+//            if (post.getPostType() != PostType.NOTICE && post.getPostType() != PostType.EVENT)
+//                throw new IllegalArgumentException();
+//        } catch (IllegalArgumentException e) {
+//            throw new BusinessException(ErrorCode.BAD_REQUEST_POST_TYPE);
+//        }
+//
+//        postRepository.delete(post);
+//    }
 
     @Transactional(readOnly = true)
     public Page<PostSummaryResponseDto> getPosts(Long boardId, Pageable pageable) {
@@ -157,22 +77,22 @@ public class PostServiceImpl implements PostService {
         return postPage.map(post -> convertToPostSummaryDTO(post, board));
     }
 
-    @Transactional(readOnly = true)
-    public Page<PostSummaryResponseDto> getPosts(String pType, Pageable pageable) {
-        PostType postType;
-
-        try {
-            postType = PostType.valueOf(pType.toUpperCase());
-            if (postType != PostType.NOTICE && postType != PostType.EVENT)
-                throw new IllegalArgumentException();
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_POST_TYPE);
-        }
-
-        Page<Post> postPage = postRepository.findPostsByPostType(postType, pageable);
-
-        return postPage.map(post -> convertToPostSummaryDTO(post));
-    }
+//    @Transactional(readOnly = true)
+//    public Page<PostSummaryResponseDto> getPosts(String pType, Pageable pageable) {
+//        PostType postType;
+//
+//        try {
+//            postType = PostType.valueOf(pType.toUpperCase());
+//            if (postType != PostType.NOTICE && postType != PostType.EVENT)
+//                throw new IllegalArgumentException();
+//        } catch (IllegalArgumentException e) {
+//            throw new BusinessException(ErrorCode.BAD_REQUEST_POST_TYPE);
+//        }
+//
+//        Page<Post> postPage = postRepository.findPostsByPostType(postType, pageable);
+//
+//        return postPage.map(post -> convertToPostSummaryDTO(post));
+//    }
 
     @Transactional
     public PostResponseDto getPost(Long postId) {
@@ -216,17 +136,23 @@ public class PostServiceImpl implements PostService {
         return postResponseDto;
     }
 
-    private void validateAuthorityOfPostManagement(User loggedInUser, User postCreator, User boardCreator) {
+    @Override
+    public Post getPostWithUserAndBoard(Long boardId, Long postId) {
+        return postRepository.findPostWithUserAndBoard(boardId, postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+    }
+
+    @Override
+    public void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator) {
         String loggedInUserId = loggedInUser.getId();
         String postCreatorId = postCreator.getId();
         String boardCreatorId = boardCreator.getId();
 
-        if (!postCreatorId.equals(loggedInUserId)
-                && !boardCreatorId.equals(loggedInUserId)
-                && loggedInUser.getRole() != Role.ROLE_ADMIN
-                && loggedInUser.getRole() != Role.ROLE_WEB_MASTER) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
-        }
+        if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN) return; // 관리자
+        if (boardCreatorId.equals(loggedInUserId) && loggedInUser.getRole() == Role.ROLE_TEAM_LEADER) return; // 자신이 만든 게시판의 글 && 현재 팀장
+        if (postCreatorId.equals(loggedInUserId)) return; // 자신이 작성한 글
+
+        throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }
 
     private PostSummaryResponseDto convertToPostSummaryDTO(Post post, Board board) {

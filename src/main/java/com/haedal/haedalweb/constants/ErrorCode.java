@@ -24,7 +24,7 @@ public enum ErrorCode implements ResponseCode{
     DUPLICATED_USER_ID(HttpStatus.CONFLICT, "USER_001", "중복된 아이디가 존재합니다."),
     DUPLICATED_STUDENT_NUMBER(HttpStatus.CONFLICT, "USER_002", "중복된 학번이 존재합니다."),
     NOT_FOUND_USER_ID(HttpStatus.NOT_FOUND, "USER_003", "유저 아이디를 찾을 수 없습니다."),
-    NOT_FOUND_ROLE(HttpStatus.NOT_FOUND, "USER_004", "해당하는 권한을 찾을 수 없습니다."),
+    BAD_REQUEST_ROLE(HttpStatus.NOT_FOUND, "USER_004", "잘못된 권한 값입니다."),
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "USER_005", "중복된 이메일이 존재합니다."),
 
     DUPLICATED_SEMESTER(HttpStatus.CONFLICT, "SEMESTER_001", "이미 해당 학기가 존재합니다."),
@@ -37,9 +37,9 @@ public enum ErrorCode implements ResponseCode{
     NOT_FOUND_BOARD_ID(HttpStatus.NOT_FOUND, "BOARD_001", "해당 게시판을 찾을 수 없습니다."),
     EXIST_POST(HttpStatus.CONFLICT, "BOARD_002", "해당 게시판에 게시글이 존재하는 경우 삭제할 수 없습니다."),
 
-    NOT_FOUND_POST_TYPE(HttpStatus.NOT_FOUND, "POST_001", "해당 게시글 타입이 존재하지 않습니다."),
-    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "POST_001", "해당 게시글을 찾을 수 없습니다."),
-    NOT_FOUND_POST_IMAGE(HttpStatus.NOT_FOUND, "POST_002", "해당 게시글 이미지를 찾을 수 없습니다."),
+    BAD_REQUEST_POST_TYPE(HttpStatus.NOT_FOUND, "POST_001", "불가능한 게시글 타입입니다."),
+    NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "POST_002", "해당 게시글을 찾을 수 없습니다."),
+    NOT_FOUND_POST_IMAGE(HttpStatus.NOT_FOUND, "POST_003", "해당 게시글 이미지를 찾을 수 없습니다."),
 
     INVALID_EMAIL_VERIFICATION(HttpStatus.BAD_REQUEST, "EMAIL_001", "인증 코드가 만료되었거나 일치하지 않습니다."),
     LIMIT_EXCEEDED_SEND_EMAIL(HttpStatus.TOO_MANY_REQUESTS, "EMAIL_002", "해당 이메일의 전송 및 재전송 횟수가 3회를 초과 했습니다."),

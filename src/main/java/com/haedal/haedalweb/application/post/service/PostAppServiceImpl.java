@@ -1,8 +1,8 @@
 package com.haedal.haedalweb.application.post.service;
 
+import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
-import com.haedal.haedalweb.application.post.dto.PostWithoutBoardRequestDto;
 import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.service.BoardService;
@@ -12,6 +12,7 @@ import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.post.service.PostImageService;
 import com.haedal.haedalweb.domain.post.service.PostService;
 import com.haedal.haedalweb.domain.user.model.User;
+import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageUtil;
 import com.haedal.haedalweb.security.service.SecurityService;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostAppServiceImpl implements PostAppService {
@@ -66,18 +68,18 @@ public class PostAppServiceImpl implements PostAppService {
 
     @Override
     @Transactional
-    public void registerPost(PostWithoutBoardRequestDto postWithoutBoardRequestDto) {
+    public void registerPost(PostType postType, BasePostRequestDto basePostRequestDto) { // Board가 필요없는 Post 생성
         User user = securityService.getLoggedInUser();
 
         Post post = Post.builder()
-                .title(postWithoutBoardRequestDto.getPostTitle())
-                .content(postWithoutBoardRequestDto.getPostContent())
-                .postType(postWithoutBoardRequestDto.getPostType())
+                .title(basePostRequestDto.getPostTitle())
+                .content(basePostRequestDto.getPostContent())
+                .postType(postType)
                 .user(user)
                 .build();
 
         postService.registerPost(post);
-        List<Long> postImageIds = postWithoutBoardRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
+        List<Long> postImageIds = basePostRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
         postImageService.addPostImagesToPost(postImageIds, post); // PostImage에 Post를 연결해주기
     }
 
@@ -103,4 +105,31 @@ public class PostAppServiceImpl implements PostAppService {
         return PostImageMapper.toDto(ImageUtil.generateImageUrl(uploadUrl, saveFile), savedPostImage);
     }
 
+    @Override
+    @Transactional
+    public void removePost(Long boardId, Long postId) { // 활동 게시판의 게시글 삭제
+        Post post = postService.getPostWithUserAndBoard(boardId, postId);
+
+        User loggedInUser = securityService.getLoggedInUser();
+        User postCreator = post.getUser();
+        User boardCreator = post.getBoard().getUser();
+
+        postService.validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator); // 게시글 삭제 검증
+
+        // 저장된 PostImage 파일 이름 저장
+        List<PostImage> postImages = postImageService.getPostImages(post);
+
+        if (!postImages.isEmpty()) {
+            List<String> removeFiles = postImages.stream()
+                    .map(PostImage::getSaveFile)
+                    .toList();
+
+            postImageService.removePostImages(postImages);
+
+            for (String removeFile : removeFiles) { // 성능테스트 이후에 느리다면, Batch Event 발행
+                applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+            }
+        }
+        postService.removePost(post);
+    }
 }

@@ -4,8 +4,10 @@ import com.haedal.haedalweb.application.user.dto.AdminUserResponseDto;
 import com.haedal.haedalweb.application.user.service.AdminUserAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
+import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.application.user.dto.UpdateRoleRequestDto;
+import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
@@ -85,9 +87,12 @@ public class AdminUserController {
 
     @Operation(summary = "유저 권한 변경")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_ROLE)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ROLE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.BAD_REQUEST_ROLE})
     @PatchMapping("/{userId}/role")
     public ResponseEntity<SuccessResponse> changeUserRole(@PathVariable String userId, @RequestBody @Valid UpdateRoleRequestDto updateRoleRequestDto) {
+        if (updateRoleRequestDto.getRole() == Role.ROLE_WEB_MASTER) { // WEB_MASTER 로의 변경은 불가능하다.
+            throw new BusinessException(ErrorCode.BAD_REQUEST_ROLE);
+        }
         adminUserAppService.updateUserRole(userId, updateRoleRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_ROLE);

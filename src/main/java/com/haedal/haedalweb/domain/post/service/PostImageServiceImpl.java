@@ -26,13 +26,24 @@ public class PostImageServiceImpl implements PostImageService {
     }
 
     @Override
-    public List<PostImage> getPostImages(List<Long> postImageIds) {
+    public void removePostImages(List<PostImage> postImages) {
+        postImageRepository.deleteAll(postImages);
+    }
+
+    @Override
+    public List<PostImage> getPostImagesByIds(List<Long> postImageIds) {
        return postImageRepository.findAllById(postImageIds);
     }
+
+    @Override
+    public List<PostImage> getPostImages(Post post) {
+        return postImageRepository.findByPost(post);
+    }
+
     @Override
     public void addPostImagesToPost(List<Long> postImageIds, Post post) {
         if (postImageIds != null && !postImageIds.isEmpty()) { // 게시글에 이미지가 포함되어 있다면
-            List<PostImage> postImages = getPostImages(postImageIds); // 이미지 ID들을 기반으로 PostImage 엔티티 조회
+            List<PostImage> postImages = getPostImagesByIds(postImageIds); // 이미지 ID들을 기반으로 PostImage 엔티티 조회
             validatePostImages(postImageIds, postImages); // 이미지 검증
             postImages.forEach(postImage -> postImage.setPost(post)); // Post와 PostImage 연결
         }
