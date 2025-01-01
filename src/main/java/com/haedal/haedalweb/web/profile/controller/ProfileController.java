@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +53,16 @@ public class ProfileController {
     @PutMapping(value = "/users/{userId}/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SuccessResponse> updateProfileImage(@PathVariable String userId, @RequestPart(value = "file") MultipartFile userImageFile) {
         profileAppService.updateProfileImage(userId, userImageFile);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_PROFILE_SUCCESS);
+    }
+
+    @Operation(summary = "프로필 이미지 삭제")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_PROFILE_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.FORBIDDEN_UPDATE})
+    @DeleteMapping("/users/{userId}/profile/image")
+    public ResponseEntity<SuccessResponse> updateProfileImage(@PathVariable String userId) {
+        profileAppService.removeProfileImage(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_PROFILE_SUCCESS);
     }

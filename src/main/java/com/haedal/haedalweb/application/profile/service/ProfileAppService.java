@@ -11,6 +11,8 @@ import java.util.List;
 public interface ProfileAppService {
     void updateProfileImage(String userId, MultipartFile profileImageFile);
 
+    void removeProfileImage(String userId);
+
     void updateProfile(String userId, ProfileRequestDto profileRequestDto);
 
     ProfileResponseDto getProfile(String userId);
