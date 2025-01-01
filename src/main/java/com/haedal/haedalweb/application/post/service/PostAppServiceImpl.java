@@ -4,6 +4,7 @@ import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
 import com.haedal.haedalweb.application.post.mapper.PostMapper;
@@ -179,5 +180,13 @@ public class PostAppServiceImpl implements PostAppService {
         Page<BasePostSummaryResponseDto> postResponsePage = postPage.map(PostMapper::toBasePostSummaryResponseDto);
 
         return postResponsePage;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostWithBoardResponseDto getPost(Long boardId, Long postId) {
+        Post post = postService.getPostWithUserAndBoard(boardId, postId);
+
+        return PostMapper.toPostWithBoardResponseDto(post);
     }
 }

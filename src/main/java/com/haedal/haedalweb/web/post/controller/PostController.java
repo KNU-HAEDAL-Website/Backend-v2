@@ -3,6 +3,7 @@ package com.haedal.haedalweb.web.post.controller;
 import com.haedal.haedalweb.application.post.dto.BasePostRequestDto;
 import com.haedal.haedalweb.application.post.dto.BasePostSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.BasePostResponseDto;
+import com.haedal.haedalweb.application.post.dto.PostWithBoardResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostImageResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostWithBoardRequestDto;
@@ -112,10 +113,8 @@ public class PostController {
     @Operation(summary = "활동 게시글 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
     @GetMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<BasePostResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
+    public ResponseEntity<PostWithBoardResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
 
-//        BasePostResponseDto post = postService.getPost(postId);
-
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(postAppService.getPost(boardId, postId));
     }
 }
