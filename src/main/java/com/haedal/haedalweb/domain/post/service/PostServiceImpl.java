@@ -37,6 +37,12 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
+    @Override
+    public Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+    }
+
     @Transactional
     public void deletePost(Long boardId, Long postId) { // 활동 게시글 삭제 method
         Post post = postRepository.findByBoardIdAndId(boardId, postId)
@@ -94,47 +100,47 @@ public class PostServiceImpl implements PostService {
 //        return postPage.map(post -> convertToPostSummaryDTO(post));
 //    }
 
-    @Transactional
-    public PostResponseDto getPost(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
-
-        postRepository.save(post);
-
-        PostResponseDto postResponseDto;
-        if (post.getPostType() == PostType.ACTIVITY) {
-            postResponseDto = PostResponseDto.builder()
-                    .postId(post.getId())
-                    .postTitle(post.getTitle())
-                    .postContent(post.getContent())
-                    .postViews(0L) // Views 구현해야 함.
-                    .postCreateDate(post.getRegDate())
-                    .postActivityStartDate(post.getActivityStartDate())
-                    .postActivityEndDate(post.getActivityEndDate())
-                    .userId(post.getUser().getId())
-                    .userName(post.getUser().getName())
-                    .boardId(post.getBoard().getId())
-                    .boardName(post.getBoard().getName())
-                    .build();
-
-            return postResponseDto;
-        }
-
-        postResponseDto = PostResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postContent(post.getContent())
-                .postImageUrl(null) // 이미지 구현해야 함.
-                .postViews(0L) // Views 구현해야 함.
-                .postCreateDate(post.getRegDate())
-                .postActivityStartDate(post.getActivityStartDate())
-                .postActivityEndDate(post.getActivityEndDate())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .build();
-
-        return postResponseDto;
-    }
+//    @Transactional
+//    public PostResponseDto getPost(Long postId) {
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+//
+//        postRepository.save(post);
+//
+//        PostResponseDto postResponseDto;
+//        if (post.getPostType() == PostType.ACTIVITY) {
+//            postResponseDto = PostResponseDto.builder()
+//                    .postId(post.getId())
+//                    .postTitle(post.getTitle())
+//                    .postContent(post.getContent())
+//                    .postViews(0L) // Views 구현해야 함.
+//                    .postCreateDate(post.getRegDate())
+//                    .postActivityStartDate(post.getActivityStartDate())
+//                    .postActivityEndDate(post.getActivityEndDate())
+//                    .userId(post.getUser().getId())
+//                    .userName(post.getUser().getName())
+//                    .boardId(post.getBoard().getId())
+//                    .boardName(post.getBoard().getName())
+//                    .build();
+//
+//            return postResponseDto;
+//        }
+//
+//        postResponseDto = PostResponseDto.builder()
+//                .postId(post.getId())
+//                .postTitle(post.getTitle())
+//                .postContent(post.getContent())
+//                .postImageUrl(null) // 이미지 구현해야 함.
+//                .postViews(0L) // Views 구현해야 함.
+//                .postCreateDate(post.getRegDate())
+//                .postActivityStartDate(post.getActivityStartDate())
+//                .postActivityEndDate(post.getActivityEndDate())
+//                .userId(post.getUser().getId())
+//                .userName(post.getUser().getName())
+//                .build();
+//
+//        return postResponseDto;
+//    }
 
     @Override
     public Post getPostWithUserAndBoard(Long boardId, Long postId) {

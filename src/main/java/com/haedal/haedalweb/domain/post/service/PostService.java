@@ -1,6 +1,5 @@
 package com.haedal.haedalweb.domain.post.service;
 
-import com.haedal.haedalweb.application.post.dto.PostResponseDto;
 import com.haedal.haedalweb.application.post.dto.PostSummaryResponseDto;
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -14,7 +13,7 @@ public interface PostService {
 
     Page<PostSummaryResponseDto> getPosts(Long boardId, Pageable pageable);
 
-    PostResponseDto getPost(Long postId);
+    Post getPost(Long postId);
 
     Post getPostWithUserAndBoard(Long boardId, Long postId);
 

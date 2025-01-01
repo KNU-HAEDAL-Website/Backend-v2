@@ -66,7 +66,7 @@ public class PostController {
     @ApiSuccessCodeExample(SuccessCode.ADD_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.NOT_FOUND_POST_IMAGE, ErrorCode.BAD_REQUEST_POST_TYPE})
     @PostMapping("/notices")
-    public ResponseEntity<SuccessResponse> registerPost(@RequestBody @Valid BasePostRequestDto basePostRequestDto) {
+    public ResponseEntity<SuccessResponse> registerNoticePost(@RequestBody @Valid BasePostRequestDto basePostRequestDto) {
         postAppService.registerPost(PostType.NOTICE, basePostRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_POST_SUCCESS);
@@ -74,23 +74,20 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE})
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_POST_ID, ErrorCode.FORBIDDEN_UPDATE})
     @DeleteMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<SuccessResponse> deletePost(@PathVariable Long boardId, @PathVariable Long postId) {
+    public ResponseEntity<SuccessResponse> removePost(@PathVariable Long boardId, @PathVariable Long postId) {
         postAppService.removePost(boardId, postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
 
-    @Operation(summary = "공지사항, 이벤트 게시글 삭제")
+    @Operation(summary = "공지사항 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_POST_SUCCESS)
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.BAD_REQUEST_POST_TYPE})
-    @Parameters({
-            @Parameter(name = "postId", description = "해당 게시글 ID")
-    })
-    @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<SuccessResponse> deleteNoticePost(@PathVariable Long postId) {
-//        postService.deletePost(postId);
+    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
+    @DeleteMapping("/notices/{postId}")
+    public ResponseEntity<SuccessResponse> removeNoticePost(@PathVariable Long postId) {
+        postAppService.removePost(PostType.NOTICE, postId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_POST_SUCCESS);
     }
@@ -126,15 +123,15 @@ public class PostController {
 //        return ResponseEntity.ok(posts);
 //    }
 
-    @Operation(summary = "게시글 단일 조회")
-    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
-    @Parameters({
-            @Parameter(name = "postId", description = "해당 게시글 ID")
-    })
-    @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
-        PostResponseDto post = postService.getPost(postId);
-
-        return ResponseEntity.ok(post);
-    }
+//    @Operation(summary = "게시글 단일 조회")
+//    @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
+//    @Parameters({
+//            @Parameter(name = "postId", description = "해당 게시글 ID")
+//    })
+//    @GetMapping("/posts/{postId}")
+//    public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
+//        PostResponseDto post = postService.getPost(postId);
+//
+//        return ResponseEntity.ok(post);
+//    }
 }

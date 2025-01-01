@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class PostAppServiceImpl implements PostAppService {
@@ -85,7 +84,7 @@ public class PostAppServiceImpl implements PostAppService {
 
     @Override
     @Transactional
-    public PostImageResponseDto registerPostImage(MultipartFile postImageFile) {
+    public PostImageResponseDto registerPostImage(MultipartFile postImageFile) { // PostImage 생성
         User loggedInUser = securityService.getLoggedInUser();
 
         String originalFile = postImageFile.getOriginalFilename();
@@ -126,7 +125,31 @@ public class PostAppServiceImpl implements PostAppService {
 
             postImageService.removePostImages(postImages);
 
-            for (String removeFile : removeFiles) { // 성능테스트 이후에 느리다면, Batch Event 발행
+            for (String removeFile : removeFiles) { // 성능테스트 이후에 느리다면, Batch Event 로 최적화 해야 함.
+                applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
+            }
+        }
+        postService.removePost(post);
+    }
+
+    @Override
+    @Transactional
+    public void removePost(PostType postType, Long postId) { // Board가 필요없는 Post 삭제
+        Post post = postService.getPost(postId);
+
+        // Notice 말고, 다른 PostType이 생긴다면 삭제 검증을 해야 함.
+
+        // 저장된 PostImage 파일 이름 저장
+        List<PostImage> postImages = postImageService.getPostImages(post);
+
+        if (!postImages.isEmpty()) {
+            List<String> removeFiles = postImages.stream()
+                    .map(PostImage::getSaveFile)
+                    .toList();
+
+            postImageService.removePostImages(postImages);
+
+            for (String removeFile : removeFiles) { // 성능테스트 이후에 느리다면, Batch Event 로 최적화 해야 함.
                 applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
             }
         }
