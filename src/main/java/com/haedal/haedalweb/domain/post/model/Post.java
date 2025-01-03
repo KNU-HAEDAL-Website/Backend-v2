@@ -61,6 +61,10 @@ public class Post {
     @Column(name = "post_activity_end_date")
     private LocalDate activityEndDate;
 
+    @Column(name = "post_views")
+    @Builder.Default
+    private Long postViews = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
