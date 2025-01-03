@@ -49,6 +49,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void incrementPostViews(Long postId) {
+        int updatedRows = postRepository.incrementViewCount(postId);
+
+        if (updatedRows == 0) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_POST_ID);
+        }
+    }
+
+    @Override
     public void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator) {
         String loggedInUserId = loggedInUser.getId();
         String postCreatorId = postCreator.getId();
