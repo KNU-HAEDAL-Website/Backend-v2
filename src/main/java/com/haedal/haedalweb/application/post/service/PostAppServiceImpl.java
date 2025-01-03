@@ -16,6 +16,7 @@ import com.haedal.haedalweb.domain.post.model.PostImage;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.post.service.PostImageService;
 import com.haedal.haedalweb.domain.post.service.PostService;
+import com.haedal.haedalweb.domain.post.service.ViewRecordService;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
@@ -41,15 +42,17 @@ public class PostAppServiceImpl implements PostAppService {
     private final PostImageService postImageService;
     private final PostService postService;
     private final BoardService boardService;
+    private final ViewRecordService viewRecordService;
     private final SecurityService securityService;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final String uploadPath;
     private final String uploadUrl;
 
-    public PostAppServiceImpl(PostImageService postImageService, PostService postService, BoardService boardService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-post-images}") String uploadPath, @Value("${file.url.upload-post-images}") String uploadUrl) {
+    public PostAppServiceImpl(PostImageService postImageService, PostService postService, BoardService boardService, ViewRecordService viewRecordService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-post-images}") String uploadPath, @Value("${file.url.upload-post-images}") String uploadUrl) {
         this.postImageService = postImageService;
         this.postService = postService;
         this.boardService = boardService;
+        this.viewRecordService = viewRecordService;
         this.securityService = securityService;
         this.applicationEventPublisher = applicationEventPublisher;
         this.uploadPath = uploadPath;
@@ -186,18 +189,18 @@ public class PostAppServiceImpl implements PostAppService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public PostWithBoardResponseDto getPost(Long boardId, Long postId) {
+    @Transactional
+    public PostWithBoardResponseDto getPost(Long boardId, Long postId, String clientIp) {
+        handleViewCount(postId, clientIp);
         Post post = postService.getPostWithUserAndBoard(boardId, postId);
-
         return PostMapper.toPostWithBoardResponseDto(post);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public BasePostResponseDto getPost(PostType postType, Long postId) {
+    @Transactional
+    public BasePostResponseDto getPost(PostType postType, Long postId, String clientIp) {
+        handleViewCount(postId, clientIp);
         Post post = postService.getPostByPostTypeAndId(postType, postId);
-
         return PostMapper.toBasePostResponseDto(post);
     }
 
@@ -279,6 +282,21 @@ public class PostAppServiceImpl implements PostAppService {
             // 각 PostImage에 게시글 연결
             List<Long> imageIds = new ArrayList<>(imageIdsToAdd);
             postImageService.addPostImagesToPost(imageIds, post); // PostImage에 Post를 연결해주기
+        }
+    }
+
+    private void handleViewCount(Long postId, String clientIp) {
+        // 조회 기록 키 생성
+        String viewRecordId = postId + ":" + clientIp;
+
+        // Redis에 조회 기록이 있는지 확인
+        boolean hasViewed = viewRecordService.existsById(viewRecordId);
+        if (!hasViewed) {
+            // 조회수가 증가해야 하는 경우
+            postService.incrementPostViews(postId);
+
+            // Redis에 조회 기록 저장 (3시간 후 만료)
+            viewRecordService.registerViewRecord(viewRecordId);
         }
     }
 }

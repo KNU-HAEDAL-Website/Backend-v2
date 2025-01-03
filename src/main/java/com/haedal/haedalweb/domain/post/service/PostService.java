@@ -13,6 +13,8 @@ public interface PostService {
 
     Post getPostWithUserAndBoard(Long boardId, Long postId);
 
+    void incrementPostViews(Long postId);
+
     void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator);
     Page<Post> getPostPage(Long boardId, Pageable pageable);
     Page<Post> getPostPage(PostType postType, Pageable pageable);

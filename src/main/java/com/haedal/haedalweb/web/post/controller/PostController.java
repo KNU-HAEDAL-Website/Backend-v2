@@ -17,6 +17,7 @@ import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -112,17 +113,17 @@ public class PostController {
     @Operation(summary = "활동 게시글 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
     @GetMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<PostWithBoardResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId) {
+    public ResponseEntity<PostWithBoardResponseDto> getPostWithBoard(@PathVariable Long boardId, @PathVariable Long postId, HttpServletRequest httpServletRequest) {
 
-        return ResponseEntity.ok(postAppService.getPost(boardId, postId));
+        return ResponseEntity.ok(postAppService.getPost(boardId, postId, getClientIp(httpServletRequest)));
     }
 
     @Operation(summary = "공지사항 게시글 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID})
     @GetMapping("/notices/{postId}")
-    public ResponseEntity<BasePostResponseDto> getNoticePost(@PathVariable Long postId) {
+    public ResponseEntity<BasePostResponseDto> getNoticePost(@PathVariable Long postId, HttpServletRequest httpServletRequest) {
 
-        return ResponseEntity.ok(postAppService.getPost(PostType.NOTICE, postId));
+        return ResponseEntity.ok(postAppService.getPost(PostType.NOTICE, postId, getClientIp(httpServletRequest)));
     }
 
     @Operation(summary = "활동 게시글 수정")
@@ -135,7 +136,7 @@ public class PostController {
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_POST_SUCCESS);
     }
 
-    @Operation(summary = "공지사하 게시글 수정")
+    @Operation(summary = "공지사항 게시글 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_POST_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_POST_ID, ErrorCode.NOT_FOUND_POST_IMAGE})
     @PutMapping("/notices/{postId}")
@@ -143,5 +144,16 @@ public class PostController {
         postAppService.updatePost(PostType.NOTICE, postId, basePostRequestDto);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_POST_SUCCESS);
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        } else {
+            // X-Forwarded-For 헤더에 여러 IP가 있을 경우 첫 번째 IP 사용
+            ip = ip.split(",")[0].trim();
+        }
+        return ip;
     }
 }
