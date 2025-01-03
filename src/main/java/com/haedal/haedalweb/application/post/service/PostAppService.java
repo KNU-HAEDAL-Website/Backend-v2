@@ -22,9 +22,9 @@ public interface PostAppService {
 
     Page<BasePostSummaryResponseDto> getPostPage(PostType postType, Pageable pageable);
 
-    PostWithBoardResponseDto getPost(Long boardId, Long postId);
+    PostWithBoardResponseDto getPost(Long boardId, Long postId, String clientIp);
 
-    BasePostResponseDto getPost(PostType postType, Long postId);
+    BasePostResponseDto getPost(PostType postType, Long postId, String clientIp);
 
     void updatePost(Long boardId, Long postId, PostWithBoardRequestDto postWithBoardRequestDto);
 
