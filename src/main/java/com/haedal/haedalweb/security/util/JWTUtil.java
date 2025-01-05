@@ -11,13 +11,16 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HexFormat;
 
 @Component
 public class JWTUtil {
     private final SecretKey secretKey;
 
     public JWTUtil(@Value("${spring.jwt.secret}")String secret) {
-        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+        byte[] secretBytes = HexFormat.of().parseHex(secret);
+        secretKey = new SecretKeySpec(secretBytes, "HmacSHA256");
+//        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
     public String getUserId(String token) {
