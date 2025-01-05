@@ -38,7 +38,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p " +
             "JOIN FETCH p.user " +
-            "WHERE p.id = :postId")
+            "WHERE p.id = :postId AND p.postType = :postType")
     Optional<Post> findByPostTypeAndId(PostType postType, Long postId);
 
     @Query("UPDATE Post p SET p.postViews = p.postViews + 1 " +
