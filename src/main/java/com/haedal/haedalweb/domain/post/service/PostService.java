@@ -16,6 +16,9 @@ public interface PostService {
     void incrementPostViews(Long postId);
 
     void validateAuthorityOfBoardPostManagement(User loggedInUser, User postCreator, User boardCreator);
+
+    Post getPost(Long postId);
+
     Page<Post> getPostPage(Long boardId, Pageable pageable);
     Page<Post> getPostPage(PostType postType, Pageable pageable);
 

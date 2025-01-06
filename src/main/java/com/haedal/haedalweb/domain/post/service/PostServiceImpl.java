@@ -38,6 +38,13 @@ public class PostServiceImpl implements PostService {
         return postRepository.findPostWithUserAndBoard(boardId, postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
     }
+
+    @Override
+    public Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST_ID));
+    }
+
     @Override
     public Page<Post> getPostPage(Long boardId, Pageable pageable) {
         return postRepository.findPostPageByBoardId(boardId, pageable);
