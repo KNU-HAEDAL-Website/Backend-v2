@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,4 +36,11 @@ public class CommentController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_COMMENT_SUCCESS);
     }
+
+//    @Operation(summary = "댓글 페이징 조회")
+//    @ApiErrorCodeExamples({})
+//    @GetMapping("/posts/{postId}/comments")
+//    public ResponseEntity<?> getComments(@PathVariable Long postId) {
+//        return
+//    }
 }
