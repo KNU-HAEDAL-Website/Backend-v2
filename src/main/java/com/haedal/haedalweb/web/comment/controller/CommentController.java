@@ -48,8 +48,19 @@ public class CommentController {
                                                                 @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                 @RequestParam(name = "size", defaultValue = "10") Integer size) {
 
-        Page<CommentResponseDto> comments = commentAppService.getCommentPage(postId, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
+        Page<CommentResponseDto> comments = commentAppService.getCommentPage(postId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
 
         return ResponseEntity.ok(comments);
+    }
+
+    @Operation(summary = "답글 등록")
+    @ApiSuccessCodeExample(SuccessCode.ADD_COMMENT_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_COMMENT_ID, ErrorCode.BAD_REQUEST_REPLY})
+    @PostMapping("/comments/{commentId}/replies")
+    public ResponseEntity<SuccessResponse> registerReply(@PathVariable Long commentId,
+                                                         @RequestBody @Valid CommentRequestDto replyRequestDto) {
+        commentAppService.registerReply(commentId, replyRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_COMMENT_SUCCESS);
     }
 }

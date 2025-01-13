@@ -8,4 +8,6 @@ public interface CommentService {
     void registerComment(Comment comment);
 
     Page<Comment> getCommentPage(Long postId, Pageable pageable);
+
+    Comment getComment(Long commentId);
 }
