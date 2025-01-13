@@ -27,8 +27,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getComment(Long commentId) {
-        return commentRepository.findById(commentId)
+    public Comment getCommentWithUser(Long commentId) {
+        return commentRepository.findCommentWithUser(commentId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COMMENT_ID));
     }
 
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
         String loggedInUserId = loggedInUser.getId();
         String commentCreatorId = commentCreator.getId();
 
-        if (loggedInUserId.equals(commentCreatorId)) return; // 자신이 작성한 댓글 삭제 가능
+        if (loggedInUserId.equals(commentCreatorId)) return; // 자신이 작성한 댓글 수정 가능
 
         throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }

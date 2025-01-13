@@ -10,7 +10,7 @@ public interface CommentService {
 
     Page<Comment> getCommentPage(Long postId, Pageable pageable);
 
-    Comment getComment(Long commentId);
+    Comment getCommentWithUser(Long commentId);
 
     Comment getCommentWithUserAndPost(Long postId, Long commentId);
 

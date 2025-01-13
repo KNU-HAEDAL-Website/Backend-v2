@@ -51,7 +51,7 @@ public class CommentAppServiceImpl implements CommentAppService {
     @Transactional
     public void registerReply(Long commentId, CommentRequestDto replyRequestDto) {
         User user = securityService.getLoggedInUser();
-        Comment comment = commentService.getComment(commentId);
+        Comment comment = commentService.getCommentWithUser(commentId);
 
         if (comment.getParent() != null) { // 답글의 깊이는 1까지만 가능
             throw new BusinessException(ErrorCode.BAD_REQUEST_REPLY);

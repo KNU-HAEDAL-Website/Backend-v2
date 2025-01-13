@@ -24,7 +24,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "SELECT c FROM Comment c " +
             "JOIN FETCH c.user " +
             "JOIN FETCH c.post " +
-            "WHERE c.post.id = :postId AND c.id = :commentId"
+            "WHERE c.post.id = :postId AND c.id = :commentId AND c.deleted = FALSE"
     )
     Optional<Comment> findCommentWithUserAndPost(Long postId, Long commentId);
+
+    @Query(
+            "SELECT c FROM Comment c " +
+            "JOIN FETCH c.user " +
+            "WHERE c.id = :commentId AND c.deleted = FALSE"
+    )
+    Optional<Comment> findCommentWithUser(Long commentId);
 }
