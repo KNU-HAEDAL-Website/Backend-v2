@@ -94,7 +94,7 @@ public class BoardAppServiceImpl implements BoardAppService {
 
         String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
-        return BoardMapper.toDto(activityId, imageUrl, board);
+        return BoardMapper.toDto(imageUrl, board);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class BoardAppServiceImpl implements BoardAppService {
         Page<BoardResponseDto> boardResponsePage = boardPage.map(board -> {
             String imageUrl = ImageUtil.generateImageUrl(uploadUrl, board.getBoardImage().getSaveFile());
 
-            return BoardMapper.toDto(activityId, imageUrl, board);
+            return BoardMapper.toDto(imageUrl, board);
         });
 
         return boardResponsePage;
