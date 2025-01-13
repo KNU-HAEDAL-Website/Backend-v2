@@ -36,7 +36,7 @@ public enum SuccessCode implements ResponseCode{
 
     ADD_COMMENT_SUCCESS(HttpStatus.CREATED, true, "댓글을 생성했습니다."),
     DELETE_COMMENT_SUCCESS(HttpStatus.OK, true, "댓글을 삭제했습니다."),
-    UPDATE_COMMENT_SUCCESS(HttpStatus.OK, "true", "댓글을 수정했습니다.");
+    UPDATE_COMMENT_SUCCESS(HttpStatus.OK, true, "댓글을 수정했습니다.");
 
     private final HttpStatus httpStatus;
     private final Boolean success;
