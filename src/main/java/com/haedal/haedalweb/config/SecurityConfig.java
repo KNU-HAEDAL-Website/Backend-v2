@@ -106,7 +106,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").authenticated()
 
                         .requestMatchers(HttpMethod.GET).permitAll()
-                        .requestMatchers("/login", "/join/**", "/reissue").permitAll()
+                        .requestMatchers("/login", "/join/**", "/reissue", "/error").permitAll()
                         .anyRequest().authenticated());
 
         //JWTFilter 등록
