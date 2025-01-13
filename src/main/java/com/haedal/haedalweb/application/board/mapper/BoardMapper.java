@@ -7,9 +7,9 @@ public class BoardMapper {
     private BoardMapper() {
     }
 
-    public static BoardResponseDto toDto(Long activityId, String imageUrl, Board board) {
+    public static BoardResponseDto toDto(String imageUrl, Board board) {
         return BoardResponseDto.builder()
-                .activityId(activityId)
+                .activityId(board.getActivity().getId())
                 .boardId(board.getId())
                 .boardName(board.getName())
                 .boardImageUrl(imageUrl)

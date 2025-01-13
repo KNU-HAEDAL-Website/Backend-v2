@@ -41,6 +41,9 @@ public enum ErrorCode implements ResponseCode{
     NOT_FOUND_POST_ID(HttpStatus.NOT_FOUND, "POST_002", "해당 게시글을 찾을 수 없습니다."),
     NOT_FOUND_POST_IMAGE(HttpStatus.NOT_FOUND, "POST_003", "해당 게시글 이미지를 찾을 수 없습니다."),
 
+    NOT_FOUND_COMMENT_ID(HttpStatus.NOT_FOUND, "COMMENT_01", "해당 댓글을 찾을 수 없습니다."),
+    BAD_REQUEST_REPLY(HttpStatus.BAD_REQUEST, "COMMENT_02", "답글의 깊이는 1을 초과할 수 없습니다."),
+
     INVALID_EMAIL_VERIFICATION(HttpStatus.BAD_REQUEST, "EMAIL_001", "인증 코드가 만료되었거나 일치하지 않습니다."),
     LIMIT_EXCEEDED_SEND_EMAIL(HttpStatus.TOO_MANY_REQUESTS, "EMAIL_002", "해당 이메일의 전송 및 재전송 횟수가 3회를 초과 했습니다."),
     NOT_FOUND_CHECK_EMAIL_VERIFICATION(HttpStatus.NOT_FOUND, "EMAIL_003", "이메일이 인증되지 않았습니다."),

@@ -92,7 +92,7 @@ public class PostController {
 
     @Operation(summary = "활동 게시글 목록 조회")
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>>  getPostsWithBoard(@PathVariable Long boardId,
+    public ResponseEntity<Page<PostWithBoardSummaryResponseDto>> getPostsWithBoard(@PathVariable Long boardId,
                                                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                                    @RequestParam(name = "size", defaultValue = "10") Integer size) {
 
@@ -103,7 +103,7 @@ public class PostController {
 
     @Operation(summary = "공지사항 게시글 목록 조회")
     @GetMapping("/notices")
-    public ResponseEntity<Page<BasePostSummaryResponseDto>>  getNoticePosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
+    public ResponseEntity<Page<BasePostSummaryResponseDto>> getNoticePosts(@RequestParam(name = "page", defaultValue = "0") Integer page,
                                                                             @RequestParam(name = "size", defaultValue = "10") Integer size) {
         Page<BasePostSummaryResponseDto> posts = postAppService.getPostPage(PostType.NOTICE, PageRequest.of(page, size, Sort.by(Sort.Order.desc("id"))));
 
