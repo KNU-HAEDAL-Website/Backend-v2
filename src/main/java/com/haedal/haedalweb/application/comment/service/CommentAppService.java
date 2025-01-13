@@ -10,4 +10,6 @@ public interface CommentAppService {
     Page<CommentResponseDto> getCommentPage(Long postId, Pageable pageable);
 
     void registerReply(Long commentId, CommentRequestDto replyRequestDto);
+
+    void removeComment(Long postId, Long commentId);
 }

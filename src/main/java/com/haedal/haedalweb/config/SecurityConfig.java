@@ -100,6 +100,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/boards/{boardId}/posts/{postId}").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/posts/{postId}/comments").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/posts/{postId}/comments/{commentId}").authenticated()
 
                         .requestMatchers(HttpMethod.PUT, "/users/{userId}/profile/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/users/{userId}/profile/**").authenticated()

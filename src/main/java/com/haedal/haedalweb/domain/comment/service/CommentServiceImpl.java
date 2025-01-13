@@ -3,6 +3,8 @@ package com.haedal.haedalweb.domain.comment.service;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.comment.model.Comment;
 import com.haedal.haedalweb.domain.comment.repository.CommentRepository;
+import com.haedal.haedalweb.domain.user.model.Role;
+import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,5 +30,24 @@ public class CommentServiceImpl implements CommentService {
     public Comment getComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COMMENT_ID));
+    }
+
+    @Override
+    public Comment getCommentWithUserAndPost(Long postId, Long commentId) {
+        return commentRepository.findCommentWithUserAndPost(postId, commentId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_COMMENT_ID));
+    }
+
+    @Override
+    public void validateRemovePermission(User loggedInUser, User postCreator, User commentCreator) {
+        String loggedInUserId = loggedInUser.getId();
+        String postCreatorId = postCreator.getId();
+        String commentCreatorId = commentCreator.getId();
+
+        if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN) return; // 관리자면 삭제 가능
+        if (loggedInUserId.equals(postCreatorId)) return; // 자신이 작성한 글의 댓글 삭제 가능
+        if (loggedInUserId.equals(commentCreatorId)) return; // 자신이 작성한 댓글 삭제 가능
+
+        throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }
 }

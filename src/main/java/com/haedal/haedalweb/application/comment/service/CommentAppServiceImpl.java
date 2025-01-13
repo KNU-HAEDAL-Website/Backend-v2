@@ -66,4 +66,14 @@ public class CommentAppServiceImpl implements CommentAppService {
 
         commentService.registerComment(reply);
     }
+
+    @Override
+    @Transactional
+    public void removeComment(Long postId, Long commentId) {
+        User user = securityService.getLoggedInUser();
+        Comment comment = commentService.getCommentWithUserAndPost(postId, commentId);
+
+        commentService.validateRemovePermission(user, comment.getPost().getUser(), comment.getUser());
+        comment.setDeleted(true); // soft delete
+    }
 }

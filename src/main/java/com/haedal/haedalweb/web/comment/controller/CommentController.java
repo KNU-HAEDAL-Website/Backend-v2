@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,16 @@ public class CommentController {
         Page<CommentResponseDto> comments = commentAppService.getCommentPage(postId, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id"))));
 
         return ResponseEntity.ok(comments);
+    }
+
+    @Operation(summary = "댓글 삭제")
+    @ApiSuccessCodeExample(SuccessCode.DELETE_COMMENT_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_COMMENT_ID, ErrorCode.FORBIDDEN_UPDATE})
+    @DeleteMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<SuccessResponse> removeComment(@PathVariable Long postId, @PathVariable Long commentId) {
+        commentAppService.removeComment(postId, commentId);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_COMMENT_SUCCESS);
     }
 
     @Operation(summary = "답글 등록")

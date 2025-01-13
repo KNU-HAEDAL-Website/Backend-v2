@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(
@@ -17,4 +19,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             countQuery = "SELECT count(c) FROM Comment c WHERE c.post.id = :postId AND c.parent IS NULL"
     )
     Page<Comment> findCommentPageId(@Param("postId") Long postId, Pageable pageable);
+
+    @Query(
+            "SELECT c FROM Comment c " +
+            "JOIN FETCH c.user " +
+            "JOIN FETCH c.post " +
+            "WHERE c.post.id = :postId AND c.id = :commentId"
+    )
+    Optional<Comment> findCommentWithUserAndPost(Long postId, Long commentId);
 }
