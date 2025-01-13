@@ -50,4 +50,14 @@ public class CommentServiceImpl implements CommentService {
 
         throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
     }
+
+    @Override
+    public void validateUpdatePermission(User loggedInUser, User commentCreator) {
+        String loggedInUserId = loggedInUser.getId();
+        String commentCreatorId = commentCreator.getId();
+
+        if (loggedInUserId.equals(commentCreatorId)) return; // 자신이 작성한 댓글 삭제 가능
+
+        throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
+    }
 }

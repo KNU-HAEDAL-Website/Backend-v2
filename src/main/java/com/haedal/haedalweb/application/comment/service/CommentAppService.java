@@ -12,4 +12,6 @@ public interface CommentAppService {
     void registerReply(Long commentId, CommentRequestDto replyRequestDto);
 
     void removeComment(Long postId, Long commentId);
+
+    void updateComment(Long postId, Long commentId, CommentRequestDto commentRequestDto);
 }

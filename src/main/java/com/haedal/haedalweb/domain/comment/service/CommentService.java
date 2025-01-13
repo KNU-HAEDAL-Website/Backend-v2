@@ -15,4 +15,6 @@ public interface CommentService {
     Comment getCommentWithUserAndPost(Long postId, Long commentId);
 
     void validateRemovePermission(User loggedInUser, User postCreator, User commentCreator);
+
+    void validateUpdatePermission(User loggedInUser, User commentCreator);
 }

@@ -82,6 +82,7 @@ public class SwaggerConfig {
                         new Tag().name("활동 API"),
                         new Tag().name("게시판 API"),
                         new Tag().name("게시글 API"),
+                        new Tag().name("댓글 API"),
                         new Tag().name("공통 에러 코드 정의")
                 ));
     }

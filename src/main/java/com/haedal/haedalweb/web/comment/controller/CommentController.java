@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +63,17 @@ public class CommentController {
         commentAppService.removeComment(postId, commentId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.DELETE_COMMENT_SUCCESS);
+    }
+
+    @Operation(summary = "댓글 수정")
+    @ApiSuccessCodeExample(SuccessCode.UPDATE_COMMENT_SUCCESS)
+    @ApiErrorCodeExamples({ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.NOT_FOUND_COMMENT_ID, ErrorCode.FORBIDDEN_UPDATE})
+    @PutMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<SuccessResponse> updateComment(@PathVariable Long postId, @PathVariable Long commentId, @RequestBody @Valid CommentRequestDto commentRequestDto) {
+        commentAppService.updateComment(postId, commentId, commentRequestDto);
+
+        return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_COMMENT_SUCCESS);
+
     }
 
     @Operation(summary = "답글 등록")
