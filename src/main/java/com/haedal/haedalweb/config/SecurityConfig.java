@@ -99,6 +99,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/boards/{boardId}/posts/{postId}").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/boards/{boardId}/posts/{postId}").authenticated()
 
+                        .requestMatchers(HttpMethod.POST, "/posts/{postId}/comments").authenticated()
+
                         .requestMatchers(HttpMethod.PUT, "/users/{userId}/profile/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/users/{userId}/profile/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").authenticated()
