@@ -12,7 +12,7 @@ public class CommentMapper {
     public static CommentResponseDto toDto(Comment comment) {
         return CommentResponseDto.builder()
                 .commentId(comment.getId())
-                .commentContent(comment.getContent())
+                .commentContent(comment.isDeleted() ? "삭제된 댓글입니다." : comment.getContent())
                 .replies(toRepliesDto(comment.getReplies()))
                 .userId(comment.getUser().getId())
                 .userName(comment.getUser().getName())
