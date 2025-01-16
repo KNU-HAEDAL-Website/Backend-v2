@@ -32,13 +32,13 @@ public class PostImageServiceImpl implements PostImageService {
     }
 
     @Override
-    public List<PostImage> getPostImagesByIds(List<Long> postImageIds) {
-       return postImageRepository.findAllById(postImageIds);
+    public List<PostImage> getPostImagesByNames(List<String> postImageNames) {
+       return postImageRepository.findAllBySaveFileIn(postImageNames);
     }
 
     @Override
-    public List<PostImage> getPostImagesByIds(Set<Long> postImageIds) {
-        return postImageRepository.findAllById(postImageIds);
+    public List<PostImage> getPostImagesByNames(Set<String> postImageNames) {
+        return postImageRepository.findAllBySaveFileIn(postImageNames);
     }
 
     @Override
@@ -47,17 +47,17 @@ public class PostImageServiceImpl implements PostImageService {
     }
 
     @Override
-    public void addPostImagesToPost(List<Long> postImageIds, Post post) {
-        if (postImageIds != null && !postImageIds.isEmpty()) { // 게시글에 이미지가 포함되어 있다면
-            List<PostImage> postImages = getPostImagesByIds(postImageIds); // 이미지 ID들을 기반으로 PostImage 엔티티 조회
-            validatePostImages(postImageIds, postImages); // 이미지 검증
+    public void addPostImagesToPost(List<String> postImageNames, Post post) {
+        if (postImageNames != null && !postImageNames.isEmpty()) { // 게시글에 이미지가 포함되어 있다면
+            List<PostImage> postImages = getPostImagesByNames(postImageNames); // 이미지 ID들을 기반으로 PostImage 엔티티 조회
+            validatePostImages(postImageNames, postImages); // 이미지 검증
             postImages.forEach(postImage -> postImage.setPost(post)); // Post와 PostImage 연결
         }
     }
 
-    private void validatePostImages(List<Long> postImageIds, List<PostImage> postImages) {
+    private void validatePostImages(List<String> postImageNames, List<PostImage> postImages) {
         // 모든 이미지가 존재하는지 확인
-        if (postImages.size() != postImageIds.size()) {
+        if (postImages.size() != postImageNames.size()) {
             throw new BusinessException(ErrorCode.NOT_FOUND_POST_IMAGE);
         }
     }
