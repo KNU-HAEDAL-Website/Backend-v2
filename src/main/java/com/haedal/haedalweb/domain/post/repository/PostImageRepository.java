@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface PostImageRepository extends JpaRepository<PostImage, Long> {
@@ -17,4 +18,8 @@ public interface PostImageRepository extends JpaRepository<PostImage, Long> {
     List<PostImage> findOldImages(LocalDateTime threshold);
 
     List<PostImage> findByPost(Post post);
+
+    List<PostImage> findAllBySaveFileIn(List<String> postImageNames);
+
+    List<PostImage> findAllBySaveFileIn(Set<String> postImageNames);
 }

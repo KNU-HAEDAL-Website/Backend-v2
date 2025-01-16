@@ -17,6 +17,8 @@ public class BasePostRequestDto {
     @Size(min = 1, max = 200000, message = "게시글의 메타 정보와 내용은 합쳐서 20만자 이하여야 합니다.")
     private String postContent;
 
-    @Schema(description = "게시글 이미지 ID", example = "[1, 2]")
-    private List<Long> postImageIds;
+    @Schema(description = "게시글 이미지 파일 이름", example = "[abdsfdseqweasd.jpg, qweqwdasdhed.jpg]")
+    private List<String> postImageNames;
+//    @Schema(description = "게시글 이미지 ID", example = "[1, 2]")
+//    private List<Long> postImageIds;
 }

@@ -77,8 +77,8 @@ public class PostAppServiceImpl implements PostAppService {
 
         postService.registerPost(post);
 
-        List<Long> postImageIds = postWithBoardRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
-        postImageService.addPostImagesToPost(postImageIds, post); // PostImage에 Post를 연결해주기
+        List<String> postImageNames = postWithBoardRequestDto.getPostImageNames();
+        postImageService.addPostImagesToPost(postImageNames, post); // PostImage에 Post를 연결해주기
     }
 
     @Override
@@ -94,8 +94,8 @@ public class PostAppServiceImpl implements PostAppService {
                 .build();
 
         postService.registerPost(post);
-        List<Long> postImageIds = basePostRequestDto.getPostImageIds(); // Post와 연결할 PostImage의 id 조회
-        postImageService.addPostImagesToPost(postImageIds, post); // PostImage에 Post를 연결해주기
+        List<String> postImageNames = basePostRequestDto.getPostImageNames();
+        postImageService.addPostImagesToPost(postImageNames, post); // PostImage에 Post를 연결해주기
     }
 
     @Override
@@ -220,8 +220,8 @@ public class PostAppServiceImpl implements PostAppService {
         post.setActivityStartDate(postWithBoardRequestDto.getPostActivityStartDate());
         post.setActivityEndDate(postWithBoardRequestDto.getPostActivityEndDate());
 
-        if (postWithBoardRequestDto.getPostImageIds() != null && !postWithBoardRequestDto.getPostImageIds().isEmpty()) {
-            updatePostImages(postWithBoardRequestDto.getPostImageIds(), post);
+        if (postWithBoardRequestDto.getPostImageNames() != null && !postWithBoardRequestDto.getPostImageNames().isEmpty()) {
+            updatePostImages(postWithBoardRequestDto.getPostImageNames(), post);
         }
     }
 
@@ -235,35 +235,35 @@ public class PostAppServiceImpl implements PostAppService {
         post.setTitle(basePostRequestDto.getPostTitle());
         post.setContent(basePostRequestDto.getPostContent());
 
-        if (basePostRequestDto.getPostImageIds() != null && !basePostRequestDto.getPostImageIds().isEmpty()) {
-            updatePostImages(basePostRequestDto.getPostImageIds(), post);
+        if (basePostRequestDto.getPostImageNames() != null && !basePostRequestDto.getPostImageNames().isEmpty()) {
+            updatePostImages(basePostRequestDto.getPostImageNames(), post);
         }
     }
 
-    private void updatePostImages(List<Long> incomingPostImageIds, Post post) {
+    private void updatePostImages(List<String> incomingPostImageNames, Post post) {
         // 1. 기존에 연결된 PostImage 목록 조회
         List<PostImage> existingPostImages = postImageService.getPostImages(post);
 
-        // 2. 기존 이미지 IDs 추출
-        Set<Long> existingImageIds = existingPostImages.stream()
-                .map(PostImage::getId)
+        // 2. 기존 이미지 names 추출
+        Set<String> existingImageNames = existingPostImages.stream()
+                .map(PostImage::getSaveFile)
                 .collect(Collectors.toSet());
 
-        // 3. 요청으로 받은 이미지 IDs 중 새로운 이미지 IDs 추출
-        Set<Long> incomingImageIdsSet = new HashSet<>(incomingPostImageIds);
+        // 3. 요청으로 받은 이미지 names Set
+        Set<String> incomingImageNamesSet = new HashSet<>(incomingPostImageNames);
 
-        // 4. 삭제할 이미지 IDs: 기존에는 있었지만 요청에는 없는 경우
-        Set<Long> imageIdsToRemove = new HashSet<>(existingImageIds);
-        imageIdsToRemove.removeAll(incomingImageIdsSet);
+        // 4. 삭제할 이미지 names: 기존에는 있었지만 요청에는 없는 경우
+        Set<String> imageNamesToRemove = new HashSet<>(existingImageNames);
+        imageNamesToRemove.removeAll(incomingImageNamesSet);
 
-        // 5. 추가할 이미지 IDs: 요청에는 있지만 기존에는 없는 경우
-        Set<Long> imageIdsToAdd = new HashSet<>(incomingImageIdsSet);
-        imageIdsToAdd.removeAll(existingImageIds);
+        // 5. 추가할 이미지 names: 요청에는 있지만 기존에는 없는 경우
+        Set<String> imageNamesToAdd = new HashSet<>(incomingImageNamesSet);
+        imageNamesToAdd.removeAll(existingImageNames);
 
         // 6. 이미지 삭제 처리
-        if (!imageIdsToRemove.isEmpty()) {
+        if (!imageNamesToRemove.isEmpty()) {
             // 삭제할 PostImage 엔티티 조회
-            List<PostImage> postImagesToRemove = postImageService.getPostImagesByIds(imageIdsToRemove);
+            List<PostImage> postImagesToRemove = postImageService.getPostImagesByNames(imageNamesToRemove);
             //PostImage 삭제
             postImageService.removePostImages(postImagesToRemove);
 
@@ -278,10 +278,10 @@ public class PostAppServiceImpl implements PostAppService {
         }
 
         // 7. 이미지 추가 처리
-        if (!imageIdsToAdd.isEmpty()) {
+        if (!imageNamesToAdd.isEmpty()) {
             // 각 PostImage에 게시글 연결
-            List<Long> imageIds = new ArrayList<>(imageIdsToAdd);
-            postImageService.addPostImagesToPost(imageIds, post); // PostImage에 Post를 연결해주기
+            List<String> imageNames = new ArrayList<>(imageNamesToAdd);
+            postImageService.addPostImagesToPost(imageNames, post); // PostImage에 Post를 연결해주기
         }
     }
 

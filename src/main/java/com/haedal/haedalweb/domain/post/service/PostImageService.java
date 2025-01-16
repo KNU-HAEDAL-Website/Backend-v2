@@ -11,10 +11,10 @@ public interface PostImageService {
 
     void removePostImages(List<PostImage> postImages);
 
-    List<PostImage> getPostImagesByIds(List<Long> postImageIds);
+    List<PostImage> getPostImagesByNames(List<String> postImageNames);
 
-    List<PostImage> getPostImagesByIds(Set<Long> postImageIds);
+    List<PostImage> getPostImagesByNames(Set<String> postImageNames);
 
     List<PostImage> getPostImages(Post post);
-    void addPostImagesToPost(List<Long> postImageIds, Post post);
+    void addPostImagesToPost(List<String> postImageNames, Post post);
 }
