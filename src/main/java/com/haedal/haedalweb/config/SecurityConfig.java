@@ -105,6 +105,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT, "/users/{userId}/profile/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/users/{userId}/profile/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/users/profiles").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users", "/users/{userId}").authenticated()
 
                         .requestMatchers(HttpMethod.GET).permitAll()
