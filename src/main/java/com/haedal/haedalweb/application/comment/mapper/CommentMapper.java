@@ -11,14 +11,14 @@ public class CommentMapper {
 
     public static CommentResponseDto toDto(Comment comment) {
         return CommentResponseDto.builder()
-                .commentId(comment.isDeleted() ? null : comment.getId())
+                .commentId(comment.getId())
                 .commentContent(comment.isDeleted() ? "삭제된 댓글입니다." : comment.getContent())
                 .replies(toRepliesDto(comment.getReplies()))
-                .userId(comment.isDeleted() ? null : comment.getUser().getId())
-                .userName(comment.isDeleted() ? null : comment.getUser().getName())
+                .userId(comment.getUser().getId())
+                .userName(comment.getUser().getName())
                 .postId(comment.getPost().getId())
                 .deleted(comment.isDeleted())
-                .commentRegDate(comment.isDeleted() ? null : comment.getRegDate())
+                .commentRegDate(comment.getRegDate())
                 .build();
     }
 
