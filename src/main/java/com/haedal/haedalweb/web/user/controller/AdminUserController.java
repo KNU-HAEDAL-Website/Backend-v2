@@ -80,7 +80,7 @@ public class AdminUserController {
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
     @PatchMapping("/{userId}/expel")
     public ResponseEntity<SuccessResponse> expelUser(@PathVariable String userId) {
-        adminUserAppService.removeUser(userId);
+        adminUserAppService.expelUser(userId);
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.EXPEL_USER);
     }

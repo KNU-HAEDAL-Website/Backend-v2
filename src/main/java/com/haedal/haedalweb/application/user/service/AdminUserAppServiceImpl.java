@@ -37,13 +37,13 @@ public class AdminUserAppServiceImpl implements AdminUserAppService {
     @Override
     @Transactional
     public void rejectUser(String userId) {
-        adminUserService.updateUserStatus(userId, UserStatus.DELETED);
+        adminUserService.removeUser(userId);
     }
 
     @Override
     @Transactional
-    public void removeUser(String userId) {
-        adminUserService.removeUser(userId);
+    public void expelUser(String userId) {
+        adminUserService.updateUserStatus(userId, UserStatus.DELETED);
     }
 
     @Override

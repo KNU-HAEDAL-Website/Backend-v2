@@ -20,7 +20,7 @@ public class AdminSemesterServiceImpl implements AdminSemesterService {
         semesterRepository.save(semester);
     }
 
-    @Override
+    @Override 
     public void removeSemester(boolean hasRelatedActivities, Semester semester) {
         if (hasRelatedActivities) {
             throw new BusinessException(ErrorCode.EXIST_ACTIVITY);

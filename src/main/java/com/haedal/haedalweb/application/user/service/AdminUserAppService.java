@@ -14,7 +14,7 @@ public interface AdminUserAppService {
 
     void rejectUser(String userId);
 
-    void removeUser(String userId);
+    void expelUser(String userId);
 
     void updateUserRole(String userId, UpdateRoleRequestDto updateRoleRequestDto);
 }
