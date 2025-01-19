@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void cancelUserAccount(User loggedInUser) {
-        if (loggedInUser.getUserStatus() != UserStatus.ACTIVE) {
+        if (loggedInUser.getUserStatus() != UserStatus.ACTIVE && loggedInUser.getUserStatus() != UserStatus.MASTER) {
             throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
