@@ -17,4 +17,6 @@ public interface UserService {
     void validateActiveUsers(List<String> userIds, List<User> users);
 
     void cancelUserAccount(User loggedInUser);
+
+    User getUserId(String email, Integer studentNumber);
 }

@@ -1,9 +1,11 @@
 package com.haedal.haedalweb.web.user.controller;
 
+import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
 import com.haedal.haedalweb.application.user.service.UserAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.constants.SuccessCode;
+import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
 import com.haedal.haedalweb.util.ResponseUtil;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -48,5 +51,12 @@ public class UserController {
         userAppService.cancelUserAccount();
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.CANCEL_USER_ACCOUNT);
+    }
+
+    @Operation(summary = "아이디 찾기")
+    @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
+    @GetMapping("/users/find-id")
+    public ResponseEntity<FindUserIdResponseDto> getUserId(@RequestParam String email, @RequestParam Integer studentNumber) {
+        return ResponseEntity.ok(userAppService.getUserId(email, studentNumber));
     }
 }

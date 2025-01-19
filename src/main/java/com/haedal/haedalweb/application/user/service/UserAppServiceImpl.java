@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.user.service;
 
+import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.mapper.UserMapper;
 import com.haedal.haedalweb.domain.user.model.User;
@@ -41,5 +42,15 @@ public class UserAppServiceImpl implements UserAppService {
     public void cancelUserAccount() {
         User loggedInUser = securityService.getLoggedInUser();
         userService.cancelUserAccount(loggedInUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FindUserIdResponseDto getUserId(String email, Integer studentNumber) {
+        User user = userService.getUserId(email, studentNumber);
+
+        return FindUserIdResponseDto.builder()
+                .userId(user.getId())
+                .build();
     }
 }
