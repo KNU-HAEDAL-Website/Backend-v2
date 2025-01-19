@@ -15,17 +15,30 @@ import org.springframework.stereotype.Service;
 public class AdminUserServiceImpl implements AdminUserService {
     private final UserRepository userRepository;
 
-
     @Override
-    public void updateUserStatus(String userId, UserStatus userStatus) {
+    public void approveUser(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
 
-        if (user.getUserStatus() != UserStatus.ACTIVE && user.getUserStatus() != UserStatus.INACTIVE) {
+        if (user.getUserStatus() != UserStatus.INACTIVE) {
             throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
         }
 
-        user.setUserStatus(userStatus);
+        user.setUserStatus(UserStatus.ACTIVE);
+    }
+
+    @Override
+    public void expelUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
+
+        if (user.getUserStatus() != UserStatus.ACTIVE) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+
+        user.setUserStatus(UserStatus.DELETED);
+        user.setEmail(null);
+        user.setStudentNumber(null);
     }
 
     @Override

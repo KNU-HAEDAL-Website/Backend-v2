@@ -31,7 +31,7 @@ public class AdminUserAppServiceImpl implements AdminUserAppService {
     @Override
     @Transactional
     public void approveUser(String userId) {
-        adminUserService.updateUserStatus(userId, UserStatus.ACTIVE);
+        adminUserService.approveUser(userId);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AdminUserAppServiceImpl implements AdminUserAppService {
     @Override
     @Transactional
     public void expelUser(String userId) {
-        adminUserService.updateUserStatus(userId, UserStatus.DELETED);
+        adminUserService.expelUser(userId);
     }
 
     @Override
