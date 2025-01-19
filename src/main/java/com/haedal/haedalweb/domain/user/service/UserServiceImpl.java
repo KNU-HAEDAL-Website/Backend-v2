@@ -63,8 +63,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserId(String email, Integer studentNumber) {
-        return userRepository.findByEmailAndStudentNumber(email, studentNumber)
+    public User getUserId(Integer studentNumber, String name) {
+        return userRepository.findByStudentNumberAndName(studentNumber, name)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER_ID));
     }
 }

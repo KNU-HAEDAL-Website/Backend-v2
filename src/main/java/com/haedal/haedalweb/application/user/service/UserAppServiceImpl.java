@@ -46,8 +46,8 @@ public class UserAppServiceImpl implements UserAppService {
 
     @Override
     @Transactional(readOnly = true)
-    public FindUserIdResponseDto getUserId(String email, Integer studentNumber) {
-        User user = userService.getUserId(email, studentNumber);
+    public FindUserIdResponseDto getUserId(Integer studentNumber, String name) {
+        User user = userService.getUserId(studentNumber, name);
 
         return FindUserIdResponseDto.builder()
                 .userId(user.getId())

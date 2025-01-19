@@ -10,6 +10,5 @@ public interface UserAppService {
     UserResponseDto getUser(String userId);
     List<UserResponseDto> getUsers(Sort sort);
     void cancelUserAccount();
-
-    FindUserIdResponseDto getUserId(String email, Integer studentNumber);
+    FindUserIdResponseDto getUserId(Integer studentNumber, String name);
 }

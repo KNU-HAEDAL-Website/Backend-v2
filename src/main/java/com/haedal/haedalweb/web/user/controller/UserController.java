@@ -56,7 +56,7 @@ public class UserController {
     @Operation(summary = "아이디 찾기")
     @ApiErrorCodeExample(ErrorCode.NOT_FOUND_USER_ID)
     @GetMapping("/users/find-id")
-    public ResponseEntity<FindUserIdResponseDto> getUserId(@RequestParam String email, @RequestParam Integer studentNumber) {
-        return ResponseEntity.ok(userAppService.getUserId(email, studentNumber));
+    public ResponseEntity<FindUserIdResponseDto> getUserId(@RequestParam Integer studentNumber, @RequestParam String name) {
+        return ResponseEntity.ok(userAppService.getUserId(studentNumber, name));
     }
 }
