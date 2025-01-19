@@ -5,6 +5,7 @@ import com.haedal.haedalweb.application.user.mapper.UserMapper;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.domain.user.service.UserService;
+import com.haedal.haedalweb.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserAppServiceImpl implements UserAppService {
     private final UserService userService;
-
-//    @Override
-//    @Transactional(readOnly = true)
-//    public UserResponseDto getMe() {
-//        User user = userService.getLoggedInUser();
-//
-//        return UserMapper.toDto(user);
-//    }
+    private final SecurityService securityService;
 
 
     @Override
@@ -40,5 +34,12 @@ public class UserAppServiceImpl implements UserAppService {
         List<User> users = userService.getUsersByUserStatus(UserStatus.ACTIVE, sort);
 
         return UserMapper.toDtos(users);
+    }
+
+    @Override
+    @Transactional
+    public void cancelUserAccount() {
+        User loggedInUser = securityService.getLoggedInUser();
+        userService.cancelUserAccount(loggedInUser);
     }
 }

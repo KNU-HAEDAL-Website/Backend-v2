@@ -50,4 +50,15 @@ public class UserServiceImpl implements UserService {
             }
         });
     }
+
+    @Override
+    public void cancelUserAccount(User loggedInUser) {
+        if (loggedInUser.getUserStatus() != UserStatus.ACTIVE) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+
+        loggedInUser.setUserStatus(UserStatus.DELETED);
+        loggedInUser.setEmail(null);
+        loggedInUser.setStudentNumber(null);
+    }
 }
