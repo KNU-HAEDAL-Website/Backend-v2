@@ -2,6 +2,7 @@ package com.haedal.haedalweb.domain.comment.model;
 
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.user.model.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -54,7 +55,7 @@ public class Comment {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Comment> replies = new ArrayList<>();
 

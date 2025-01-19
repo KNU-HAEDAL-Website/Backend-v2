@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 public interface CommentService {
     void registerComment(Comment comment);
 
+    void removeComments(Long postId);
+
     Page<Comment> getCommentPage(Long postId, Pageable pageable);
 
     Comment getCommentWithUser(Long commentId);
