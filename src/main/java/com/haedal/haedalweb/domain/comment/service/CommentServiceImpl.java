@@ -22,6 +22,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public void removeComments(Long postId) {
+        commentRepository.deleteCommentsByPostId(postId);
+    }
+
+    @Override
     public Page<Comment> getCommentPage(Long postId, Pageable pageable) {
         return commentRepository.findCommentPageId(postId, pageable);
     }

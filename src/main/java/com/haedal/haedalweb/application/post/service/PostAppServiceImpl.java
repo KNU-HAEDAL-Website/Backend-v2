@@ -11,6 +11,7 @@ import com.haedal.haedalweb.application.post.mapper.PostImageMapper;
 import com.haedal.haedalweb.application.post.mapper.PostMapper;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.service.BoardService;
+import com.haedal.haedalweb.domain.comment.service.CommentService;
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostImage;
 import com.haedal.haedalweb.domain.post.model.PostType;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 public class PostAppServiceImpl implements PostAppService {
     private final PostImageService postImageService;
     private final PostService postService;
+    private final CommentService commentService;
     private final BoardService boardService;
     private final ViewRecordService viewRecordService;
     private final SecurityService securityService;
@@ -48,9 +50,10 @@ public class PostAppServiceImpl implements PostAppService {
     private final String uploadPath;
     private final String uploadUrl;
 
-    public PostAppServiceImpl(PostImageService postImageService, PostService postService, BoardService boardService, ViewRecordService viewRecordService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-post-images}") String uploadPath, @Value("${file.url.upload-post-images}") String uploadUrl) {
+    public PostAppServiceImpl(PostImageService postImageService, PostService postService, CommentService commentService, BoardService boardService, ViewRecordService viewRecordService, SecurityService securityService, ApplicationEventPublisher applicationEventPublisher, @Value("${file.path.upload-post-images}") String uploadPath, @Value("${file.url.upload-post-images}") String uploadUrl) {
         this.postImageService = postImageService;
         this.postService = postService;
+        this.commentService = commentService;
         this.boardService = boardService;
         this.viewRecordService = viewRecordService;
         this.securityService = securityService;
@@ -130,6 +133,7 @@ public class PostAppServiceImpl implements PostAppService {
         User boardCreator = post.getBoard().getUser();
 
         postService.validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator); // 게시글 삭제 검증
+        commentService.removeComments(postId);
 
         // 저장된 PostImage 파일 이름 저장
         List<PostImage> postImages = postImageService.getPostImages(post);
