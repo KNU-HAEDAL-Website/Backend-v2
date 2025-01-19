@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserAppService {
     UserResponseDto getUser(String userId);
     List<UserResponseDto> getUsers(Sort sort);
+    void cancelUserAccount();
 }

@@ -15,4 +15,6 @@ public interface UserService {
     List<User> getUsersByIds(List<String> userIds);
 
     void validateActiveUsers(List<String> userIds, List<User> users);
+
+    void cancelUserAccount(User loggedInUser);
 }
