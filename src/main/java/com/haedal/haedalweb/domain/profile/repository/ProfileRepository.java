@@ -25,10 +25,12 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             value = "SELECT p FROM Profile p " +
                     "JOIN FETCH p.user " +
                     "JOIN FETCH p.profileImage " +
-                    "WHERE p.user.role IN :roles",
+                    "WHERE p.user.role IN :roles " +
+                    "AND p.user.userStatus = 'ACTIVE'",
             countQuery = "SELECT count(p) FROM Profile p " +
                          "JOIN p.user " +
-                         "WHERE p.user.role IN :roles"
+                         "WHERE p.user.role IN :roles " +
+                         "AND p.user.userStatus = 'ACTIVE'"
     )
     Page<Profile> findProfilePageByRoles(@Param("roles") List<Role> roles, Pageable pageable);
 }
