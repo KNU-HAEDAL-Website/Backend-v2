@@ -50,7 +50,12 @@ public class JoinController {
 
 	//    @Operation(summary = "관리자 회원가입 (개발용)")
 	//    @ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
-	//    @ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER, ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
+	//    @ApiErrorCodeExamples({
+	//    ErrorCode.DUPLICATED_USER_ID,
+	//    ErrorCode.DUPLICATED_STUDENT_NUMBER,
+	//    ErrorCode.DUPLICATED_EMAIL,
+	//    ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION
+	//    })
 	//    @PostMapping("/admin")
 	//    public ResponseEntity<SuccessResponse> resisterAdmin(@RequestBody @Valid JoinRequestDto joinRequestDTO) {
 	//        joinAppService.registerMasterAccount(joinRequestDTO);
