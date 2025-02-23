@@ -23,10 +23,10 @@ public class BasePostSummaryResponseDto {
     @Schema(description = "게시글 조회수")
     private Long postViews;
 
-    @Schema(description = "유저 아이디", example = "haedal12")
+    @Schema(description = "게시글 작성자 아이디", example = "haedal12")
     private String userId;
 
-    @Schema(description = "유저 이름", example = "조대성")
+    @Schema(description = "게시글 작성자 이름", example = "조대성")
     private String userName;
 
     @Schema(description = "게시글 타입", example = "(NOTICE, ACTIVITY)")
