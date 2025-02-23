@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActivityResponseDto {
-    @Schema(description = "활동 id")
-    private Long activityId;
+	@Schema(description = "활동 id")
+	private Long activityId;
 
-    @Schema(description = "활동명")
-    private String activityName;
+	@Schema(description = "활동명")
+	private String activityName;
 
-    @Schema(description = "학기 id")
-    private Long semesterId;
+	@Schema(description = "학기 id")
+	private Long semesterId;
 }

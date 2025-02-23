@@ -1,30 +1,30 @@
 package com.haedal.haedalweb.domain.activity.service;
 
+import org.springframework.stereotype.Service;
+
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.activity.model.Activity;
-import com.haedal.haedalweb.domain.semester.model.Semester;
-import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.activity.repository.ActivityRepository;
+import com.haedal.haedalweb.exception.BusinessException;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class AdminActivityServiceImpl implements AdminActivityService {
-    private final ActivityRepository activityRepository;
+	private final ActivityRepository activityRepository;
 
-    @Override
-    public void registerActivity(Activity activity) {
-        activityRepository.save(activity);
-    }
+	@Override
+	public void registerActivity(Activity activity) {
+		activityRepository.save(activity);
+	}
 
-    @Override
-    public void removeActivity(boolean hasRelatedBoards, Activity activity) {
-        if (hasRelatedBoards) {
-            throw new BusinessException(ErrorCode.EXIST_BOARD);
-        }
+	@Override
+	public void removeActivity(boolean hasRelatedBoards, Activity activity) {
+		if (hasRelatedBoards) {
+			throw new BusinessException(ErrorCode.EXIST_BOARD);
+		}
 
-        activityRepository.delete(activity);
-    }
+		activityRepository.delete(activity);
+	}
 }

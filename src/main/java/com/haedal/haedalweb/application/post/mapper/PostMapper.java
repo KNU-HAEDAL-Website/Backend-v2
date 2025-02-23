@@ -7,64 +7,64 @@ import com.haedal.haedalweb.application.post.dto.PostWithBoardSummaryResponseDto
 import com.haedal.haedalweb.domain.post.model.Post;
 
 public class PostMapper {
-    private PostMapper() {
-    }
+	private PostMapper() {
+	}
 
-    public static PostWithBoardSummaryResponseDto toPostWithBoardSummaryResponseDto(Post post) {
-        return PostWithBoardSummaryResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postViews(post.getPostViews())
-                .postRegDate(post.getRegDate())
-                .postType(post.getPostType())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .boardId(post.getBoard().getId())
-                .postActivityStartDate(post.getActivityStartDate())
-                .postActivityEndDate(post.getActivityEndDate())
-                .build();
-    }
+	public static PostWithBoardSummaryResponseDto toPostWithBoardSummaryResponseDto(Post post) {
+		return PostWithBoardSummaryResponseDto.builder()
+			.postId(post.getId())
+			.postTitle(post.getTitle())
+			.postViews(post.getPostViews())
+			.postRegDate(post.getRegDate())
+			.postType(post.getPostType())
+			.userId(post.getUser().getId())
+			.userName(post.getUser().getName())
+			.boardId(post.getBoard().getId())
+			.postActivityStartDate(post.getActivityStartDate())
+			.postActivityEndDate(post.getActivityEndDate())
+			.build();
+	}
 
-    public static BasePostSummaryResponseDto toBasePostSummaryResponseDto(Post post) {
-        return PostWithBoardSummaryResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postViews(post.getPostViews())
-                .postRegDate(post.getRegDate())
-                .postType(post.getPostType())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .build();
-    }
+	public static BasePostSummaryResponseDto toBasePostSummaryResponseDto(Post post) {
+		return PostWithBoardSummaryResponseDto.builder()
+			.postId(post.getId())
+			.postTitle(post.getTitle())
+			.postViews(post.getPostViews())
+			.postRegDate(post.getRegDate())
+			.postType(post.getPostType())
+			.userId(post.getUser().getId())
+			.userName(post.getUser().getName())
+			.build();
+	}
 
-    public static PostWithBoardResponseDto toPostWithBoardResponseDto(Post post) {
-        return PostWithBoardResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postContent(post.getContent())
-                .postViews(post.getPostViews())
-                .postRegDate(post.getRegDate())
-                .postType(post.getPostType())
-                .boardUserId(post.getBoard().getUser().getId())
-                .boardUserName(post.getBoard().getUser().getName())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .boardId(post.getBoard().getId())
-                .postActivityStartDate(post.getActivityStartDate())
-                .postActivityEndDate(post.getActivityEndDate())
-                .build();
-    }
+	public static PostWithBoardResponseDto toPostWithBoardResponseDto(Post post) {
+		return PostWithBoardResponseDto.builder()
+			.postId(post.getId())
+			.postTitle(post.getTitle())
+			.postContent(post.getContent())
+			.postViews(post.getPostViews())
+			.postRegDate(post.getRegDate())
+			.postType(post.getPostType())
+			.boardUserId(post.getBoard().getUser().getId())
+			.boardUserName(post.getBoard().getUser().getName())
+			.userId(post.getUser().getId())
+			.userName(post.getUser().getName())
+			.boardId(post.getBoard().getId())
+			.postActivityStartDate(post.getActivityStartDate())
+			.postActivityEndDate(post.getActivityEndDate())
+			.build();
+	}
 
-    public static BasePostResponseDto toBasePostResponseDto(Post post) {
-        return BasePostResponseDto.builder()
-                .postId(post.getId())
-                .postTitle(post.getTitle())
-                .postContent(post.getContent())
-                .postViews(post.getPostViews())
-                .postRegDate(post.getRegDate())
-                .postType(post.getPostType())
-                .userId(post.getUser().getId())
-                .userName(post.getUser().getName())
-                .build();
-    }
+	public static BasePostResponseDto toBasePostResponseDto(Post post) {
+		return BasePostResponseDto.builder()
+			.postId(post.getId())
+			.postTitle(post.getTitle())
+			.postContent(post.getContent())
+			.postViews(post.getPostViews())
+			.postRegDate(post.getRegDate())
+			.postType(post.getPostType())
+			.userId(post.getUser().getId())
+			.userName(post.getUser().getName())
+			.build();
+	}
 }
