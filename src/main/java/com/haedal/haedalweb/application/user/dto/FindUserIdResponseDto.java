@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FindUserIdResponseDto {
-    @Schema(description = "유저 아이디", example = "haedal12")
-    private String userId;
+	@Schema(description = "유저 아이디", example = "haedal12")
+	private String userId;
 }

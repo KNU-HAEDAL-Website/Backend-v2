@@ -1,6 +1,13 @@
 package com.haedal.haedalweb.domain.post.model;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import com.haedal.haedalweb.domain.user.model.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,10 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -30,32 +33,32 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class PostImage {
-    @Id
-    @Column(name = "post_image_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@Column(name = "post_image_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "post_image_original_file")
-    @NonNull
-    private String originalFile;
+	@Column(name = "post_image_original_file")
+	@NonNull
+	private String originalFile;
 
-    @Column(name = "post_image_save_file")
-    @NonNull
-    private String saveFile;
+	@Column(name = "post_image_save_file")
+	@NonNull
+	private String saveFile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id")
+	private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @CreatedDate
-    @Column(name = "reg_date", nullable = false, updatable = false)
-    private LocalDateTime regDate;
+	@CreatedDate
+	@Column(name = "reg_date", nullable = false, updatable = false)
+	private LocalDateTime regDate;
 
-    @LastModifiedDate
-    @Column(name = "update_date")
-    private LocalDateTime updateDate;
+	@LastModifiedDate
+	@Column(name = "update_date")
+	private LocalDateTime updateDate;
 }

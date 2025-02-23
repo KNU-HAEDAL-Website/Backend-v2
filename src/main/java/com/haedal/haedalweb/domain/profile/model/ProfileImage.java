@@ -1,5 +1,10 @@
 package com.haedal.haedalweb.domain.profile.model;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,12 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,26 +30,26 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 public class ProfileImage {
-    @Id
-    @Column(name = "profile_image_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@Column(name = "profile_image_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(name = "profile_image_original_file")
-    private String originalFile;
+	@Column(name = "profile_image_original_file")
+	private String originalFile;
 
-    @Column(name = "profile_image_save_file")
-    private String saveFile;
+	@Column(name = "profile_image_save_file")
+	private String saveFile;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false, unique = true)
-    private Profile profile;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "profile_id", nullable = false, unique = true)
+	private Profile profile;
 
-    @CreatedDate
-    @Column(name = "reg_date", nullable = false, updatable = false)
-    private LocalDateTime regDate;
+	@CreatedDate
+	@Column(name = "reg_date", nullable = false, updatable = false)
+	private LocalDateTime regDate;
 
-    @LastModifiedDate
-    @Column(name = "update_date")
-    private LocalDateTime updateDate;
+	@LastModifiedDate
+	@Column(name = "update_date")
+	private LocalDateTime updateDate;
 }

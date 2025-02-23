@@ -1,20 +1,23 @@
 package com.haedal.haedalweb.domain.post.service;
 
-import com.haedal.haedalweb.domain.post.model.Post;
-import com.haedal.haedalweb.domain.post.model.PostImage;
 import java.util.List;
 import java.util.Set;
 
+import com.haedal.haedalweb.domain.post.model.Post;
+import com.haedal.haedalweb.domain.post.model.PostImage;
+
 public interface PostImageService {
-    PostImage registerPostImage(PostImage postImage);
-    void registerPostImages(List<PostImage> postImages);
+	PostImage registerPostImage(PostImage postImage);
 
-    void removePostImages(List<PostImage> postImages);
+	void registerPostImages(List<PostImage> postImages);
 
-    List<PostImage> getPostImagesByNames(List<String> postImageNames);
+	void removePostImages(List<PostImage> postImages);
 
-    List<PostImage> getPostImagesByNames(Set<String> postImageNames);
+	List<PostImage> getPostImagesByNames(List<String> postImageNames);
 
-    List<PostImage> getPostImages(Post post);
-    void addPostImagesToPost(List<String> postImageNames, Post post);
+	List<PostImage> getPostImagesByNames(Set<String> postImageNames);
+
+	List<PostImage> getPostImages(Post post);
+
+	void addPostImagesToPost(List<String> postImageNames, Post post);
 }

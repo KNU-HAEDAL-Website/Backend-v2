@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SemesterResponseDto {
-    @Schema(description = "학기 id")
-    private Long semesterId;
+	@Schema(description = "학기 id")
+	private Long semesterId;
 
-    @Schema(description = "학기명")
-    private String semesterName;
+	@Schema(description = "학기명")
+	private String semesterName;
 }

@@ -1,11 +1,11 @@
 package com.haedal.haedalweb.application.activity.service;
 
-import com.haedal.haedalweb.application.activity.dto.ActivityResponseDto;
-
 import java.util.List;
 
-public interface ActivityAppService {
-    List<ActivityResponseDto> getActivities(Long semesterId);
+import com.haedal.haedalweb.application.activity.dto.ActivityResponseDto;
 
-    ActivityResponseDto getActivity(Long semesterId, Long activityId);
+public interface ActivityAppService {
+	List<ActivityResponseDto> getActivities(Long semesterId);
+
+	ActivityResponseDto getActivity(Long semesterId, Long activityId);
 }

@@ -1,37 +1,38 @@
 package com.haedal.haedalweb.domain.semester.service;
 
+import org.springframework.stereotype.Service;
+
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.semester.model.Semester;
-import com.haedal.haedalweb.exception.BusinessException;
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
+import com.haedal.haedalweb.exception.BusinessException;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AdminSemesterServiceImpl implements AdminSemesterService {
-    private final SemesterRepository semesterRepository;
+	private final SemesterRepository semesterRepository;
 
+	@Override
+	public void registerSemester(Semester semester) {
+		validateRegisterSemester(semester);
 
-    @Override
-    public void registerSemester(Semester semester) {
-        validateRegisterSemester(semester);
+		semesterRepository.save(semester);
+	}
 
-        semesterRepository.save(semester);
-    }
+	@Override
+	public void removeSemester(boolean hasRelatedActivities, Semester semester) {
+		if (hasRelatedActivities) {
+			throw new BusinessException(ErrorCode.EXIST_ACTIVITY);
+		}
 
-    @Override 
-    public void removeSemester(boolean hasRelatedActivities, Semester semester) {
-        if (hasRelatedActivities) {
-            throw new BusinessException(ErrorCode.EXIST_ACTIVITY);
-        }
+		semesterRepository.delete(semester);
+	}
 
-        semesterRepository.delete(semester);
-    }
-
-    private void validateRegisterSemester(Semester semester) {
-        if (semesterRepository.existsByName(semester.getName())) {
-            throw new BusinessException(ErrorCode.DUPLICATED_SEMESTER);
-        }
-    }
+	private void validateRegisterSemester(Semester semester) {
+		if (semesterRepository.existsByName(semester.getName())) {
+			throw new BusinessException(ErrorCode.DUPLICATED_SEMESTER);
+		}
+	}
 }
