@@ -17,6 +17,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query(
             value = "SELECT b FROM Board b " +
                     "JOIN FETCH b.boardImage " + // 여기서 OneToOne 연관 엔티티 fetch join
+                    "JOIN FETCH b.user " +
                     "WHERE b.activity.id = :activityId",
             countQuery = "SELECT count(b) FROM Board b WHERE b.activity.id = :activityId"
     )
@@ -36,6 +37,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT DISTINCT b FROM Board b " +
             "JOIN FETCH b.boardImage " +
             "JOIN FETCH b.participants " +
+            "JOIN FETCH b.user " +
             "WHERE b.id = :boardId AND b.activity.id = :activityId")
     Optional<Board> findBoardWithParticipants(Long activityId, Long boardId);
 
