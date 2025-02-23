@@ -45,6 +45,8 @@ public class PostMapper {
                 .postViews(post.getPostViews())
                 .postRegDate(post.getRegDate())
                 .postType(post.getPostType())
+                .boardUserId(post.getBoard().getUser().getId())
+                .boardUserName(post.getBoard().getUser().getName())
                 .userId(post.getUser().getId())
                 .userName(post.getUser().getName())
                 .boardId(post.getBoard().getId())

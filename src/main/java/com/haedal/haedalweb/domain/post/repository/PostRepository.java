@@ -32,8 +32,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p " +
             "JOIN FETCH p.user " +
-            "JOIN FETCH p.board " +
-            "WHERE p.id = :postId AND p.board.id = :boardId")
+            "JOIN FETCH p.board b " +
+            "JOIN FETCH b.user " +
+            "WHERE p.id = :postId AND b.id = :boardId")
     Optional<Post> findPostWithUserAndBoard(Long boardId, Long postId);
 
     @Query("SELECT p FROM Post p " +

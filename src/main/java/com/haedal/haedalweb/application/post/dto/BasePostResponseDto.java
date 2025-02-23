@@ -35,9 +35,9 @@ public class BasePostResponseDto {
     @Schema(description = "게시글 생성일")
     private LocalDateTime postRegDate;
 
-    @Schema(description = "유저 아이디", example = "haedal12")
+    @Schema(description = "게시글 생성자 아이디", example = "haedal12")
     private String userId;
 
-    @Schema(description = "유저 이름", example = "조대성")
+    @Schema(description = "게시글 생성자 이름", example = "조대성")
     private String userName;
 }

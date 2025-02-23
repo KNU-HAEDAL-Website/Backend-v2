@@ -37,7 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardController {
     private final BoardAppService boardAppService;
 
-    @Operation(summary = "게시판 생성")
+    @Operation(summary = "활동 게시판 생성")
     @ApiSuccessCodeExample(SuccessCode.ADD_BOARD_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_FOUND_ACTIVITY_ID, ErrorCode.BAD_REQUEST_FILE, ErrorCode.NOT_AUTHENTICATED_USER})
     @PostMapping(value = "/activities/{activityId}/boards", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -46,7 +46,7 @@ public class BoardController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.ADD_BOARD_SUCCESS);
     }
-    @Operation(summary = "게시판 단일 조회")
+    @Operation(summary = "활동 게시판 단일 조회")
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID})
     @GetMapping("/activities/{activityId}/boards/{boardId}")
     public ResponseEntity<BoardResponseDto> getBoard(@PathVariable Long activityId, @PathVariable Long boardId) {
@@ -54,7 +54,7 @@ public class BoardController {
         return ResponseEntity.ok(boardAppService.getBoard(activityId, boardId));
     }
 
-    @Operation(summary = "게시판 페이징 조회")
+    @Operation(summary = "활동 게시판 페이징 조회")
     @GetMapping("/activities/{activityId}/boards")
     public ResponseEntity<Page<BoardResponseDto>> getBoards(@PathVariable Long activityId,
                                                             @RequestParam(name = "page", defaultValue = "0") Integer page,
@@ -63,7 +63,7 @@ public class BoardController {
 
         return ResponseEntity.ok(boardDtos);
     }
-    @Operation(summary = "게시판 이미지 수정")
+    @Operation(summary = "활동 게시판 이미지 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.BAD_REQUEST_FILE, ErrorCode.NOT_AUTHENTICATED_USER})
     @PutMapping(value = "/activities/{activityId}/boards/{boardId}/image",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -72,7 +72,7 @@ public class BoardController {
 
         return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_BOARD_SUCCESS);
     }
-    @Operation(summary = "게시판 메타 데이터 수정")
+    @Operation(summary = "활동 게시판 메타 데이터 수정")
     @ApiSuccessCodeExample(SuccessCode.UPDATE_BOARD_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER})
     @PutMapping("/activities/{activityId}/boards/{boardId}")
@@ -83,7 +83,7 @@ public class BoardController {
     }
 
 
-    @Operation(summary = "게시판 삭제")
+    @Operation(summary = "활동 게시판 삭제")
     @ApiSuccessCodeExample(SuccessCode.DELETE_BOARD_SUCCESS)
     @ApiErrorCodeExamples({ErrorCode.NOT_FOUND_BOARD_ID, ErrorCode.FORBIDDEN_UPDATE, ErrorCode.NOT_AUTHENTICATED_USER})
     @DeleteMapping("/activities/{activityId}/boards/{boardId}")
