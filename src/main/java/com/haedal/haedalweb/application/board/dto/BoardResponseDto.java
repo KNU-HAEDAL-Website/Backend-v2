@@ -26,6 +26,12 @@ public class BoardResponseDto {
     @Schema(description = "게시판 대표 이미지 파일 Url")
     private String boardImageUrl;
 
+    @Schema(description = "게시판 생성자 아이디", example = "haedal12")
+    private String userId;
+
+    @Schema(description = "게시판 생성자 이름", example = "조대성")
+    private String userName;
+
     @Schema(description = "참여 인원 목록")
     private List<ParticipantResponseDto> participants;
 
