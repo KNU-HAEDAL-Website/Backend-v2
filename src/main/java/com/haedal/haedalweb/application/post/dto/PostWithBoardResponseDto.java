@@ -17,6 +17,12 @@ public class PostWithBoardResponseDto extends BasePostResponseDto {
     @Schema(description = "게시판 id")
     private Long boardId;
 
+    @Schema(description = "게시판 생성자 아이디", example = "haedal12")
+    private String boardUserId;
+
+    @Schema(description = "게시판 생성자 이름", example = "조대성")
+    private String boardUserName;
+
     @Schema(description = "활동 시작일", example = "yyyy-MM-dd (2024-07-24)")
     private LocalDate postActivityStartDate;
 
