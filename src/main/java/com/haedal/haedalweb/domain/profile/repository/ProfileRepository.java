@@ -16,22 +16,24 @@ import com.haedal.haedalweb.domain.user.model.Role;
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
-	@Query("SELECT p FROM Profile p " +
-		"JOIN FETCH p.user " +
-		"JOIN FETCH p.profileImage " +
-		"WHERE p.user.id = :userId ")
+	@Query(
+		"SELECT p FROM Profile p "
+			+ "JOIN FETCH p.user "
+			+ "JOIN FETCH p.profileImage "
+			+ "WHERE p.user.id = :userId "
+	)
 	Optional<Profile> findProfileWithUser(String userId);
 
 	@Query(
-		value = "SELECT p FROM Profile p " +
-			"JOIN FETCH p.user " +
-			"JOIN FETCH p.profileImage " +
-			"WHERE p.user.role IN :roles " +
-			"AND p.user.userStatus = 'ACTIVE'",
-		countQuery = "SELECT count(p) FROM Profile p " +
-			"JOIN p.user " +
-			"WHERE p.user.role IN :roles " +
-			"AND p.user.userStatus = 'ACTIVE'"
+		value = "SELECT p FROM Profile p "
+			+ "JOIN FETCH p.user "
+			+ "JOIN FETCH p.profileImage "
+			+ "WHERE p.user.role IN :roles "
+			+ "AND p.user.userStatus = 'ACTIVE'",
+		countQuery = "SELECT count(p) FROM Profile p "
+			+ "JOIN p.user "
+			+ "WHERE p.user.role IN :roles "
+			+ "AND p.user.userStatus = 'ACTIVE'"
 	)
 	Page<Profile> findProfilePageByRoles(@Param("roles") List<Role> roles, Pageable pageable);
 }

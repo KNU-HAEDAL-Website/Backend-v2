@@ -72,12 +72,15 @@ public class PostServiceImpl implements PostService {
 		String postCreatorId = postCreator.getId();
 		String boardCreatorId = boardCreator.getId();
 
-		if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN)
+		if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN) {
 			return; // 관리자
-		if (boardCreatorId.equals(loggedInUserId) && loggedInUser.getRole() == Role.ROLE_TEAM_LEADER)
+		}
+		if (boardCreatorId.equals(loggedInUserId) && loggedInUser.getRole() == Role.ROLE_TEAM_LEADER) {
 			return; // 자신이 만든 게시판의 글 && 현재 팀장
-		if (postCreatorId.equals(loggedInUserId))
+		}
+		if (postCreatorId.equals(loggedInUserId)) {
 			return; // 자신이 작성한 글
+		}
 
 		throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
 	}

@@ -17,8 +17,8 @@ public class ImageValidationUtil {
 	private static final List<String> ALLOWED_MIME_TYPES = List.of("image/jpeg", "image/png");
 
 	public static void validateImageExtension(MultipartFile imageFile) {
-		String ImageFileName = imageFile.getOriginalFilename();
-		String extension = ImageUtil.getExtension(ImageFileName);
+		String imageFileName = imageFile.getOriginalFilename();
+		String extension = ImageUtil.getExtension(imageFileName);
 
 		if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
 			throw new BusinessException(ErrorCode.BAD_REQUEST_FILE);

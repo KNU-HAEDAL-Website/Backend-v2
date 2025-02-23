@@ -87,7 +87,8 @@ public class ProfileController {
 	@Parameters({
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작)", required = false, example = "0"),
 		@Parameter(name = "size", description = "페이지 크기", required = false, example = "5"),
-		@Parameter(name = "roles", description = "조회할 역할 목록 컴마로 여러개 전달 가능 (ex: ROLE_ADMIN,ROLE_TEAM_LEADER,ROLE_MEMBER)", required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER")
+		@Parameter(name = "roles", description = "조회할 역할 목록 컴마로 여러개 전달 가능 (ex: ROLE_ADMIN,ROLE_TEAM_LEADER,ROLE_MEMBER)",
+			required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER")
 	})
 	@GetMapping("/users/profiles")
 	public ResponseEntity<Page<ProfileResponseDto>> getProfiles(

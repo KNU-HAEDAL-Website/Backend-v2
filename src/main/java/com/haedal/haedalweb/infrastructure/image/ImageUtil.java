@@ -20,8 +20,9 @@ public class ImageUtil {
 	public static void uploadImage(MultipartFile multipartFile, String uploadPath, String saveFile) {
 		try {
 			File folder = new File(uploadPath);
-			if (!folder.exists())
+			if (!folder.exists()) {
 				folder.mkdirs();
+			}
 
 			Path path = Paths.get(uploadPath + File.separator + saveFile);
 			log.warn(path.toString() + " path");

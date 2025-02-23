@@ -71,8 +71,9 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 		profileImage.setSaveFile(saveFile);
 
 		// 삭제할 이미지 없다면 early return
-		if (removeFile == null || removeFile.isEmpty())
+		if (removeFile == null || removeFile.isEmpty()) {
 			return;
+		}
 
 		// 모든작업이 Commit 될 시에 이전 이미지 파일 삭제
 		applicationEventPublisher.publishEvent(new ImageRemoveEvent(uploadPath, removeFile));
@@ -91,8 +92,9 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 		String removeFile = profileImage.getSaveFile();
 
 		// 삭제할 이미지 없다면 early return
-		if (removeFile == null || removeFile.isEmpty())
+		if (removeFile == null || removeFile.isEmpty()) {
 			return;
+		}
 
 		// 이미지 테이블 수정
 		profileImage.setOriginalFile(null);
