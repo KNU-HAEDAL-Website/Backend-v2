@@ -51,12 +51,15 @@ public class CommentServiceImpl implements CommentService {
 		String postCreatorId = postCreator.getId();
 		String commentCreatorId = commentCreator.getId();
 
-		if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN)
+		if (loggedInUser.getRole() == Role.ROLE_WEB_MASTER || loggedInUser.getRole() == Role.ROLE_ADMIN) {
 			return; // 관리자면 삭제 가능
-		if (loggedInUserId.equals(postCreatorId))
+		}
+		if (loggedInUserId.equals(postCreatorId)) {
 			return; // 자신이 작성한 글의 댓글 삭제 가능
-		if (loggedInUserId.equals(commentCreatorId))
+		}
+		if (loggedInUserId.equals(commentCreatorId)) {
 			return; // 자신이 작성한 댓글 삭제 가능
+		}
 
 		throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
 	}
@@ -66,8 +69,9 @@ public class CommentServiceImpl implements CommentService {
 		String loggedInUserId = loggedInUser.getId();
 		String commentCreatorId = commentCreator.getId();
 
-		if (loggedInUserId.equals(commentCreatorId))
+		if (loggedInUserId.equals(commentCreatorId)) {
 			return; // 자신이 작성한 댓글 수정 가능
+		}
 
 		throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE); // 위의 경우 제외 예외 발생
 	}
