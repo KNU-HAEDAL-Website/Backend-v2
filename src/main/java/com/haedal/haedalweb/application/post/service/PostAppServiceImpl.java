@@ -133,6 +133,8 @@ public class PostAppServiceImpl implements PostAppService {
         User boardCreator = post.getBoard().getUser();
 
         postService.validateAuthorityOfBoardPostManagement(loggedInUser, postCreator, boardCreator); // 게시글 삭제 검증
+
+        // 관련된 댓글 모두 삭제
         commentService.removeComments(postId);
 
         // 저장된 PostImage 파일 이름 저장
@@ -158,6 +160,9 @@ public class PostAppServiceImpl implements PostAppService {
         Post post = postService.getPostByPostTypeAndId(postType, postId);
 
         // Notice 말고, 다른 PostType이 생긴다면 삭제 검증을 해야 함.
+
+        // 관련된 댓글 모두 삭제
+        commentService.removeComments(postId);
 
         // 저장된 PostImage 파일 이름 저장
         List<PostImage> postImages = postImageService.getPostImages(post);
