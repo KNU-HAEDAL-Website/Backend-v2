@@ -11,15 +11,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ViewRecordRepositoryAdapter implements ViewRecordRepository {
 
-	private final ViewRecordJpaRepository viewRecordJpaRepository;
+	private final ViewRecordRedisRepository viewRecordRedisRepository;
 
 	@Override
 	public boolean existsById(String viewRecordId) {
-		return viewRecordJpaRepository.existsById(viewRecordId);
+		return viewRecordRedisRepository.existsById(viewRecordId);
 	}
 
 	@Override
 	public ViewRecord save(ViewRecord viewRecord) {
-		return viewRecordJpaRepository.save(viewRecord);
+		return viewRecordRedisRepository.save(viewRecord);
 	}
 }
