@@ -2,7 +2,6 @@ package com.haedal.haedalweb.domain.semester.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
@@ -25,6 +24,6 @@ public class SemesterServiceImpl implements SemesterService {
 
 	@Override
 	public List<Semester> getSemesters() {
-		return semesterRepository.findAll(Sort.by("name"));
+		return semesterRepository.findAllSortedByName();
 	}
 }

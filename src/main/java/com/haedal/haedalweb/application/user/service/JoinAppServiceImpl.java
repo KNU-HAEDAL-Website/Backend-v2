@@ -8,6 +8,7 @@ import com.haedal.haedalweb.application.user.dto.EmailRequestDto;
 import com.haedal.haedalweb.application.user.dto.EmailVerificationCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.JoinRequestDto;
 import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
+import com.haedal.haedalweb.domain.auth.service.EmailSenderService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
 import com.haedal.haedalweb.domain.auth.service.VerifiedEmailService;
 import com.haedal.haedalweb.domain.profile.service.ProfileService;
@@ -15,7 +16,6 @@ import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.domain.user.service.JoinService;
-import com.haedal.haedalweb.infrastructure.email.EmailSenderService;
 import com.haedal.haedalweb.util.EmailUtil;
 
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,11 @@
 package com.haedal.haedalweb.domain.auth.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 import com.haedal.haedalweb.domain.auth.model.VerifiedEmail;
 
-@Repository
-public interface VerifiedEmailRepository extends CrudRepository<VerifiedEmail, String> {
+public interface VerifiedEmailRepository {
+	VerifiedEmail save(VerifiedEmail verifiedEmail);
+
+	Optional<VerifiedEmail> findById(String userId);
 }

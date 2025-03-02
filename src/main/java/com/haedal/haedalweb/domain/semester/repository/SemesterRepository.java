@@ -1,11 +1,18 @@
 package com.haedal.haedalweb.domain.semester.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Optional;
 
 import com.haedal.haedalweb.domain.semester.model.Semester;
 
-@Repository
-public interface SemesterRepository extends JpaRepository<Semester, Long> {
+public interface SemesterRepository {
+	Semester save(Semester semester);
+
+	void delete(Semester semester);
+
+	Optional<Semester> findById(Long semesterId);
+
+	List<Semester> findAllSortedByName();
+
 	boolean existsByName(String name);
 }
