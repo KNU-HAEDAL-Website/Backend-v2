@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Page<Comment> getCommentPage(Long postId, Pageable pageable) {
-		return commentRepository.findCommentPageId(postId, pageable);
+		return commentRepository.findCommentPage(postId, pageable);
 	}
 
 	@Override
