@@ -10,14 +10,13 @@ import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 import com.haedal.haedalweb.domain.post.repository.PostRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class PostRepositoryAdapter implements PostRepository {
 
 	private final PostJpaRepository postJpaRepository;
-
-	public PostRepositoryAdapter(PostJpaRepository postJpaRepository) {
-		this.postJpaRepository = postJpaRepository;
-	}
 
 	@Override
 	public void save(Post post) {

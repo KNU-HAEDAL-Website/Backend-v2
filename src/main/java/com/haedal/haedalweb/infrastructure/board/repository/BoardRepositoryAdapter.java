@@ -9,14 +9,13 @@ import org.springframework.stereotype.Repository;
 import com.haedal.haedalweb.domain.board.model.Board;
 import com.haedal.haedalweb.domain.board.repository.BoardRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class BoardRepositoryAdapter implements BoardRepository {
 
 	private final BoardJpaRepository boardJpaRepository;
-
-	public BoardRepositoryAdapter(BoardJpaRepository boardJpaRepository) {
-		this.boardJpaRepository = boardJpaRepository;
-	}
 
 	@Override
 	public boolean existsByActivityId(Long activityId) {

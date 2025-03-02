@@ -10,14 +10,13 @@ import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostImage;
 import com.haedal.haedalweb.domain.post.repository.PostImageRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class PostImageRepositoryAdapter implements PostImageRepository {
 
 	private final PostImageJpaRepository postImageJpaRepository;
-
-	public PostImageRepositoryAdapter(PostImageJpaRepository postImageJpaRepository) {
-		this.postImageJpaRepository = postImageJpaRepository;
-	}
 
 	@Override
 	public PostImage save(PostImage postImage) {
