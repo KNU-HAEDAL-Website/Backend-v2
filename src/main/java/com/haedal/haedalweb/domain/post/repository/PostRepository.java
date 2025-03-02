@@ -4,53 +4,24 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import com.haedal.haedalweb.domain.post.model.Post;
 import com.haedal.haedalweb.domain.post.model.PostType;
 
-@Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
-	@Query(
-		value = "SELECT p FROM Post p "
-			+ "JOIN FETCH p.user "
-			+ "WHERE p.board.id = :boardId",
-		countQuery = "SELECT count(p) FROM Post p WHERE p.board.id = :boardId"
-	)
-	Page<Post> findPostPageByBoardId(@Param("boardId") Long boardId, Pageable pageable);
+public interface PostRepository {
+	void save(Post post);
 
-	@Query(
-		value = "SELECT p FROM Post p "
-			+ "JOIN FETCH p.user "
-			+ "WHERE p.postType = :postType",
-		countQuery = "SELECT count(p) FROM Post p WHERE p.postType = :postType"
-	)
-	Page<Post> findPostPageByPostType(@Param("postType") PostType postType, Pageable pageable);
+	void delete(Post post);
 
-	@Query(
-		"SELECT p FROM Post p "
-			+ "JOIN FETCH p.user "
-			+ "JOIN FETCH p.board b "
-			+ "JOIN FETCH b.user "
-			+ "WHERE p.id = :postId AND b.id = :boardId"
-	)
-	Optional<Post> findPostWithUserAndBoard(Long boardId, Long postId);
+	Optional<Post> findById(Long postId);
 
-	@Query(
-		"SELECT p FROM Post p "
-			+ "JOIN FETCH p.user "
-			+ "WHERE p.id = :postId AND p.postType = :postType"
-	)
 	Optional<Post> findByPostTypeAndId(PostType postType, Long postId);
 
-	@Query(
-		"UPDATE Post p SET p.postViews = p.postViews + 1 "
-			+ "WHERE p.id = :postId"
-	)
-	@Modifying
+	Optional<Post> findPostWithUserAndBoard(Long boardId, Long postId);
+
+	Page<Post> findPostPageByBoardId(Long boardId, Pageable pageable);
+
+	Page<Post> findPostPageByPostType(PostType postType, Pageable pageable);
+
 	int incrementViewCount(Long postId);
 }
