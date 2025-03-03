@@ -126,6 +126,8 @@ public class SecurityConfig {
 				.authenticated()
 				.requestMatchers(HttpMethod.PATCH, "/users/me/password")
 				.authenticated()
+				.requestMatchers(HttpMethod.PATCH, "/users/password/reset")
+				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/users/profiles", "/users/find-id")
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/users", "/users/{userId}")

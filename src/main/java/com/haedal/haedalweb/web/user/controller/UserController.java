@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
+import com.haedal.haedalweb.application.user.dto.ResetPasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.service.UserAppService;
@@ -66,6 +67,16 @@ public class UserController {
 	public ResponseEntity<FindUserIdResponseDto> getUserId(@RequestParam Integer studentNumber,
 		@RequestParam String name) {
 		return ResponseEntity.ok(userAppService.getUserId(studentNumber, name));
+	}
+
+	@Operation(summary = "비밀번호 찾기 (인증코드 전송)")
+	@ApiSuccessCodeExample(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS)
+	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.LIMIT_EXCEEDED_SEND_EMAIL})
+	@PatchMapping("/users/password/reset")
+	public ResponseEntity<SuccessResponse> resetPassword(@RequestBody @Valid ResetPasswordRequestDto resetPasswordRequestDto) {
+		userAppService.resetPassword(resetPasswordRequestDto);
+
+		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS);
 	}
 
 	@Operation(summary = "비밀번호 변경")
