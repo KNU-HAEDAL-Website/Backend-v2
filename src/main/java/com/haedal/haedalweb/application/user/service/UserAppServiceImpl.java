@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
+import com.haedal.haedalweb.application.user.dto.ResetPasswordEmailCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.ResetPasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
@@ -92,5 +93,22 @@ public class UserAppServiceImpl implements UserAppService {
 
 		// 인증 코드 전송
 		emailSenderService.sendVerificationEmail(user.getEmail(), code);
+	}
+
+	@Override
+	@Transactional
+	public void verifyResetPasswordCode(ResetPasswordEmailCodeRequestDto resetPasswordEmailCodeRequestDto) {
+		User user = userService.getUser(resetPasswordEmailCodeRequestDto.getUserId());
+
+		// 인증 코드 검증
+		emailVerificationService.validateCode(user.getEmail(),
+			resetPasswordEmailCodeRequestDto.getCode());
+
+		// 랜덤 비밀번호 전송
+		String password = EmailUtil.generateRandomPassword();
+		emailSenderService.sendRandomPassword(user.getEmail(), password);
+
+		// 비밀번호 초기화
+		user.setPassword(passwordEncoder.encode(password));
 	}
 }

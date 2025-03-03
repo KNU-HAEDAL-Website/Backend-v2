@@ -23,4 +23,14 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 		message.setText("인증 코드: " + code + "\n3분 내에 입력해주세요.");
 		javaMailSender.send(message);
 	}
+
+	@Override
+	@Async
+	public void sendRandomPassword(String to, String password) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject("비밀번호 초기화");
+		message.setText("랜덤 비밀번호: " + password + "\n3분 내에 입력해주세요.");
+		javaMailSender.send(message);
+	}
 }

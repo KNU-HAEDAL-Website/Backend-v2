@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 
 import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
+import com.haedal.haedalweb.application.user.dto.ResetPasswordEmailCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.ResetPasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
@@ -21,4 +22,6 @@ public interface UserAppService {
 	void updatePassword(UpdatePasswordRequestDto updatePasswordRequestDto);
 
 	void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto);
+
+	void verifyResetPasswordCode(ResetPasswordEmailCodeRequestDto resetPasswordEmailCodeRequestDto);
 }

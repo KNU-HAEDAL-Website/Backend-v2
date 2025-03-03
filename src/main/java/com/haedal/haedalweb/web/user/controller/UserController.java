@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
+import com.haedal.haedalweb.application.user.dto.ResetPasswordEmailCodeRequestDto;
 import com.haedal.haedalweb.application.user.dto.ResetPasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
@@ -22,6 +24,7 @@ import com.haedal.haedalweb.constants.SuccessCode;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
+import com.haedal.haedalweb.swagger.ApiSuccessCodeExamples;
 import com.haedal.haedalweb.util.ResponseUtil;
 import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 
@@ -72,14 +75,25 @@ public class UserController {
 	@Operation(summary = "비밀번호 찾기 (인증코드 전송)")
 	@ApiSuccessCodeExample(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS)
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.LIMIT_EXCEEDED_SEND_EMAIL})
-	@PatchMapping("/users/password/reset")
+	@PostMapping("/users/password/reset")
 	public ResponseEntity<SuccessResponse> resetPassword(@RequestBody @Valid ResetPasswordRequestDto resetPasswordRequestDto) {
 		userAppService.resetPassword(resetPasswordRequestDto);
 
 		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.SEND_VERIFICATION_CODE_SUCCESS);
 	}
 
-	@Operation(summary = "비밀번호 변경")
+	@Operation(summary = "비밀번호 찾기 (인증코드 확인 및 랜덤 비밀번호 전송)")
+	@ApiSuccessCodeExamples({SuccessCode.VERIFY_VERIFICATION_CODE_SUCCESS})
+	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.INVALID_EMAIL_VERIFICATION})
+	@PatchMapping("/users/password/verify")
+	public ResponseEntity<SuccessResponse> verifyResetPasswordCode(
+		@RequestBody @Valid ResetPasswordEmailCodeRequestDto resetPasswordEmailCodeRequestDto) {
+		userAppService.verifyResetPasswordCode(resetPasswordEmailCodeRequestDto);
+
+		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.VERIFY_VERIFICATION_CODE_SUCCESS);
+	}
+
+	@Operation(summary = "비밀번호 변경 (프로필 페이지)")
 	@ApiSuccessCodeExample(SuccessCode.UPDATE_USER_PASSWORD)
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.BAD_REQUEST_PASSWORD})
 	@PatchMapping("/users/me/password")
