@@ -6,11 +6,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.haedal.haedalweb.application.user.dto.FindUserIdResponseDto;
+import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.service.UserAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
@@ -23,6 +26,7 @@ import com.haedal.haedalweb.web.common.dto.SuccessResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "유저 API")
@@ -62,5 +66,15 @@ public class UserController {
 	public ResponseEntity<FindUserIdResponseDto> getUserId(@RequestParam Integer studentNumber,
 		@RequestParam String name) {
 		return ResponseEntity.ok(userAppService.getUserId(studentNumber, name));
+	}
+
+	@Operation(summary = "비밀번호 변경")
+	@ApiSuccessCodeExample(SuccessCode.UPDATE_USER_PASSWORD)
+	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.BAD_REQUEST_PASSWORD})
+	@PatchMapping("/users/me/password")
+	public ResponseEntity<SuccessResponse> updateUserPassword(@RequestBody @Valid UpdatePasswordRequestDto updatePasswordRequestDto) {
+		userAppService.updatePassword(updatePasswordRequestDto);
+
+		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.UPDATE_USER_PASSWORD);
 	}
 }
