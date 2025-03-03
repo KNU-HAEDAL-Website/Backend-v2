@@ -124,6 +124,8 @@ public class SecurityConfig {
 				.authenticated()
 				.requestMatchers(HttpMethod.DELETE, "/users/{userId}/profile/**", "/users/me")
 				.authenticated()
+				.requestMatchers(HttpMethod.PATCH, "/users/me/password")
+				.authenticated()
 				.requestMatchers(HttpMethod.GET, "/users/profiles", "/users/find-id")
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/users", "/users/{userId}")
