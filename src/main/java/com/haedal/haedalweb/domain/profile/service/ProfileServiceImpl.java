@@ -60,4 +60,9 @@ public class ProfileServiceImpl implements ProfileService {
 			throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
 		}
 	}
+
+	@Override
+	public void deleteProfile(Profile profile) {
+		profileRepository.delete(profile);
+	}
 }

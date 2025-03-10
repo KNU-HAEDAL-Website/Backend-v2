@@ -15,4 +15,6 @@ public interface ProfileRepository {
 	Optional<Profile> findProfileWithUser(String userId);
 
 	Page<Profile> findProfilePageByRoles(List<Role> roles, Pageable pageable);
+
+	void delete(Profile profile);
 }

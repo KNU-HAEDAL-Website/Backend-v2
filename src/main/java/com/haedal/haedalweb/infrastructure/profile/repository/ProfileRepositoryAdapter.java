@@ -22,6 +22,10 @@ public class ProfileRepositoryAdapter implements ProfileRepository {
 	public Profile save(Profile profile) {
 		return profileJpaRepository.save(profile);
 	}
+	@Override
+	public void delete(Profile profile) {
+		profileJpaRepository.delete(profile);
+	}
 
 	@Override
 	public Optional<Profile> findProfileWithUser(String userId) {
@@ -32,4 +36,5 @@ public class ProfileRepositoryAdapter implements ProfileRepository {
 	public Page<Profile> findProfilePageByRoles(List<Role> roles, Pageable pageable) {
 		return profileJpaRepository.findProfilePageByRoles(roles, pageable);
 	}
+
 }
