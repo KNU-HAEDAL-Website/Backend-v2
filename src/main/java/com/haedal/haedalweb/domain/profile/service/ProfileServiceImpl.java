@@ -62,7 +62,9 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void deleteProfile(Profile profile) {
-		profileRepository.delete(profile);
+	public void cancelUserAccount(User user) {
+		user.setUserStatus(UserStatus.DELETED);
+		user.setEmail(null);
+		user.setStudentNumber(null);
 	}
 }

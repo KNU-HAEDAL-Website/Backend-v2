@@ -169,8 +169,6 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 
 		profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
 
-		profile.getUser().setUserStatus(UserStatus.DELETED);
-		profile.getUser().setEmail(null);
-		profile.getUser().setStudentNumber(null);
+		profileService.cancelUserAccount(loggedInUser);
 	}
 }

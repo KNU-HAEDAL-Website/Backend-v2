@@ -18,5 +18,5 @@ public interface ProfileService {
 
 	void validateAuthorityOfProfileManagement(String userId, User loggedInUser);
 
-	void deleteProfile(Profile profile);
+	void cancelUserAccount(User user);
 }
