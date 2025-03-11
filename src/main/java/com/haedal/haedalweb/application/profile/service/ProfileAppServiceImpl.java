@@ -161,14 +161,16 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 		}
 	}
 
-	public void cancelUserAccount(String userId) {
+	@Transactional
+	@Override
+	public void expelUserAccount(String userId) {
 		Profile profile = profileService.getProfileWithUser(userId);
 		User loggedInUser = securityService.getLoggedInUser();
 
 		profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
 
 		profile.getUser().setUserStatus(UserStatus.DELETED);
-
-		profileService.deleteProfile(profile);
+		profile.getUser().setEmail(null);
+		profile.getUser().setStudentNumber(null);
 	}
 }

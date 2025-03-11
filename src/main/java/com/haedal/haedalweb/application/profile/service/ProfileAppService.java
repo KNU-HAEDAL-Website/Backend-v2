@@ -21,5 +21,5 @@ public interface ProfileAppService {
 
 	Page<ProfileResponseDto> getProfilePage(List<Role> roles, Pageable pageable);
 
-	void cancelUserAccount(String userId);
+	void expelUserAccount(String userId);
 }

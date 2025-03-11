@@ -104,7 +104,7 @@ public class ProfileController {
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.FORBIDDEN_UPDATE})
 	@DeleteMapping("/users/{userId}/profile")
 	public ResponseEntity<SuccessResponse> cancelUserAccount(@PathVariable String userId) {
-		profileAppService.cancelUserAccount(userId);
+		profileAppService.expelUserAccount(userId);
 		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.CANCEL_USER_ACCOUNT);
 	}
 }
