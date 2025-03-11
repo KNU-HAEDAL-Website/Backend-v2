@@ -22,10 +22,6 @@ public class ProfileRepositoryAdapter implements ProfileRepository {
 	public Profile save(Profile profile) {
 		return profileJpaRepository.save(profile);
 	}
-	@Override
-	public void delete(Profile profile) {
-		profileJpaRepository.delete(profile);
-	}
 
 	@Override
 	public Optional<Profile> findProfileWithUser(String userId) {
