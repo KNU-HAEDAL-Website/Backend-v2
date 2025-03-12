@@ -32,4 +32,5 @@ public class ProfileRepositoryAdapter implements ProfileRepository {
 	public Page<Profile> findProfilePageByRoles(List<Role> roles, Pageable pageable) {
 		return profileJpaRepository.findProfilePageByRoles(roles, pageable);
 	}
+
 }

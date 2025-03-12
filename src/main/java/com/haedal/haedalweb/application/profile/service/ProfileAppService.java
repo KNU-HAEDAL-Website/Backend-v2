@@ -20,4 +20,6 @@ public interface ProfileAppService {
 	ProfileResponseDto getProfile(String userId);
 
 	Page<ProfileResponseDto> getProfilePage(List<Role> roles, Pageable pageable);
+
+	void expelUserAccount(String userId);
 }

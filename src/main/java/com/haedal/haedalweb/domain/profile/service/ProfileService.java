@@ -17,4 +17,6 @@ public interface ProfileService {
 	Page<Profile> getProfilePage(List<Role> roles, Pageable pageable);
 
 	void validateAuthorityOfProfileManagement(String userId, User loggedInUser);
+
+	void cancelUserAccount(User user);
 }

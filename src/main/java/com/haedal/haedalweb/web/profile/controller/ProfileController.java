@@ -99,4 +99,12 @@ public class ProfileController {
 			profileAppService.getProfilePage(roles, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id")))));
 	}
 
+	@Operation(summary = "회원 탈퇴")
+	@ApiSuccessCodeExample(SuccessCode.UPDATE_PROFILE_SUCCESS)
+	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER, ErrorCode.FORBIDDEN_UPDATE})
+	@DeleteMapping("/users/{userId}/profile")
+	public ResponseEntity<SuccessResponse> cancelUserAccount(@PathVariable String userId) {
+		profileAppService.expelUserAccount(userId);
+		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.CANCEL_USER_ACCOUNT);
+	}
 }

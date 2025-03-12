@@ -19,6 +19,7 @@ import com.haedal.haedalweb.domain.profile.model.ProfileImage;
 import com.haedal.haedalweb.domain.profile.service.ProfileService;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
+import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageUtil;
@@ -158,5 +159,16 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 			// 이미지 URL을 생성하는 유틸 메서드 활용
 			return ImageUtil.generateImageUrl(uploadUrl, saveFile);
 		}
+	}
+
+	@Transactional
+	@Override
+	public void expelUserAccount(String userId) {
+		Profile profile = profileService.getProfileWithUser(userId);
+		User loggedInUser = securityService.getLoggedInUser();
+
+		profileService.validateAuthorityOfProfileManagement(userId, loggedInUser);
+
+		profileService.cancelUserAccount(loggedInUser);
 	}
 }

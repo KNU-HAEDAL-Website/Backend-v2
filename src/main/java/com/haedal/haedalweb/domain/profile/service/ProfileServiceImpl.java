@@ -60,4 +60,11 @@ public class ProfileServiceImpl implements ProfileService {
 			throw new BusinessException(ErrorCode.FORBIDDEN_UPDATE);
 		}
 	}
+
+	@Override
+	public void cancelUserAccount(User user) {
+		user.setUserStatus(UserStatus.DELETED);
+		user.setEmail(null);
+		user.setStudentNumber(null);
+	}
 }
