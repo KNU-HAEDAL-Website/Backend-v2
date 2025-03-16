@@ -70,6 +70,9 @@ public class User {
 	@Column(name = "update_date")
 	private LocalDateTime updateDate;
 
+	@Column(name = "joined_semester")
+	private String joinedSemester;
+
 	@Builder.Default
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserSemester> userSemesters = new ArrayList<>();

@@ -116,6 +116,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 			.role(role)
 			.userStatus(userStatus)
 			.studentNumber(dto.getStudentNumber())
+			.joinedSemester(dto.getSemester())
 			.build();
 
 		List<Semester> semesterList = semesterRepository.findSemestersFrom(dto.getSemester());
