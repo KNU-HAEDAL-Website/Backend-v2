@@ -1,5 +1,9 @@
 package com.haedal.haedalweb.domain.user.service;
 
+import com.haedal.haedalweb.domain.association.model.UserSemester;
+import com.haedal.haedalweb.domain.semester.model.Semester;
+import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
@@ -15,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
 	private final UserRepository userRepository;
+	private final SemesterRepository semesterRepository;
 
 	@Override
 	public void approveUser(String userId) {
@@ -23,6 +28,21 @@ public class AdminUserServiceImpl implements AdminUserService {
 
 		if (user.getUserStatus() != UserStatus.INACTIVE) {
 			throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
+		}
+
+
+		List<Semester> semesterList = semesterRepository.findSemestersFrom(user.getJoinedSemester());
+		if (semesterList.isEmpty()) {
+			throw new IllegalArgumentException("No semesters found starting from: " + user.getJoinedSemester());
+		}
+
+		for (Semester semester : semesterList) {
+			UserSemester userSemester = UserSemester.builder()
+					.user(user)
+					.semester(semester)
+					.build();
+			user.getUserSemesters().add(userSemester);
+			semester.getUserSemesters().add(userSemester);
 		}
 
 		user.setUserStatus(UserStatus.ACTIVE);

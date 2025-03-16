@@ -45,7 +45,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 		User user = registerUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
 
 		// 등록
-//		joinService.registerAccount(user);
+		joinService.registerAccount(user);
 		profileService.generateProfile(user);
 	}
 
@@ -108,7 +108,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 	}
 
 	private User registerUserFromDto(JoinRequestDto dto, Role role, UserStatus userStatus) {
-		User user = User.builder()
+		return User.builder()
 			.id(dto.getUserId())
 			.email(dto.getEmail())
 			.password(passwordEncoder.encode(dto.getPassword()))
@@ -118,23 +118,5 @@ public class JoinAppServiceImpl implements JoinAppService {
 			.studentNumber(dto.getStudentNumber())
 			.joinedSemester(dto.getSemester())
 			.build();
-
-		List<Semester> semesterList = semesterRepository.findSemestersFrom(dto.getSemester());
-		if (semesterList.isEmpty()) {
-			throw new IllegalArgumentException("No semesters found starting from: " + dto.getSemester());
-		}
-
-		joinService.registerAccount(user);
-
-		for (Semester semester : semesterList) {
-			UserSemester userSemester = UserSemester.builder()
-					.user(user)
-					.semester(semester)
-					.build();
-			user.getUserSemesters().add(userSemester);
-			semester.getUserSemesters().add(userSemester);
-		}
-
-		return user;
 	}
 }
