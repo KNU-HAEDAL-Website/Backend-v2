@@ -41,4 +41,14 @@ public class SemesterRepositoryAdapter implements SemesterRepository {
 	public boolean existsByName(String name) {
 		return semesterJpaRepository.existsByName(name);
 	}
+
+	@Override
+	public Optional<Semester> findByName(String name) {
+		return semesterJpaRepository.findByName(name);
+	}
+
+	@Override
+	public List<Semester> findSemestersFrom(String name) {
+		return semesterJpaRepository.findAllByNameGreaterThanEqualOrderByNameAsc(name);
+	}
 }

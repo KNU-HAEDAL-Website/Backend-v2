@@ -39,4 +39,8 @@ public class JoinRequestDto {
 	@Schema(description = "유저 이름", example = "조대성")
 	@Size(min = 2, max = 5, message = "이름은 2글자 이상 5글자 이하여야 합니다.")
 	private String userName;
+
+	@Schema(description = "가입 학기", example = "2025-1")
+	@NotBlank(message = "가입 학기는 필수 입력 항목입니다.")
+	private String semester;
 }

@@ -1,5 +1,9 @@
 package com.haedal.haedalweb.application.user.service;
 
+import com.haedal.haedalweb.domain.association.model.UserSemester;
+import com.haedal.haedalweb.domain.semester.model.Semester;
+import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
+import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 	private final VerifiedEmailService verifiedEmailService;
 	private final EmailSenderService emailSenderService;
 	private final PasswordEncoder passwordEncoder;
+	private final SemesterRepository semesterRepository;
 
 	@Transactional
 	@Override
@@ -40,7 +45,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 		User user = registerUserFromDto(joinRequestDto, Role.ROLE_MEMBER, UserStatus.INACTIVE);
 
 		// 등록
-		joinService.registerAccount(user);
+//		joinService.registerAccount(user);
 		profileService.generateProfile(user);
 	}
 
@@ -103,7 +108,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 	}
 
 	private User registerUserFromDto(JoinRequestDto dto, Role role, UserStatus userStatus) {
-		return User.builder()
+		User user = User.builder()
 			.id(dto.getUserId())
 			.email(dto.getEmail())
 			.password(passwordEncoder.encode(dto.getPassword()))
@@ -112,5 +117,23 @@ public class JoinAppServiceImpl implements JoinAppService {
 			.userStatus(userStatus)
 			.studentNumber(dto.getStudentNumber())
 			.build();
+
+		List<Semester> semesterList = semesterRepository.findSemestersFrom(dto.getSemester());
+		if (semesterList.isEmpty()) {
+			throw new IllegalArgumentException("No semesters found starting from: " + dto.getSemester());
+		}
+
+		joinService.registerAccount(user);
+
+		for (Semester semester : semesterList) {
+			UserSemester userSemester = UserSemester.builder()
+					.user(user)
+					.semester(semester)
+					.build();
+			user.getUserSemesters().add(userSemester);
+			semester.getUserSemesters().add(userSemester);
+		}
+
+		return user;
 	}
 }
