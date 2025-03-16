@@ -15,6 +15,8 @@ public interface UserAppService {
 
 	List<UserResponseDto> getUsers(Sort sort);
 
+	List<UserResponseDto> getUsersBySemester(String semesterName, Sort sort);
+
 	void cancelUserAccount();
 
 	FindUserIdResponseDto getUserId(Integer studentNumber, String name);

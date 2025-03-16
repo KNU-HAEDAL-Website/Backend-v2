@@ -54,6 +54,14 @@ public class UserController {
 			userAppService.getUsers(Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
 	}
 
+	@Operation(summary = "학기별 활동 User 목록 조회 (학번 포함)")
+	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
+	@GetMapping("/users/semester/{semesterName}")
+	public ResponseEntity<List<UserResponseDto>> getUsersBySemester(@PathVariable String semesterName) {
+		return ResponseEntity.ok(
+				userAppService.getUsersBySemester(semesterName, Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
+	}
+
 	@Operation(summary = "회원 탈퇴")
 	@ApiSuccessCodeExample(SuccessCode.CANCEL_USER_ACCOUNT)
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER})

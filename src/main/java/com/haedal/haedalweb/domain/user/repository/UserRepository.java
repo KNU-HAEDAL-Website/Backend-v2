@@ -19,6 +19,8 @@ public interface UserRepository {
 
 	List<User> findByUserStatus(UserStatus userStatus, Sort sort);
 
+	List<User> findBySemester(String semesterName, Sort sort);
+
 	boolean existsByEmail(String email);
 
 	boolean existsById(String userId); // 추가

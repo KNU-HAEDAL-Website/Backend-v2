@@ -14,6 +14,8 @@ public interface UserJpaRepository extends JpaRepository<User, String> {
 
 	List<User> findByUserStatus(UserStatus userStatus, Sort sort);
 
+	List<User> findByUserSemesters_Semester_Name(String semesterName, Sort sort);
+
 	boolean existsByEmail(String email);
 
 	Optional<User> findByStudentNumberAndName(Integer studentNumber, String name);

@@ -15,6 +15,8 @@ public interface UserService {
 
 	List<User> getUsersByIds(List<String> userIds);
 
+	List<User> getUsersBySemester(String semesterName, Sort sort);
+
 	void validateActiveUsers(List<String> userIds, List<User> users);
 
 	void cancelUserAccount(User loggedInUser);

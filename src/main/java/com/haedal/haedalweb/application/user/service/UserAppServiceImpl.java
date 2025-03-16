@@ -51,6 +51,14 @@ public class UserAppServiceImpl implements UserAppService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<UserResponseDto> getUsersBySemester(String semesterName, Sort sort) {
+		List<User> users = userService.getUsersBySemester(semesterName, sort);
+
+		return UserMapper.toDtos(users);
+	}
+
+	@Override
 	@Transactional
 	public void cancelUserAccount() {
 		User loggedInUser = securityService.getLoggedInUser();

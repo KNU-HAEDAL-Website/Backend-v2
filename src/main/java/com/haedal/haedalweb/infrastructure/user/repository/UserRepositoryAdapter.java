@@ -44,6 +44,11 @@ public class UserRepositoryAdapter implements UserRepository {
 	}
 
 	@Override
+	public List<User> findBySemester(String semesterName, Sort sort) {
+		return userJpaRepository.findByUserSemesters_Semester_Name(semesterName, sort);
+	}
+
+	@Override
 	public boolean existsByEmail(String email) {
 		return userJpaRepository.existsByEmail(email);
 	}
