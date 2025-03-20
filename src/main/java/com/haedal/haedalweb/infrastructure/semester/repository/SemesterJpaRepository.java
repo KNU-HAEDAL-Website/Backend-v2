@@ -8,6 +8,5 @@ import com.haedal.haedalweb.domain.semester.model.Semester;
 
 public interface SemesterJpaRepository extends JpaRepository<Semester, Long> {
 	boolean existsByName(String name);
-	Optional<Semester> findByName(String name);
 	List<Semester> findAllByNameGreaterThanEqualOrderByNameAsc(String name);
 }

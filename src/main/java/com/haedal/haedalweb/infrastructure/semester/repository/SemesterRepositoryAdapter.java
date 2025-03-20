@@ -43,11 +43,6 @@ public class SemesterRepositoryAdapter implements SemesterRepository {
 	}
 
 	@Override
-	public Optional<Semester> findByName(String name) {
-		return semesterJpaRepository.findByName(name);
-	}
-
-	@Override
 	public List<Semester> findSemestersFrom(String name) {
 		return semesterJpaRepository.findAllByNameGreaterThanEqualOrderByNameAsc(name);
 	}
