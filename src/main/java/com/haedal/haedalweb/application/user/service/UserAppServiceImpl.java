@@ -44,17 +44,14 @@ public class UserAppServiceImpl implements UserAppService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<UserResponseDto> getUsers(Sort sort) {
-		List<User> users = userService.getUsersByUserStatus(UserStatus.ACTIVE, sort);
-
-		return UserMapper.toDtos(users);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<UserResponseDto> getUsersBySemester(String semesterName, Sort sort) {
-		List<User> users = userService.getUsersBySemester(semesterName, sort);
-
+	public List<UserResponseDto> getUsers(Long semesterId, Sort sort) {
+		List<User> users;
+		if (semesterId == null) {
+			users = userService.getUsersByUserStatus(UserStatus.ACTIVE, sort);
+		}
+		else {
+			users = userService.getUsersByUserStatusAndSemester(UserStatus.ACTIVE, semesterId, sort);
+		}
 		return UserMapper.toDtos(users);
 	}
 

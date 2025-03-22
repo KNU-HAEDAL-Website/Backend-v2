@@ -48,18 +48,11 @@ public class UserController {
 
 	@Operation(summary = "User 목록 조회 (학번 포함, 회원만)")
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
-	@GetMapping("/users")
-	public ResponseEntity<List<UserResponseDto>> getUsers() {
+	@GetMapping("/users?semester=semesterId")
+	public ResponseEntity<List<UserResponseDto>> getUsers(
+			@RequestParam(value = "semester", required = false) Long semesterId) {
 		return ResponseEntity.ok(
-			userAppService.getUsers(Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
-	}
-
-	@Operation(summary = "학기별 활동 User 목록 조회 (학번 포함)")
-	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
-	@GetMapping("/users/semester/{semesterName}")
-	public ResponseEntity<List<UserResponseDto>> getUsersBySemester(@PathVariable String semesterName) {
-		return ResponseEntity.ok(
-				userAppService.getUsersBySemester(semesterName, Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
+			userAppService.getUsers(semesterId, Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
 	}
 
 	@Operation(summary = "회원 탈퇴")

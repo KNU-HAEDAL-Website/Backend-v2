@@ -15,7 +15,7 @@ public interface UserService {
 
 	List<User> getUsersByIds(List<String> userIds);
 
-	List<User> getUsersBySemester(String semesterName, Sort sort);
+	List<User> getUsersByUserStatusAndSemester(UserStatus userStatus, Long semesterId, Sort sort);
 
 	void validateActiveUsers(List<String> userIds, List<User> users);
 

@@ -13,9 +13,7 @@ import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 public interface UserAppService {
 	UserResponseDto getUser(String userId);
 
-	List<UserResponseDto> getUsers(Sort sort);
-
-	List<UserResponseDto> getUsersBySemester(String semesterName, Sort sort);
+	List<UserResponseDto> getUsers(Long semesterId, Sort sort);
 
 	void cancelUserAccount();
 

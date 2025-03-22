@@ -44,8 +44,8 @@ public class UserRepositoryAdapter implements UserRepository {
 	}
 
 	@Override
-	public List<User> findBySemester(String semesterName, Sort sort) {
-		return userJpaRepository.findByUserSemesters_Semester_Name(semesterName, sort);
+	public List<User> findByUserStatusAndSemester(UserStatus userStatus, Long semesterId, Sort sort) {
+		return userJpaRepository.findByUserStatusAndUserSemesters_Semester_Id(userStatus, semesterId, sort);
 	}
 
 	@Override

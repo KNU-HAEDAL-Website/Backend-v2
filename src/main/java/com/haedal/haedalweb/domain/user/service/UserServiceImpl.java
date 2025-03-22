@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUsersBySemester(String semesterName, Sort sort) {
-		return userRepository.findBySemester(semesterName, sort);
+	public List<User> getUsersByUserStatusAndSemester(UserStatus userStatus, Long semesterId, Sort sort) {
+		return userRepository.findByUserStatusAndSemester(userStatus, semesterId, sort);
 	}
 
 	@Override
