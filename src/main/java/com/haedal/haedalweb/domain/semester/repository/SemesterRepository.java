@@ -15,6 +15,4 @@ public interface SemesterRepository {
 	List<Semester> findAllSortedByName();
 
 	boolean existsByName(String name);
-
-	List<Semester> findSemestersFrom(String name);
 }

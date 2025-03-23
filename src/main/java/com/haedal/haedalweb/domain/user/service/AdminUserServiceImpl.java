@@ -3,7 +3,6 @@ package com.haedal.haedalweb.domain.user.service;
 import com.haedal.haedalweb.domain.association.model.UserSemester;
 import com.haedal.haedalweb.domain.semester.model.Semester;
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.haedal.haedalweb.constants.ErrorCode;
@@ -30,20 +29,16 @@ public class AdminUserServiceImpl implements AdminUserService {
 			throw new BusinessException(ErrorCode.NOT_FOUND_USER_ID);
 		}
 
+		Semester joinedSemester = semesterRepository.findById(user.getJoinedSemesterId())
+				.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_SEMESTER_ID));
 
-		List<Semester> semesterList = semesterRepository.findSemestersFrom(user.getJoinedSemester());
-		if (semesterList.isEmpty()) {
-			throw new IllegalArgumentException("No semesters found starting from: " + user.getJoinedSemester());
-		}
-
-		for (Semester semester : semesterList) {
-			UserSemester userSemester = UserSemester.builder()
-					.user(user)
-					.semester(semester)
-					.build();
-			user.getUserSemesters().add(userSemester);
-			semester.getUserSemesters().add(userSemester);
-		}
+		// joinedSemester와 user의 연관관계 추가
+		UserSemester userSemester = UserSemester.builder()
+				.user(user)
+				.semester(joinedSemester)
+				.build();
+		user.getUserSemesters().add(userSemester);
+		joinedSemester.getUserSemesters().add(userSemester);
 
 		user.setUserStatus(UserStatus.ACTIVE);
 	}
