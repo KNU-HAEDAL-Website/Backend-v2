@@ -1,9 +1,7 @@
 package com.haedal.haedalweb.application.user.service;
 
-import com.haedal.haedalweb.domain.association.model.UserSemester;
-import com.haedal.haedalweb.domain.semester.model.Semester;
+
 import com.haedal.haedalweb.domain.semester.repository.SemesterRepository;
-import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,7 +114,6 @@ public class JoinAppServiceImpl implements JoinAppService {
 			.role(role)
 			.userStatus(userStatus)
 			.studentNumber(dto.getStudentNumber())
-			.joinedSemester(dto.getSemester())
 			.build();
 	}
 }

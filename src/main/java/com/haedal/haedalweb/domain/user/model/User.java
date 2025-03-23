@@ -1,6 +1,7 @@
 package com.haedal.haedalweb.domain.user.model;
 
 import com.haedal.haedalweb.domain.association.model.UserSemester;
+import com.haedal.haedalweb.domain.semester.model.Semester;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
@@ -71,7 +72,7 @@ public class User {
 	private LocalDateTime updateDate;
 
 	@Column(name = "joined_semester")
-	private String joinedSemester;
+	private Long joinedSemesterId;
 
 	@Builder.Default
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
