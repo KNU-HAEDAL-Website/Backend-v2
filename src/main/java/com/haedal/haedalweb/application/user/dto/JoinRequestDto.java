@@ -42,5 +42,5 @@ public class JoinRequestDto {
 
 	@Schema(description = "가입 학기", example = "2025-1")
 	@NotBlank(message = "가입 학기는 필수 입력 항목입니다.")
-	private Long semesterId;
+	private Long joinedSemesterId;
 }
