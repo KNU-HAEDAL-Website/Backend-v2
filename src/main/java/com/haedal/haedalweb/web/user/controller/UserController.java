@@ -48,9 +48,9 @@ public class UserController {
 
 	@Operation(summary = "User 목록 조회 (학번 포함, 회원만)")
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID})
-	@GetMapping("/users?semester=semesterId")
+	@GetMapping("/users")
 	public ResponseEntity<List<UserResponseDto>> getUsers(
-			@RequestParam(value = "semester", required = false) Long semesterId) {
+			@RequestParam(value = "semesterId", required = false) Long semesterId) {
 		return ResponseEntity.ok(
 			userAppService.getUsers(semesterId, Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
 	}
@@ -59,7 +59,7 @@ public class UserController {
 	@ApiSuccessCodeExample(SuccessCode.CANCEL_USER_ACCOUNT)
 	@ApiErrorCodeExamples({ErrorCode.NOT_FOUND_USER_ID, ErrorCode.NOT_AUTHENTICATED_USER})
 	@DeleteMapping("/users/me")
-	public ResponseEntity<SuccessResponse> cancelUserAccount() {
+	public ResponseEntity<SuccessResponse> cancelUserAccountㅋ() {
 		userAppService.cancelUserAccount();
 
 		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.CANCEL_USER_ACCOUNT);
