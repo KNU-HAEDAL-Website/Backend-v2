@@ -71,7 +71,7 @@ public class User {
 	@Column(name = "update_date")
 	private LocalDateTime updateDate;
 
-	@Column(name = "joined_semester")
+	@Column(name = "joined_semester_id")
 	private Long joinedSemesterId;
 
 	@Builder.Default
