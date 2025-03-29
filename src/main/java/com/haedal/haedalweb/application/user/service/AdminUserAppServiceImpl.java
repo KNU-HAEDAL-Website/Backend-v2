@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.user.service;
 
+import com.haedal.haedalweb.domain.association.service.UserSemesterService;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminUserAppServiceImpl implements AdminUserAppService {
 	private final AdminUserService adminUserService;
 	private final UserService userService;
+	private final UserSemesterService userSemesterService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -33,6 +35,7 @@ public class AdminUserAppServiceImpl implements AdminUserAppService {
 	@Override
 	@Transactional
 	public void approveUser(String userId) {
+		userSemesterService.assignJoinedSemester(userId);
 		adminUserService.approveUser(userId);
 	}
 
