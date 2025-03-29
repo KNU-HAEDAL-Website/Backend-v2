@@ -114,6 +114,7 @@ public class JoinAppServiceImpl implements JoinAppService {
 			.role(role)
 			.userStatus(userStatus)
 			.studentNumber(dto.getStudentNumber())
+			.joinedSemesterId(dto.getJoinedSemesterId())
 			.build();
 	}
 }
