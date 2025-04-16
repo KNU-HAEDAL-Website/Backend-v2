@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.haedal.haedalweb.domain.profile.model.Profile;
 import com.haedal.haedalweb.domain.profile.repository.ProfileRepository;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 import lombok.RequiredArgsConstructor;
@@ -33,4 +34,8 @@ public class ProfileRepositoryAdapter implements ProfileRepository {
 		return profileJpaRepository.findProfilePageByRoles(roles, pageable);
 	}
 
+	@Override
+	public Page<Profile> findProfilePageByRolesAndJoinSemester(List<Role> roles, JoinSemester joinSemester, Pageable pageable) {
+		return profileJpaRepository.findProfilePageByRolesAndJoinSemester(roles, joinSemester, pageable);
+	}
 }
