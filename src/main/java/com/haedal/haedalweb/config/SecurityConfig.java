@@ -130,7 +130,7 @@ public class SecurityConfig {
 				.permitAll()
 				.requestMatchers(HttpMethod.PATCH, "/users/password/verify")
 				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/users/profiles", "/users/find-id")
+				.requestMatchers(HttpMethod.GET, "/users/profiles", "/users/find-id", "/users/join-semesters")
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/users", "/users/{userId}")
 				.authenticated()
