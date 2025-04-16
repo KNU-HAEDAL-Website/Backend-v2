@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.profile.dto;
 
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,4 +42,6 @@ public class ProfileResponseDto {
 	@Schema(description = "인스타그램 계정 id")
 	private String instaAccount;
 
+	@Schema(description = "가입학기", example = "2024-1")
+	private JoinSemester joinSemester;
 }
