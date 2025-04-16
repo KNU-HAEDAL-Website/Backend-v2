@@ -21,6 +21,7 @@ import com.haedal.haedalweb.application.user.dto.UserResponseDto;
 import com.haedal.haedalweb.application.user.service.UserAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExample;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -52,6 +53,12 @@ public class UserController {
 	public ResponseEntity<List<UserResponseDto>> getUsers() {
 		return ResponseEntity.ok(
 			userAppService.getUsers(Sort.by(Sort.Order.asc("name"), Sort.Order.asc("studentNumber"))));
+	}
+
+	@Operation(summary = "유저 가입 학기 목록 조회")
+	@GetMapping("/users/join-semesters")
+	public ResponseEntity<List<JoinSemester>> getJoinSemesters() {
+		return ResponseEntity.ok(userAppService.getAvailableJoinSemesters());
 	}
 
 	@Operation(summary = "회원 탈퇴")
