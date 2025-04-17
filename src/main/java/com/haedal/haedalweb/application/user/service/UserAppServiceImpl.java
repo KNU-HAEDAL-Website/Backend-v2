@@ -16,6 +16,7 @@ import com.haedal.haedalweb.application.user.mapper.UserMapper;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.auth.service.EmailSenderService;
 import com.haedal.haedalweb.domain.auth.service.EmailVerificationService;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.domain.user.service.UserService;
@@ -110,5 +111,10 @@ public class UserAppServiceImpl implements UserAppService {
 
 		// 비밀번호 초기화
 		user.setPassword(passwordEncoder.encode(password));
+	}
+
+	@Override
+	public List<JoinSemester> getAvailableJoinSemesters() {
+		return JoinSemester.getAvailableSemesters();
 	}
 }

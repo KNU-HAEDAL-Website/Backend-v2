@@ -57,6 +57,10 @@ public class User {
 	@NonNull
 	private UserStatus userStatus;
 
+	@Column(name = "join_semester")
+	@Enumerated(EnumType.STRING)
+	private JoinSemester joinSemester;
+
 	@CreatedDate
 	@Column(name = "reg_date", nullable = false, updatable = false)
 	private LocalDateTime regDate;

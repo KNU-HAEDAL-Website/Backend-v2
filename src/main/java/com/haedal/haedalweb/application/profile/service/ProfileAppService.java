@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.haedal.haedalweb.application.profile.dto.ProfileRequestDto;
 import com.haedal.haedalweb.application.profile.dto.ProfileResponseDto;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 public interface ProfileAppService {
@@ -19,7 +20,7 @@ public interface ProfileAppService {
 
 	ProfileResponseDto getProfile(String userId);
 
-	Page<ProfileResponseDto> getProfilePage(List<Role> roles, Pageable pageable);
+	Page<ProfileResponseDto> getProfilePage(List<Role> roles, JoinSemester joinSemester, Pageable pageable);
 
 	void expelUserAccount(String userId);
 }

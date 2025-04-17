@@ -10,6 +10,7 @@ import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.domain.profile.model.Profile;
 import com.haedal.haedalweb.domain.profile.model.ProfileImage;
 import com.haedal.haedalweb.domain.profile.repository.ProfileRepository;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
 import com.haedal.haedalweb.domain.user.model.UserStatus;
@@ -52,6 +53,14 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public Page<Profile> getProfilePage(List<Role> roles, Pageable pageable) {
 		return profileRepository.findProfilePageByRoles(roles, pageable);
+	}
+
+	@Override
+	public Page<Profile> getProfilePage(List<Role> roles, JoinSemester joinSemester, Pageable pageable) {
+		if (joinSemester == null) {
+			return getProfilePage(roles, pageable);
+		}
+		return profileRepository.findProfilePageByRolesAndJoinSemester(roles, joinSemester, pageable);
 	}
 
 	@Override

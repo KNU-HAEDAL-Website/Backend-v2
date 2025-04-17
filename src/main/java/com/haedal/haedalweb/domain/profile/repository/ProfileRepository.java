@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.haedal.haedalweb.domain.profile.model.Profile;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 public interface ProfileRepository {
@@ -15,4 +16,6 @@ public interface ProfileRepository {
 	Optional<Profile> findProfileWithUser(String userId);
 
 	Page<Profile> findProfilePageByRoles(List<Role> roles, Pageable pageable);
+
+	Page<Profile> findProfilePageByRolesAndJoinSemester(List<Role> roles, JoinSemester joinSemester, Pageable pageable);
 }

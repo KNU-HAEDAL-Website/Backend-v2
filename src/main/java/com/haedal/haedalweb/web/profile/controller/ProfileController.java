@@ -22,6 +22,7 @@ import com.haedal.haedalweb.application.profile.dto.ProfileResponseDto;
 import com.haedal.haedalweb.application.profile.service.ProfileAppService;
 import com.haedal.haedalweb.constants.ErrorCode;
 import com.haedal.haedalweb.constants.SuccessCode;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.swagger.ApiErrorCodeExamples;
 import com.haedal.haedalweb.swagger.ApiSuccessCodeExample;
@@ -88,15 +89,18 @@ public class ProfileController {
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작)", required = false, example = "0"),
 		@Parameter(name = "size", description = "페이지 크기", required = false, example = "5"),
 		@Parameter(name = "roles", description = "조회할 역할 목록 컴마로 여러개 전달 가능 (ex: ROLE_ADMIN,ROLE_TEAM_LEADER,ROLE_MEMBER)",
-			required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER")
+			required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER"),
+		@Parameter(name = "joinSemester", description = "가입학기로 필터링 (ex: SEMESTER_2024_1)",
+			required = false)
 	})
 	@GetMapping("/users/profiles")
 	public ResponseEntity<Page<ProfileResponseDto>> getProfiles(
 		@RequestParam(name = "page", defaultValue = "0") Integer page,
 		@RequestParam(name = "size", defaultValue = "5") Integer size,
-		@RequestParam List<Role> roles) {
+		@RequestParam List<Role> roles,
+		@RequestParam(required = false) JoinSemester joinSemester) {
 		return ResponseEntity.ok(
-			profileAppService.getProfilePage(roles, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id")))));
+			profileAppService.getProfilePage(roles, joinSemester, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id")))));
 	}
 
 	@Operation(summary = "회원 탈퇴")

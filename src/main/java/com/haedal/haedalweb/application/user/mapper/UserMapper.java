@@ -15,6 +15,7 @@ public class UserMapper {
 			.role(user.getRole())
 			.studentNumber(user.getStudentNumber())
 			.userName(user.getName())
+			.joinSemester(user.getJoinSemester())
 			.build();
 	}
 

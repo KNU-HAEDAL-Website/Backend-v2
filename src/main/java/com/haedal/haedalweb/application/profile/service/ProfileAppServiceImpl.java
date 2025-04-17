@@ -17,9 +17,9 @@ import com.haedal.haedalweb.application.profile.mapper.ProfileMapper;
 import com.haedal.haedalweb.domain.profile.model.Profile;
 import com.haedal.haedalweb.domain.profile.model.ProfileImage;
 import com.haedal.haedalweb.domain.profile.service.ProfileService;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 import com.haedal.haedalweb.domain.user.model.User;
-import com.haedal.haedalweb.domain.user.model.UserStatus;
 import com.haedal.haedalweb.infrastructure.image.ImageRemoveEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageSaveRollbackEvent;
 import com.haedal.haedalweb.infrastructure.image.ImageUtil;
@@ -139,8 +139,8 @@ public class ProfileAppServiceImpl implements ProfileAppService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<ProfileResponseDto> getProfilePage(List<Role> roles, Pageable pageable) {
-		Page<Profile> profilePage = profileService.getProfilePage(roles, pageable);
+	public Page<ProfileResponseDto> getProfilePage(List<Role> roles, JoinSemester joinSemester, Pageable pageable) {
+		Page<Profile> profilePage = profileService.getProfilePage(roles, joinSemester, pageable);
 
 		Page<ProfileResponseDto> profileResponsePage = profilePage.map(profile -> {
 			String imageUrl = getProfileImageUrl(defaultUrl, uploadUrl, profile.getProfileImage().getSaveFile());

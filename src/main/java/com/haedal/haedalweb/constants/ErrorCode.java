@@ -28,6 +28,7 @@ public enum ErrorCode implements ResponseCode {
 	BAD_REQUEST_ROLE(HttpStatus.NOT_FOUND, "USER_004", "잘못된 권한 값입니다."),
 	DUPLICATED_EMAIL(HttpStatus.CONFLICT, "USER_005", "중복된 이메일이 존재합니다."),
 	BAD_REQUEST_PASSWORD(HttpStatus.BAD_REQUEST, "USER_006", "현재 비밀번호가 일치하지 않습니다."),
+	INVALID_JOIN_SEMESTER(HttpStatus.BAD_REQUEST, "USER_007", "유효하지 않은 가입학기입니다."),
 
 	DUPLICATED_SEMESTER(HttpStatus.CONFLICT, "SEMESTER_001", "이미 해당 학기가 존재합니다."),
 	NOT_FOUND_SEMESTER_ID(HttpStatus.NOT_FOUND, "SEMESTER_002", "해당 학기를 찾을 수 없습니다."),

@@ -9,6 +9,7 @@ import com.haedal.haedalweb.application.user.dto.ResetPasswordEmailCodeRequestDt
 import com.haedal.haedalweb.application.user.dto.ResetPasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UpdatePasswordRequestDto;
 import com.haedal.haedalweb.application.user.dto.UserResponseDto;
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 
 public interface UserAppService {
 	UserResponseDto getUser(String userId);
@@ -24,4 +25,6 @@ public interface UserAppService {
 	void resetPassword(ResetPasswordRequestDto resetPasswordRequestDto);
 
 	void verifyResetPasswordCode(ResetPasswordEmailCodeRequestDto resetPasswordEmailCodeRequestDto);
+
+	List<JoinSemester> getAvailableJoinSemesters();
 }
