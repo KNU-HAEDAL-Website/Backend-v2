@@ -22,6 +22,7 @@ public class ProfileMapper {
 			.instaAccount(profile.getInstaAccount())
 			.email(isSelf ? user.getEmail() : null)
 			.studentNumber(isSelf ? user.getStudentNumber() : null)
+			.joinSemester(user.getJoinSemester())
 			.build();
 	}
 }

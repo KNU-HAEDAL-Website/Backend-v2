@@ -2,6 +2,7 @@ package com.haedal.haedalweb.application.user.dto;
 
 import java.time.LocalDateTime;
 
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,5 +31,8 @@ public class AdminUserResponseDto {
 
 	@Schema(description = "가입 날짜")
 	private LocalDateTime regDate;
+
+	@Schema(description = "가입학기", example = "2024-1")
+	private JoinSemester joinSemester;
 }
 

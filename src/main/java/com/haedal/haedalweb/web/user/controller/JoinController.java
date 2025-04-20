@@ -36,7 +36,7 @@ public class JoinController {
 	@Operation(summary = "회원가입")
 	@ApiSuccessCodeExample(SuccessCode.JOIN_SUCCESS)
 	@ApiErrorCodeExamples({ErrorCode.DUPLICATED_USER_ID, ErrorCode.DUPLICATED_STUDENT_NUMBER,
-		ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION})
+		ErrorCode.DUPLICATED_EMAIL, ErrorCode.NOT_FOUND_CHECK_EMAIL_VERIFICATION, ErrorCode.INVALID_JOIN_SEMESTER})
 	//        @ApiResponses(value={
 	//                @ApiResponse(responseCode = "409", description = "Successful Join Us!",
 	//                        content = @Content(mediaType = "application/json", schema = @Schema(oneOf = {ErrorCode.class, SuccessCode.class})))

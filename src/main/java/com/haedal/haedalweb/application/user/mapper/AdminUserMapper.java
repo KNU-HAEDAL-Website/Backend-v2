@@ -16,6 +16,7 @@ public class AdminUserMapper {
 			.userName(user.getName())
 			.role(user.getRole())
 			.regDate(user.getRegDate())
+			.joinSemester(user.getJoinSemester())
 			.build();
 	}
 

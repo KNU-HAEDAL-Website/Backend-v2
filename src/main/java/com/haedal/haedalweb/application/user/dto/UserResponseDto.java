@@ -1,5 +1,6 @@
 package com.haedal.haedalweb.application.user.dto;
 
+import com.haedal.haedalweb.domain.user.model.JoinSemester;
 import com.haedal.haedalweb.domain.user.model.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,4 +26,7 @@ public class UserResponseDto {
 
 	@Schema(description = "유저 권한", example = "(ROLE_WEB_MASTER, ROLE_ADMIN, ROLE_TEAM_LEADER, ROLE_MEMBER)")
 	private Role role;
+
+	@Schema(description = "가입학기", example = "2024-1")
+	private JoinSemester joinSemester;
 }
