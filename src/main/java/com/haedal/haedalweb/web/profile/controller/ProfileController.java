@@ -1,10 +1,13 @@
 package com.haedal.haedalweb.web.profile.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -88,19 +91,21 @@ public class ProfileController {
 	@Parameters({
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작)", required = false, example = "0"),
 		@Parameter(name = "size", description = "페이지 크기", required = false, example = "5"),
+		@Parameter(name = "sort", description = "정렬 (예: name,asc). 여러 개 가능", required = false, example = "name,asc"),
 		@Parameter(name = "roles", description = "조회할 역할 목록 컴마로 여러개 전달 가능 (ex: ROLE_ADMIN,ROLE_TEAM_LEADER,ROLE_MEMBER)",
-			required = false, example = "ROLE_ADMIN,ROLE_TEAM_LEADER"),
+			example = "ROLE_ADMIN,ROLE_TEAM_LEADER"),
 		@Parameter(name = "joinSemester", description = "가입학기로 필터링 (ex: SEMESTER_2024_1)",
 			required = false)
 	})
 	@GetMapping("/users/profiles")
 	public ResponseEntity<Page<ProfileResponseDto>> getProfiles(
-		@RequestParam(name = "page", defaultValue = "0") Integer page,
-		@RequestParam(name = "size", defaultValue = "5") Integer size,
+		@PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
 		@RequestParam List<Role> roles,
 		@RequestParam(required = false) JoinSemester joinSemester) {
+
+		Pageable mapped = remapSort(pageable);
 		return ResponseEntity.ok(
-			profileAppService.getProfilePage(roles, joinSemester, PageRequest.of(page, size, Sort.by(Sort.Order.asc("id")))));
+			profileAppService.getProfilePage(roles, joinSemester, mapped));
 	}
 
 	@Operation(summary = "회원 탈퇴")
@@ -110,5 +115,37 @@ public class ProfileController {
 	public ResponseEntity<SuccessResponse> cancelUserAccount(@PathVariable String userId) {
 		profileAppService.expelUserAccount(userId);
 		return ResponseUtil.buildSuccessResponseEntity(SuccessCode.CANCEL_USER_ACCOUNT);
+	}
+
+	private static final Map<String, String> SORT_MAP = Map.of(
+		// 프론트가 보내는 키  →  JPA 경로(엔티티 기준)
+		"name", "user.name",
+		"role", "user.role",
+		"id", "id"
+	);
+
+	private Pageable remapSort(Pageable pageable) {
+		Sort sort = pageable.getSort();
+		if (sort.isUnsorted()) {
+			Sort defaultSort = Sort.by(Sort.Order.asc(SORT_MAP.getOrDefault("name", "user.name")));
+			return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), defaultSort);
+		}
+
+		Sort mapped = Sort.by(
+			sort.stream()
+				.map(order -> {
+					String clientKey = order.getProperty();          // 예: "name"
+					String mappedProp = SORT_MAP.getOrDefault(clientKey, "user.name");
+					Sort.Order mappedOrder = new Sort.Order(order.getDirection(), mappedProp);
+					// 문자열 정렬만 대소문자 무시
+					if ("name".equals(clientKey)) {
+						mappedOrder = mappedOrder.ignoreCase();
+					}
+					return mappedOrder;
+				})
+				.toList()
+		);
+
+		return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), mapped);
 	}
 }
