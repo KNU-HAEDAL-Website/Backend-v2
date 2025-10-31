@@ -66,8 +66,7 @@ public class SecurityConfig {
 					CorsConfiguration configuration = new CorsConfiguration();
 
 					configuration.setAllowedOrigins(
-						Arrays.asList("http://localhost:5173", "http://localhost:3000", "http://www.knu-haedal.com",
-							"https://www.knu-haedal.com", "http://localhost:8080"));
+						Arrays.asList("http://localhost:5173", "http://localhost:3000", "https://www.knu-haedal.co.kr", "http://localhost:8080"));
 					configuration.setAllowedMethods(Collections.singletonList("*"));
 					configuration.setAllowCredentials(true);
 					configuration.setAllowedHeaders(Collections.singletonList("*"));
